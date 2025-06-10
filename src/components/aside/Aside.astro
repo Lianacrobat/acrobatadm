@@ -1,0 +1,142 @@
+---
+import navigationData from "../../data/navegacion";
+import ThemeSelector from "../theme/ThemeSelector.astro";
+import ActionButton from "../ui/ActionButton.astro";
+---
+
+<aside
+    class="hidden lg:flex flex-col w-64 h-screen fixed left-0 top-0 border-r border-gray-500/30 bg-[var(--background)]"
+>
+    <!-- Header -->
+    <header class="h-16 flex items-center px-4 border-b border-gray-500/30">
+        <a class="text-xl font-extrabold" aria-label="ADM" href="/">ADM</a>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="flex-1 overflow-y-auto py-4">
+        {
+            navigationData.map((section) => (
+                <div class="accordion-section" data-section={section.title}>
+                    <button
+                        class="w-full px-4 py-2 flex items-center justify-between hover:bg-gray-500/10"
+                        aria-expanded="true"
+                    >
+                        <span class="font-medium">{section.title}</span>
+                        <svg
+                            class="w-4 h-4 transform transition-transform"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M19 9l-7 7-7-7"
+                            />
+                        </svg>
+                    </button>
+                    <div class="accordion-content">
+                        <ul class="py-2">
+                            {section.items.map((item) => (
+                                <li>
+                                    <a
+                                        href={item.href}
+                                        class="block px-8 py-2 text-[var(--text)]/50 hover:text-[var(--text)] transition-colors hover:bg-gray-500/10 "
+                                        data-active={
+                                            Astro.url.pathname === item.href
+                                        }
+                                    >
+                                        {item.title}
+                                        {item.badge && (
+                                            <span
+                                                class={`ml-2 px-2 py-0.5 text-xs rounded-full ${
+                                                    item.badgeVariant ===
+                                                    "primary"
+                                                        ? "bg-blue-500 text-white"
+                                                        : "bg-gray-200 text-gray-800"
+                                                }`}
+                                            >
+                                                {item.badge}
+                                            </span>
+                                        )}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            ))
+        }
+    </nav>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-gray-500/30 px-4 py-4">
+        <div class="flex items-center justify-center gap-4">
+            <ActionButton
+                svg=`<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" /></svg>`
+                tooltip="Mi Perfil"
+                href="/user"
+            />
+            <ThemeSelector />
+        </div>
+    </footer>
+
+    <script>
+        // Accordion functionality
+        const sections = document.querySelectorAll(".accordion-section");
+
+        // Load saved states from localStorage
+        sections.forEach((section) => {
+            const sectionTitle = section.getAttribute("data-section");
+            const savedState = localStorage.getItem(
+                `accordion-${sectionTitle}`,
+            );
+            const button = section.querySelector("button");
+            const content = section.querySelector(".accordion-content");
+
+            if (savedState === "closed") {
+                button?.setAttribute("aria-expanded", "false");
+                content?.classList.add("hidden");
+                button?.querySelector("svg")?.classList.add("rotate-180");
+            }
+        });
+
+        // Handle accordion clicks
+        sections.forEach((section) => {
+            const button = section.querySelector("button");
+            const content = section.querySelector(".accordion-content");
+            const sectionTitle = section.getAttribute("data-section");
+
+            button?.addEventListener("click", () => {
+                const isExpanded =
+                    button.getAttribute("aria-expanded") === "true";
+
+                // Update button state
+                button.setAttribute("aria-expanded", (!isExpanded).toString());
+
+                // Toggle content visibility
+                content?.classList.toggle("hidden");
+
+                // Rotate arrow
+                button.querySelector("svg")?.classList.toggle("rotate-180");
+
+                // Save state to localStorage
+                localStorage.setItem(
+                    `accordion-${sectionTitle}`,
+                    isExpanded ? "closed" : "open",
+                );
+            });
+        });
+
+        // Active link highlighting
+        const links = document.querySelectorAll("a[data-active]");
+        links.forEach((link) => {
+            if (link.getAttribute("data-active") === "true") {
+                link.classList.add("text-blue-500", "font-bold");
+            }
+        });
+    </script>
+
+
+</aside>
