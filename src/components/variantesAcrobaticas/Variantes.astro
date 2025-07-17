@@ -1,0 +1,81 @@
+---
+import categories from "./categories.json";
+---
+
+<section id="categorias">
+	<div class="container mx-auto">
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+			{
+				categories.map((category) => (
+					<div
+						class="category-card group cursor-pointer"
+						data-category={category.id}
+						role="button"
+						tabindex="0"
+						aria-expanded="false"
+						aria-label={`Toggle ${category.title} sports`}
+					>
+						<div
+							class={`relative bg-gradient-to-br ${category.color} p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl  text-white overflow-hidden`}
+						>
+							<div class="absolute inset-0 bg-gradient-to-l from-transparent via-white/10 to-white/20" />
+							<div
+								class="absolute inset-0 bg-cover bg-center opacity-20"
+								style={`background-image: url(${category.img})`}
+							/>
+							<div class="relative z-10">
+								<div class="text-4xl mb-4">{category.icon}</div>
+								<h3 class="text-xl sm:text-2xl font-bold mb-2">
+									{category.title}
+								</h3>
+								<p class="text-white/90 mb-4 text-sm sm:text-base">
+									{category.description}
+								</p>
+								<div class="flex items-center text-sm font-medium">
+									<span>Ver deportes</span>
+									<svg
+										class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform duration-200"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+										aria-hidden="true"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M9 5l7 7-7 7"
+										/>
+									</svg>
+								</div>
+							</div>
+						</div>
+
+						<div class="sports-grid hidden mt-6 p-6 bg-[var(--cajas)] rounded-xl ">
+							<h4 class="text-lg sm:text-xl font-bold text-[var(--text-color)] mb-4">
+								Deportes en {category.title}
+							</h4>
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+								{category.sports.map((sport) => (
+									<div class="bg-[var(--card)] p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+										<span class="text-[var(--text-color)]/80 font-medium text-sm sm:text-base">
+											{sport}
+										</span>
+									</div>
+								))}
+							</div>
+							<button
+								class="close-sports mt-4 text-[var(--accent-color)] hover:text-[var(--accent-hover)] font-medium transition-colors duration-200"
+								aria-label={`Close ${category.title} sports`}
+							>
+								← Volver a categorías
+							</button>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<script src="./variantesCategorias.js"></script>

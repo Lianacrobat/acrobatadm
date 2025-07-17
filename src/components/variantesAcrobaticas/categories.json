@@ -1,0 +1,200 @@
+[
+	{
+		"id": "acuaticos",
+		"title": "Acuáticos",
+		"description": "Acrobacias en océanos, playas, lagos y piscinas",
+		"icon": "🌊",
+		"color": "bg-gradient-to-r from-sky-400 to-blue-500",
+		"img": "https://i.pinimg.com/736x/c3/63/32/c3633283409bf4ff106f0a301b236eca.jpg",
+		"sports": [
+			"Surf",
+			"Tandem Surfing",
+			"Sky Acuático",
+			"Cliff Diving",
+			"Wakeboarding",
+			"Flyboarding",
+			"Kite Surfing",
+			"Wind Surfing"
+		]
+	},
+  	{
+		"id": "urbanos",
+		"title": "Urbanos",
+		"description": "En calles, metros y parques urbanos",
+		"icon": "🏙️",
+		"color": "bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r",
+		"img": "https://i.pinimg.com/736x/1b/72/ea/1b72eacf6dd4e05cafc8bcbd520f5e0f.jpg",
+		"sports": [
+			"Calistenia",
+			"Parkour",
+			"Free Running",
+			"Fitballing",
+			"Street Workout",
+			"Skateboarding",
+			"BMX",
+			"Roller Skating"
+		]
+	},
+	{
+		"id": "recreativos",
+		"title": "Recreativos",
+		"description": "Actividades accesibles para todo público",
+		"icon": "🎨",
+		"color": "bg-gradient-to-tr from-violet-500 to-orange-300",
+		"img": "https://i.pinimg.com/736x/12/9b/9a/129b9a6abbf4d6fbd33f3ce89e3d2b31.jpg",
+		"sports": [
+			"Acroyoga",
+			"Telas Aéreas",
+			"Capoeira",
+			"Break Dance",
+			"Yoga Acrobático",
+			"Pole Dance",
+			"Aerial Hoop",
+			"Contorsión"
+		]
+	},
+	{
+		"id": "circo",
+		"title": "Circo",
+		"description": "Artes circenses tradicionales y modernas",
+		"icon": "🎪",
+		"color": "bg-gradient-to-tr from-sky-400 to-blue-500",
+		"img": "https://i.pinimg.com/736x/a5/3f/bf/a53fbf43d43c2f685b52e1f5ee2cee41.jpg",
+		"sports": [
+			"Trapecio",
+			"Cuerda Floja",
+			"Malabares",
+			"Acrobacia Aérea",
+			"Equilibrio",
+			"Prestidigitación",
+			"Payasos",
+			"Domadores"
+		]
+	},
+	{
+		"id": "olimpicos",
+		"title": "Olímpicos",
+		"description": "Deportes de élite mundial",
+		"icon": "🏅",
+		"color": "from-yellow-500 to-orange-500",
+		"img": "https://i.pinimg.com/736x/5b/a2/91/5ba2919e32e0dc17325820fe8c7450dc.jpg",
+		"sports": [
+			"Gimnasia Artística",
+			"Trampolín",
+			"Gimnasia Rítmica",
+			"Salto con Pértiga",
+			"Salto Alto",
+			"Clavados",
+			"Gimnasia Aeróbica",
+			"Parkour Olímpico"
+		]
+	},
+	{
+		"id": "extremos",
+		"title": "Extremos",
+		"description": "Desafiando el peligro y la muerte",
+		"icon": "⚡",
+		"color": "from-red-500 to-rose-600",
+		"img": "https://i.pinimg.com/736x/77/4f/16/774f16bd2dfe9c9a91a220772c5ac2a7.jpg",
+		"sports": [
+			"Wingwalking",
+			"Globo de la Muerte",
+			"Death Wheel",
+			"Base Jumping",
+			"Bungee Jumping",
+			"Motocross Extremo",
+			"Freestyle Skiing",
+			"Snowboarding Extremo"
+		]
+	},
+	{
+		"id": "marciales",
+		"title": "Artes Marciales",
+		"description": "Acrobacias en combate y defensa",
+		"icon": "🥋",
+		"color": "from-orange-500 to-red-500",
+		"img": "https://i.pinimg.com/736x/e1/7c/41/e17c418dcb5878bff101aa133a41db1e.jpg",
+		"sports": [
+			"Tricking",
+			"Capoeira",
+			"Wushu",
+			"Shaolin",
+			"Taekwondo",
+			"Karate Acrobático",
+			"Kung Fu",
+			"Jiu-Jitsu Brasileño"
+		]
+	},
+	{
+		"id": "cultura",
+		"title": "Cultura",
+		"description": "Tradiciones transmitidas por generaciones",
+		"icon": "🌍",
+		"color": "from-teal-500 to-cyan-600",
+		"img": "https://i.pinimg.com/736x/87/72/87/8772870ce32e2c6c3a445aa4a114ec8f.jpg",
+		"sports": [
+			"Castells",
+			"Clavadistas de Acapulco",
+			"Danza del León",
+			"Flamenco Acrobático",
+			"Samba",
+			"Haka",
+			"Danza Folclórica",
+			"Rituales Ancestrales"
+		]
+	},
+	{
+		"id": "danza",
+		"title": "Danza",
+		"description": "Acrobacias en contexto de danza",
+		"icon": "💃",
+		"color": "from-pink-500 to-rose-500",
+		"img": "https://i.pinimg.com/736x/34/3a/65/343a6578a7cd1a3d8cb260dfa9ed5635.jpg",
+		"sports": [
+			"Hula Hula",
+			"Break Dance",
+			"Salsa Acrobática",
+			"Malambo",
+			"Gopak",
+			"Rock and Roll",
+			"Tango Acrobático",
+			"Ballet Aéreo"
+		]
+	},
+	{
+		"id": "animales",
+		"title": "Animales",
+		"description": "Acrobacias junto a animales",
+		"icon": "🐎",
+		"color": "from-amber-500 to-yellow-600",
+		"img": "https://i.pinimg.com/736x/3d/47/f5/3d47f508ad004b6b0a43b31ff1bf57ff.jpg",
+		"sports": [
+			"Ecuestre",
+			"Recorte de Toros",
+			"Domadores de Toros",
+			"Rodeo",
+			"Equitación Acrobática",
+			"Doma Clásica",
+			"Salto Ecuestre",
+			"Polo"
+		]
+	},
+	{
+		"id": "fitness",
+		"title": "Fitness",
+		"description": "Acrobacias para el bienestar",
+		"icon": "💪",
+		"color": "from-emerald-500 to-teal-500",
+		"img": "https://i.pinimg.com/736x/44/91/05/449105aabcceecb4edf7c241efe4e90e.jpg",
+		"sports": [
+			"Acroyoga",
+			"Calistenia",
+			"Fitball",
+			"Pilates Acrobático",
+			"CrossFit",
+			"Functional Training",
+			"Yoga Aéreo",
+			"Aqua Fitness"
+		]
+	}
+]

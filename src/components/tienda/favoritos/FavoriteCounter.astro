@@ -1,0 +1,87 @@
+---
+// This component displays the current number of favorites and updates in real-time
+---
+
+<div
+	id="favorite-counter"
+	class="flex items-center gap-2 transition-all duration-200 hover:scale-105"
+>
+	<svg
+		class="w-5 h-5 text-red-500"
+		fill="currentColor"
+		viewBox="0 0 24 24"
+	>
+		<path
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			stroke-width="2"
+			d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+		></path>
+	</svg>
+	<span
+		id="favorite-count"
+		class="text-sm font-medium transition-transform duration-200"
+		>0</span
+	>
+</div>
+
+<script>
+	// Global favorites management system (same as other components)
+	class FavoritesManager {
+		private static instance: FavoritesManager;
+
+		private constructor() {}
+
+		static getInstance(): FavoritesManager {
+			if (!FavoritesManager.instance) {
+				FavoritesManager.instance = new FavoritesManager();
+			}
+			return FavoritesManager.instance;
+		}
+
+		getFavorites(): string[] {
+			try {
+				const favorites = localStorage.getItem("favorites");
+				return favorites ? JSON.parse(favorites) : [];
+			} catch (error) {
+				console.error("Error reading favorites from localStorage:", error);
+				return [];
+			}
+		}
+	}
+
+	const favoritesManager = FavoritesManager.getInstance();
+
+	function updateFavoriteCount() {
+		const countElement = document.getElementById("favorite-count");
+		if (countElement) {
+			const favorites = favoritesManager.getFavorites();
+			const count = favorites.length;
+			countElement.textContent = count.toString();
+
+			// Add visual feedback for changes using Tailwind classes
+			countElement.classList.add("scale-110");
+			setTimeout(() => {
+				countElement.classList.remove("scale-110");
+			}, 200);
+		}
+	}
+
+	function initializeFavoriteCounter() {
+		// Initial count
+		updateFavoriteCount();
+
+		// Listen for favorites changes
+		window.addEventListener("favoritesChanged", updateFavoriteCount);
+		window.addEventListener("favoritesCleared", updateFavoriteCount);
+
+		// Make the function globally available for other components
+		window.updateFavoritesCount = updateFavoriteCount;
+	}
+
+	// Initialize on page load
+	document.addEventListener("DOMContentLoaded", initializeFavoriteCounter);
+	document.addEventListener("astro:page-load", initializeFavoriteCounter);
+</script>
+
+

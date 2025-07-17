@@ -1,0 +1,83 @@
+---
+const comunidad = [
+	{
+		title: "Instagram",
+		description: "Síguenos en Instagram",
+		link: "https://www.instagram.com/acrobata_adm/",
+		icon: "instagram",
+	},
+	{
+		title: "Facebook",
+		description: "Síguenos en Facebook",
+		link: "facebook.com/acrobatadm",
+		icon: "facebook",
+	},
+	{
+		title: "YouTube",
+		description: "Suscríbete a nuestro canal",
+		link: "#",
+		icon: "youtube",
+	},
+	{
+		title: "TikTok",
+		description: "Síguenos en TikTok",
+		link: "https://www.tiktok.com/@acrobata_demente",
+		icon: "tiktok",
+	},
+	{
+		title: "Twitter",
+		description: "Síguenos en Twitter",
+		link: "#",
+		icon: "twitter",
+	},
+	{
+		title: "LinkedIn",
+		description: "Conecta con nosotros",
+		link: "https://www.linkedin.com/in/lianacrobata/",
+		icon: "linkedin",
+	},
+	{
+		title: "WhatsApp",
+		description: "Contáctanos por WhatsApp",
+		link: "https://wa.me/8619981641420",
+		icon: "whatsapp",
+	},
+	{
+		title: "Telegram",
+		description: "Únete a nuestro canal",
+		link: "#",
+		icon: "telegram",
+	},
+	{
+		title: "Discord",
+		description: "Únete a nuestra comunidad",
+		link: "#",
+		icon: "discord",
+	},
+];
+---
+
+<div class="grid grid-cols-3 gap-4">
+	{
+		comunidad.map((item) => (
+			<a
+				href={item.link}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="bg-[var(--cajas)] rounded-lg p-4 hover:shadow-lg transition-shadow duration-200"
+			>
+				<div class="flex items-center justify-center h-16 mb-3">
+					<svg
+						class="w-10 h-10 text-[var(--text-color-soft)] "
+						aria-hidden="true"
+					>
+						<use href={`/icons/sprite.svg#${item.icon}`} />
+					</svg>
+				</div>
+				<h3 class="font-semibold  mb-2 text-center text-[var(--accent-color)]">
+					{item.title}
+				</h3>
+			</a>
+		))
+	}
+</div>

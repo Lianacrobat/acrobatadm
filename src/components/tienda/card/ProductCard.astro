@@ -1,0 +1,108 @@
+---
+import type { Product } from "../../../data/products";
+import FavoriteButton from "../ui/FavoriteButton.astro";
+import placeholderImage from "../../../assets/images/products/acrobatico/trampolin/eurotramp/eurotramp01.jpg";
+
+export interface Props {
+	product: Product;
+}
+
+const { product } = Astro.props;
+const mainImage = product.images?.[0] || placeholderImage;
+const shortDesc =
+	product.shortDescription?.length > 60
+		? product.shortDescription.slice(0, 60) + "..."
+		: product.shortDescription;
+---
+
+<!-- Desktop Card -->
+<div
+	class="hidden lg:block bg-[var(--cajas)] rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200"
+>
+	<div class="relative">
+		<a
+			href={`/producto/${product.slug}`}
+			class="block group"
+		>
+			<div class="aspect-square overflow-hidden bg-[var(--cajas)]">
+				<img
+					src={typeof mainImage === "string"
+						? mainImage
+						: mainImage?.src || placeholderImage.src}
+					alt={product.name}
+					class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+					loading="lazy"
+				/>
+			</div>
+		</a>
+		<div class="absolute top-3 right-3 z-10">
+			<FavoriteButton
+				productId={product.id}
+				productName={product.name}
+				class="w-8 h-8 bg-[var(--card)]/90 backdrop-blur-sm shadow-lg rounded-full flex items-center justify-center hover:bg-[var(--card)] hover:shadow-xl transition-all duration-200"
+			/>
+		</div>
+	</div>
+	<div class="p-4">
+		<h3
+			class="font-semibold mb-2 text-[var(--accent-color)] hover:text-[var(--vinculo)] transition-colors line-clamp-2"
+		>
+			<a href={`/producto/${product.slug}`}>
+				{product.name}
+			</a>
+		</h3>
+		<p class="text-sm mb-3 text-[var(--text-color)] line-clamp-2">
+			{product.shortDescription}
+		</p>
+		<div class="flex items-center justify-between">
+			<a
+				href={`/producto/${product.slug}`}
+				class="text-sm font-medium transition-colors text-[var(--accent-color)] hover:text-[var(--vinculo)]"
+			>
+				Ver detalles →
+			</a>
+		</div>
+	</div>
+</div>
+
+<!-- Mobile Card -->
+<div
+	class="flex lg:hidden h-[100px] bg-card rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-200 bg-[var(--cajas)]"
+>
+	<div class="w-[100px] h-[100px] flex-shrink-0 relative">
+		<img
+			src={typeof mainImage === "string"
+				? mainImage
+				: mainImage?.src || placeholderImage.src}
+			alt={product.name}
+			class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+			loading="lazy"
+		/>
+		<div class="absolute top-2 right-2 z-20">
+			<FavoriteButton
+				productId={product.id}
+				productName={product.name}
+				class="w-8 h-8 bg-white/90 backdrop-blur-sm shadow-lg rounded-full flex items-center justify-center hover:bg-white hover:shadow-xl transition-all duration-200"
+			/>
+		</div>
+		<div
+			class="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 via-black/0 to-black/0"
+		>
+		</div>
+	</div>
+	<div class="flex-1 p-2 flex flex-col justify-between">
+		<div>
+			<h3 class="text-sm font-medium text-text-color line-clamp-1">
+				<a
+					href={`/producto/${product.slug}`}
+					class="text-accent"
+				>
+					{product.name}
+				</a>
+			</h3>
+			<p class="text-xs text-text-color-soft line-clamp-2 mt-1">
+				{shortDesc}
+			</p>
+		</div>
+	</div>
+</div>

@@ -1,40 +1,28 @@
 ---
 interface Props {
-  svg: string;
-  tooltip: string;
-  href: string;
+	svg: string;
+	tooltip: string;
+	href: string;
 }
 
 const { svg, tooltip, href } = Astro.props;
+
+import Tooltip from "../ui/Tooltip.astro";
 ---
 
 <div class="relative group hover:text-[var(--text)]/50 transition-colors">
-  <a
-    href={href}
-    aria-label={tooltip}
-  >
-    <div set:html={svg} />
-  </a>
-  
-  <!-- Tooltip -->
-  <div class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-    {tooltip}
-    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-black rotate-45"></div>
-  </div>
+	<a
+		href={href}
+		aria-label={tooltip}
+	>
+		<div set:html={svg} />
+	</a>
+
+	<!-- Tooltip -->
+	<Tooltip
+		text={tooltip}
+		position="top"
+	/>
 </div>
 
-<style>
-  /* Rotate and pulse animation */
-  .rotate-pulse {
-    animation: rotate-pulse 0.5s ease-in-out;
-  }
 
-  @keyframes rotate-pulse {
-    0% {
-      transform: rotate(0deg) scale(1);
-    }
-    100% {
-      transform: rotate(360deg) scale(1);
-    }
-  }
-</style> 

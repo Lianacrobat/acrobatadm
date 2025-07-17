@@ -1,0 +1,99 @@
+---
+import type { Product } from "../../../data/products";
+
+export interface Props {
+	product: Product;
+}
+
+const { product } = Astro.props;
+---
+
+<div class="bg-[var(--cajas)] rounded-xl p-4">
+	<div class="flex items-center gap-3 mb-6">
+		<div
+			class="w-10 h-10 bg-[var(--accent-color-soft)]/10 rounded-lg flex items-center justify-center"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="text-primary-soft"
+			>
+				<path
+					d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+				></path>
+				<path d="M15 12a3 3 0 1 0 -6 0a3 3 0 0 0 6 0z"></path>
+			</svg>
+		</div>
+		<div>
+			<h3 class="text-lg font-semibold text-primary">Especificaciones</h3>
+			<p class="text-xs text-primary-soft">Detalles técnicos del producto</p>
+		</div>
+	</div>
+
+	{
+		product.specifications && Object.keys(product.specifications).length > 0 ? (
+			<div class="space-y-3">
+				{Object.entries(product.specifications).map(([key, value]) => (
+					<div class="flex items-center justify-between p-4 bg-[var(--card)] rounded-lg ">
+						<div class="flex items-center gap-3">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								class="text-primary-soft"
+							>
+								<path
+									stroke="none"
+									d="M0 0h24v24H0z"
+									fill="none"
+								/>
+								<path d="M9 11l3 3l8 -8" />
+								<path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" />
+							</svg>
+							<dt class="font-medium text-primary-soft text-xs md:text-sm">
+								{key}
+							</dt>
+						</div>
+						<dd class="text-primary text-xs md:text-sm font-semibold bg-[var(--accent-color-soft)]/10 px-3  ">
+							{value}
+						</dd>
+					</div>
+				))}
+			</div>
+		) : (
+			<div class="text-center py-8">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="48"
+					height="48"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="text-primary-soft mx-auto mb-4 opacity-50"
+				>
+					<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+					<path d="M15 12a3 3 0 1 0 -6 0a3 3 0 0 0 6 0z" />
+				</svg>
+				<p class="text-primary-soft text-sm">
+					No hay especificaciones disponibles
+				</p>
+			</div>
+		)
+	}
+</div>

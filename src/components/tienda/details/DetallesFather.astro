@@ -1,0 +1,84 @@
+---
+import type { Product } from "../../../data/products";
+import { getSimilarProducts } from "../../../data/productUtils";
+import Imagenes from "./Imagenes.astro";
+import InformacionProducto from "./InformacionProducto.astro";
+import Especificaciones from "./Especificaciones.astro";
+import Caracteristicas from "./Caracteristicas.astro";
+import ProductosRelacionados from "./ProductosRelacionados.astro";
+import Breadcrumb from "./Breadcrumb.astro";
+
+export interface Props {
+	product: Product;
+}
+
+const { product } = Astro.props;
+const similarProducts = getSimilarProducts(product, 4);
+const mainImage = product.images[0] || "/images/placeholder.jpg";
+const placeholder = "/images/placeholder.jpg";
+
+const breadcrumbItems = [
+	{ label: "Tienda", href: "/tienda" },
+	{ label: product.category, href: `/tienda?category=${product.category}` },
+	{ label: product.name, href: `/producto/${product.slug}` },
+];
+---
+
+<section class="min-h-screen flex flex-col gap-4">
+	<Breadcrumb items={breadcrumbItems} />
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+		<!-- Imagenes -->
+		<Imagenes
+			product={product}
+			mainImage={mainImage}
+			placeholder={placeholder}
+		/>
+
+		<!-- Informacion del Producto -->
+		<InformacionProducto
+			product={product}
+			mainImage={mainImage}
+			placeholder={placeholder}
+		/>
+
+		<!-- Especificaciones -->
+		<Especificaciones product={product} />
+
+		<!-- Características -->
+		<Caracteristicas product={product} />
+	</div>
+
+	<!-- Productos Relacionados -->
+	<ProductosRelacionados similarProducts={similarProducts} />
+</section>
+
+<script>
+	declare global {
+		interface Window {
+			selectProductImage: (idx: number) => void;
+		}
+	}
+
+	let selectedImageIdx = 0;
+
+	function selectProductImage(idx: number) {
+		selectedImageIdx = idx;
+		const images = document.querySelectorAll("[data-image-thumbnail]");
+		const mainImage = document.querySelector(
+			"[data-main-image]"
+		) as HTMLImageElement | null;
+
+		if (mainImage && images[idx]) {
+			mainImage.src = images[idx].querySelector("img")!.src;
+		}
+
+		images.forEach((btn, i) => {
+			btn.classList.toggle("border-blue-500", i === idx);
+			btn.classList.toggle("shadow-lg", i === idx);
+			btn.classList.toggle("border-gray-200", i !== idx);
+		});
+	}
+
+	window.selectProductImage = selectProductImage;
+	window.addEventListener("DOMContentLoaded", () => selectProductImage(0));
+</script>

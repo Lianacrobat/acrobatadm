@@ -1,0 +1,191 @@
+---
+import Layout from "../layouts/Layout.astro";
+import HeroSection from "../components/ui/HeroSection.astro";
+---
+
+<Layout title="Primeros Pasos">
+	<!-- Hero Section -->
+	<section>
+		<HeroSection
+			colorHero="bg-gradient-to-r from-sky-400 to-blue-600"
+			heroTitle="Primeros Pasos"
+			heroParagraph="Descubre todos los recursos aquí."
+			heroImage="primerosPasos"
+		/>
+	</section>
+
+	<!-- Primeros Pasos -->
+	<section>
+		<div class="max-w-2xl mx-auto p-4">
+			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 md:p-8 space-y-4">
+				<h1 class="text-3xl md:text-4xl font-bold">Hola! 👋</h1>
+				<p>
+					¡Bienvenido/a a Acrobata Demente! El primer sitio en español con
+					recursos para artistas, atletas y acróbatas.
+				</p>
+				<p>
+					Aquí encontrarás cómo navegar y aprovechar al máximo todo lo que <span
+						class="font-bold">Acrobata Demente</span
+					> tiene para ti.
+				</p>
+			</div>
+		</div>
+
+		<!-- Grid de recursos -->
+		<div
+			class="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-5xl"
+		>
+			<!-- Catálogo -->
+			<div class="bg-[var(--cajas)] rounded-xl shadow p-5 md:p-8 flex flex-col">
+				<div class="flex items-center gap-2 mb-2">
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+					>
+						<use href={`/icons/sprite.svg#tienda`}></use>
+					</svg>
+					<h2 class="text-xl md:text-2xl font-bold text-[var(--accent-color)]">
+						Catálogo
+					</h2>
+				</div>
+				<p class="text-sm md:text-base mb-2 flex-1">
+					Explora el <a
+						href="/catalogo"
+						class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
+						>Catálogo 2025</a
+					> con productos, servicios, herramientas y más. Filtra por categorías y
+					subcategorías, y descubre todo lo que tenemos para ti.
+				</p>
+			</div>
+			<!-- Destacados -->
+			<div class="bg-[var(--cajas)] rounded-xl shadow p-5 md:p-8 flex flex-col">
+				<div class="flex items-center gap-2 mb-2">
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+					>
+						<use href={`/icons/sprite.svg#productos`}></use>
+					</svg>
+					<h2 class="text-xl md:text-2xl font-bold text-[var(--accent-color)]">
+						Destacados
+					</h2>
+				</div>
+				<p class="text-sm md:text-base mb-2 flex-1">
+					Encuentra una selección de <span class="font-semibold"
+						>productos recomendados</span
+					> y populares para descubrir lo mejor de la tienda rápidamente.
+				</p>
+			</div>
+			<!-- Testimonios -->
+			<div class="bg-[var(--cajas)] rounded-xl shadow p-5 md:p-8 flex flex-col">
+				<div class="flex items-center gap-2 mb-2">
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+					>
+						<use href={`/icons/sprite.svg#testimonios`}></use>
+					</svg>
+					<h2 class="text-xl md:text-2xl font-bold text-[var(--accent-color)]">
+						Testimonios
+					</h2>
+				</div>
+				<p class="text-sm md:text-base mb-2 flex-1">
+					Lee las experiencias de otros artistas y atletas que han usado
+					nuestros productos y servicios. Descubre cómo han mejorado su
+					rendimiento.
+				</p>
+			</div>
+			<!-- Comunidad -->
+			<div class="bg-[var(--cajas)] rounded-xl shadow p-5 md:p-8 flex flex-col">
+				<div class="flex items-center gap-2 mb-2">
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+					>
+						<use href={`/icons/sprite.svg#comunidad`}></use>
+					</svg>
+					<h2 class="text-xl md:text-2xl font-bold text-[var(--accent-color)]">
+						Comunidad
+					</h2>
+				</div>
+				<p class="text-sm md:text-base mb-2 flex-1">
+					Únete a nuestra comunidad de artistas y atletas. Comparte
+					experiencias, conecta con otros profesionales y mantente actualizado.
+				</p>
+			</div>
+			<!-- Nutrición -->
+			<div class="bg-[var(--cajas)] rounded-xl shadow p-5 md:p-8 flex flex-col">
+				<div class="flex items-center gap-2 mb-2">
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+					>
+						<use href={`/icons/sprite.svg#nutricion`}></use>
+					</svg>
+					<h2 class="text-xl md:text-2xl font-bold text-[var(--accent-color)]">
+						Nutrición
+					</h2>
+				</div>
+				<p class="text-sm md:text-base mb-2 flex-1">
+					Descubre consejos de nutrición específicos para artistas y atletas.
+					Optimiza tu rendimiento con una alimentación adecuada.
+				</p>
+			</div>
+			<!-- Variantes Acrobáticas -->
+			<div class="bg-[var(--cajas)] rounded-xl shadow p-5 md:p-8 flex flex-col">
+				<div class="flex items-center gap-2 mb-2">
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+					>
+						<use href={`/icons/sprite.svg#variantes`}></use>
+					</svg>
+					<h2 class="text-xl md:text-2xl font-bold text-[var(--accent-color)]">
+						Variantes Acrobáticas
+					</h2>
+				</div>
+				<p class="text-sm md:text-base mb-2 flex-1">
+					Explora diferentes disciplinas acrobáticas y descubre nuevas formas de
+					expresar tu arte. Desde circo hasta deportes urbanos.
+				</p>
+			</div>
+			<!-- Favoritos -->
+			<div class="bg-[var(--cajas)] rounded-xl shadow p-5 md:p-8 flex flex-col">
+				<div class="flex items-center gap-2 mb-2">
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+					>
+						<use href={`/icons/sprite.svg#favoritos`}></use>
+					</svg>
+					<h2 class="text-xl md:text-2xl font-bold text-[var(--accent-color)]">
+						Favoritos
+					</h2>
+				</div>
+				<p class="text-sm md:text-base mb-2 flex-1">
+					Guarda tus productos favoritos para acceder rápidamente a ellos más
+					tarde. Organiza tu lista de deseos personal.
+				</p>
+			</div>
+			<!-- Feedback -->
+			<div class="bg-[var(--cajas)] rounded-xl shadow p-5 md:p-8 flex flex-col">
+				<div class="flex items-center gap-2 mb-2">
+					<svg
+						class="w-6 h-6"
+						aria-hidden="true"
+					>
+						<use href={`/icons/sprite.svg#feedback`}></use>
+					</svg>
+					<h2 class="text-xl md:text-2xl font-bold text-[var(--accent-color)]">
+						Feedback
+					</h2>
+				</div>
+				<p class="text-sm md:text-base mb-2 flex-1">
+					Comparte tu opinión sobre nuestros productos y servicios. Tu feedback
+					nos ayuda a mejorar y servirte mejor.
+				</p>
+			</div>
+		</div>
+	</section>
+	<div class="h-10"></div>
+</Layout>

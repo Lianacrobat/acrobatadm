@@ -1,0 +1,137 @@
+---
+// Componente de prueba para verificar la integración con Telegram
+---
+
+<div class="bg-cajas rounded-lg p-4 mb-4">
+	<h3 class="text-lg font-semibold text-primary mb-3">
+		🧪 Prueba de Integración Telegram
+	</h3>
+
+	<div class="space-y-3">
+		<button
+			id="test-connection"
+			class="w-full bg-[var(--accent-color)] hover:bg-[var(--accent-color-dark)] text-[var(--text-color)] px-4 py-2 rounded-lg transition-colors"
+		>
+			🔗 Probar Conexión
+		</button>
+
+		<button
+			id="test-message"
+			class="w-full bg-[var(--success-color)] hover:bg-[var(--success-color-dark)] text-[var(--text-color)] px-4 py-2 rounded-lg transition-colors"
+		>
+			📨 Enviar Mensaje de Prueba
+		</button>
+
+		<button
+			id="test-favorite"
+			class="w-full bg-[var(--primary-color)] hover:bg-[var(--primary-color-dark)] text-[var(--text-color)] px-4 py-2 rounded-lg transition-colors"
+		>
+			❤️ Simular Favorito
+		</button>
+	</div>
+
+	<div
+		id="test-results"
+		class="mt-4 p-3 bg-[var(--cajas)] rounded-lg hidden"
+	>
+		<h4 class="font-semibold mb-2">Resultados:</h4>
+		<pre
+			id="test-output"
+			class="text-sm text-[var(--text-color)] whitespace-pre-wrap">
+		</pre>
+	</div>
+</div>
+
+<script>
+	import {
+		testTelegramConnection,
+		sendTestMessage,
+		sendTelegramNotification,
+	} from "../../../utils/telegram.js";
+
+	function showResults(message: string, isError = false) {
+		const resultsDiv = document.getElementById("test-results");
+		const outputDiv = document.getElementById("test-output");
+
+		if (resultsDiv && outputDiv) {
+			resultsDiv.classList.remove("hidden");
+			outputDiv.textContent = message;
+			outputDiv.className = `text-sm whitespace-pre-wrap ${isError ? "text-red-600" : "text-green-600"}`;
+		}
+	}
+
+	// Test connection
+	document
+		.getElementById("test-connection")
+		?.addEventListener("click", async () => {
+			try {
+				showResults("🔄 Probando conexión...", false);
+				const result = await testTelegramConnection();
+
+				if (result.success) {
+					showResults(
+						`✅ Conexión exitosa!\n\nBot: ${result.bot.first_name}\nUsername: @${result.bot.username}\nID: ${result.bot.id}`,
+						false
+					);
+				} else {
+					showResults(`❌ Error de conexión:\n${result.error}`, true);
+				}
+			} catch (error) {
+				const errorMessage =
+					error instanceof Error ? error.message : "Error desconocido";
+				showResults(`❌ Error inesperado:\n${errorMessage}`, true);
+			}
+		});
+
+	// Test message
+	document
+		.getElementById("test-message")
+		?.addEventListener("click", async () => {
+			try {
+				showResults("🔄 Enviando mensaje de prueba...", false);
+				const result = await sendTestMessage();
+
+				if (result.success) {
+					showResults(
+						"✅ Mensaje de prueba enviado exitosamente!\n\nRevisa tu chat de Telegram.",
+						false
+					);
+				} else {
+					showResults(`❌ Error al enviar mensaje:\n${result.error}`, true);
+				}
+			} catch (error) {
+				const errorMessage =
+					error instanceof Error ? error.message : "Error desconocido";
+				showResults(`❌ Error inesperado:\n${errorMessage}`, true);
+			}
+		});
+
+	// Test favorite simulation
+	document
+		.getElementById("test-favorite")
+		?.addEventListener("click", async () => {
+			try {
+				showResults("🔄 Simulando favorito...", false);
+				const result = await sendTelegramNotification(
+					"Producto de Prueba",
+					"added"
+				);
+
+				if (result.success) {
+					showResults(
+						"✅ Notificación de favorito enviada exitosamente!\n\nRevisa tu chat de Telegram.",
+						false
+					);
+				} else {
+					showResults(
+						`❌ Error al enviar notificación:\n${result.error}`,
+						true
+					);
+				}
+			} catch (error) {
+				const errorMessage =
+					error instanceof Error ? error.message : "Error desconocido";
+				showResults(`❌ Error inesperado:\n${errorMessage}`, true);
+			}
+		});
+</script>

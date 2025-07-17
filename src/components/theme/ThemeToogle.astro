@@ -1,0 +1,60 @@
+---
+import Luna from "@icons/Luna.astro";
+import Sol from "@icons/Sol.astro";
+---
+
+<button
+	id="theme-toggle"
+	class="group relative flex items-center justify-center cursor-pointer"
+	aria-label="Cambio de tema"
+	title="Cambio de tema"
+>
+	<Luna />
+	<Sol />
+</button>
+
+<script>
+	function initializeTheme() {
+		const toggleButton = document.getElementById("theme-toggle");
+		const themeIconDark = document.getElementById("theme-icon-dark");
+		const themeIconLight = document.getElementById("theme-icon-light");
+
+		if (!toggleButton || !themeIconDark || !themeIconLight) {
+			return;
+		}
+
+		// Get initial theme - Dark theme by default
+		const getTheme = (): "dark" | "light" => {
+			const savedTheme = localStorage.getItem("theme");
+			if (savedTheme) {
+				return savedTheme as "dark" | "light";
+			}
+			return "dark";
+		};
+
+		// Apply theme to document
+		const applyTheme = (theme: "dark" | "light") => {
+			document.documentElement.dataset.theme = theme;
+			themeIconDark.classList.toggle("hidden", theme === "dark");
+			themeIconLight.classList.toggle("hidden", theme === "light");
+			localStorage.setItem("theme", theme);
+			document.cookie = `theme=${theme};path=/;max-age=31536000;SameSite=Strict`;
+		};
+
+		// Initialize theme
+		let currentTheme = getTheme();
+		applyTheme(currentTheme);
+
+		// Toggle theme on click
+		toggleButton.addEventListener("click", () => {
+			currentTheme = currentTheme === "dark" ? "light" : "dark";
+			applyTheme(currentTheme);
+		});
+	}
+
+	// Initialize theme on first load
+	initializeTheme();
+
+	// Re-initialize theme after view transitions
+	document.addEventListener("astro:page-load", initializeTheme);
+</script>

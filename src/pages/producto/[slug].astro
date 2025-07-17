@@ -1,0 +1,26 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProducDetails from "../../components/tienda/details/DetallesFather.astro";
+import { getProductBySlug, getAllProducts } from "../../data/productUtils";
+import type { Product } from "../../data/products";
+
+// Genera todas las rutas de productos para build estático
+export async function getStaticPaths() {
+	const products = getAllProducts();
+	return products.map((product) => ({
+		params: { slug: product.slug },
+	}));
+}
+
+// Get the slug from params
+const { slug } = Astro.params;
+const product: Product | undefined = slug ? getProductBySlug(slug) : undefined;
+
+if (!product) {
+	return Astro.redirect("/404");
+}
+---
+
+<Layout title={`${product.name} - Acrobata de Mente`}>
+	<ProducDetails product={product} />
+</Layout>

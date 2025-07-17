@@ -1,0 +1,165 @@
+---
+export interface Props {
+	productId: string;
+	productName: string;
+	class?: string;
+}
+
+const { productId, productName, class: className = "" } = Astro.props;
+---
+
+<button
+	class={`favorite-btn relative ${className} transition-all duration-200 flex items-center justify-center group bg-white rounded-full p-2 shadow-lg`}
+	data-product-id={productId}
+	data-product-name={productName}
+	aria-label={`${productName} - Agregar a favoritos`}
+>
+	<svg
+		class="heart-icon w-5 h-5 text-[var(--text-color-soft)] transition-all duration-200"
+		fill="none"
+		stroke="currentColor"
+		viewBox="0 0 24 24"
+	>
+		<path
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			stroke-width="2"
+			d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+		></path>
+	</svg>
+</button>
+
+<script>
+	import { sendTelegramNotification } from "../../../utils/telegram.js";
+
+	// Funciones simples para manejar favoritos
+	const getFavorites = (): string[] => {
+		try {
+			return JSON.parse(localStorage.getItem("favorites") || "[]");
+		} catch {
+			return [];
+		}
+	};
+
+	const saveFavorites = (favorites: string[]): void => {
+		try {
+			localStorage.setItem("favorites", JSON.stringify(favorites));
+		} catch (error) {
+			console.error("Error saving favorites:", error);
+		}
+	};
+
+	const updateHeartIcon = (icon: SVGElement, isFavorite: boolean): void => {
+		if (isFavorite) {
+			icon.classList.add("fill-red-500", "text-red-500");
+			icon.classList.remove("fill-none", "text-[var(--text-color-soft)]");
+		} else {
+			icon.classList.remove("fill-red-500", "text-red-500");
+			icon.classList.add("fill-none", "text-[var(--text-color-soft)]");
+		}
+	};
+
+	const updateAllHeartIcons = (
+		productId: string,
+		isFavorite: boolean
+	): void => {
+		document
+			.querySelectorAll(
+				`.favorite-btn[data-product-id="${productId}"] .heart-icon`
+			)
+			.forEach((icon) => updateHeartIcon(icon as SVGElement, isFavorite));
+	};
+
+	// Función principal para alternar favorito
+	const toggleFavorite = async (
+		productId: string,
+		productName: string
+	): Promise<boolean> => {
+		const favorites = getFavorites();
+		const isFavorite = favorites.includes(productId);
+
+		if (isFavorite) {
+			// Remover de favoritos
+			const newFavorites = favorites.filter((id: string) => id !== productId);
+			saveFavorites(newFavorites);
+
+			// Notificar por Telegram (sin bloquear la UI)
+			sendTelegramNotification(productName, "removed").catch(console.warn);
+
+			return false;
+		} else {
+			// Agregar a favoritos
+			favorites.push(productId);
+			saveFavorites(favorites);
+
+			// Notificar por Telegram (sin bloquear la UI)
+			sendTelegramNotification(productName, "added").catch(console.warn);
+
+			return true;
+		}
+	};
+
+	// Manejador de click simplificado
+	const handleClick = async (event: Event): Promise<void> => {
+		// Prevenir que el clic se propague al enlace padre
+		event.preventDefault();
+		event.stopPropagation();
+
+		const button = event.currentTarget as HTMLButtonElement;
+		const productId = button.dataset.productId!;
+		const productName = button.dataset.productName!;
+
+		// Prevenir clicks múltiples
+		if (button.disabled) return;
+
+		button.disabled = true;
+
+		try {
+			const newIsFavorite = await toggleFavorite(productId, productName);
+
+			// Actualizar todos los íconos del producto
+			updateAllHeartIcons(productId, newIsFavorite);
+
+			// Notificar a otros componentes
+			window.dispatchEvent(
+				new CustomEvent("favoritesChanged", {
+					detail: { productId, isFavorite: newIsFavorite, productName },
+				})
+			);
+
+			// Actualizar contador si existe
+			if (window.updateFavoritesCount) {
+				window.updateFavoritesCount(getFavorites().length);
+			}
+		} catch (error) {
+			console.error("Error toggling favorite:", error);
+		} finally {
+			button.disabled = false;
+		}
+	};
+
+	// Inicializar botones
+	const initializeButtons = (): void => {
+		document.querySelectorAll(".favorite-btn").forEach((button) => {
+			const productId = (button as HTMLButtonElement).dataset.productId!;
+			const isFavorite = getFavorites().includes(productId);
+			const icon = button.querySelector(".heart-icon") as SVGElement;
+
+			// Establecer estado inicial
+			updateHeartIcon(icon, isFavorite);
+
+			// Agregar listener (remover previo si existe)
+			button.removeEventListener("click", handleClick);
+			button.addEventListener("click", handleClick);
+		});
+	};
+
+	// Inicializar cuando el DOM esté listo
+	document.addEventListener("DOMContentLoaded", initializeButtons);
+	document.addEventListener("astro:page-load", initializeButtons);
+
+	// Escuchar cambios de favoritos
+	document.addEventListener("favoritesChanged", () => {
+		setTimeout(initializeButtons, 50);
+	});
+</script>

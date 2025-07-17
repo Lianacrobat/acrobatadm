@@ -1,0 +1,32 @@
+---
+import { getAllProducts } from "../../../data/productUtils";
+import { getAllCategories } from "../../../data/productUtils";
+
+const products = getAllProducts();
+const categories = getAllCategories();
+---
+
+<!-- Resumen -->
+<div class="flex flex-row justify-between gap-4">
+	<div class="bg-[var(--cajas)] rounded-lg p-2 sm:p-6 text-center flex-1">
+		<div class="text-lg sm:text-3xl font-bold text-sky-600">
+			{products.length}
+		</div>
+		<div class="text-xs sm:text-sm">Productos</div>
+	</div>
+	<div class="bg-[var(--cajas)] rounded-lg p-2 sm:p-6 text-center flex-1">
+		<div class="text-lg sm:text-3xl font-bold text-sky-600">
+			{categories.length}
+		</div>
+		<div class="text-xs sm:text-sm">Categorías</div>
+	</div>
+	<div class="bg-[var(--cajas)] rounded-lg p-2 sm:p-6 text-center flex-1">
+		<div class="text-lg sm:text-3xl font-bold text-sky-600">
+			{
+				Array.from(new Set(products.map((product) => product.subcategory)))
+					.length
+			}
+		</div>
+		<div class="text-xs sm:text-sm">Subcategorías</div>
+	</div>
+</div>

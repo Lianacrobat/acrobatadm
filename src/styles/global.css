@@ -1,30 +1,106 @@
 @import "tailwindcss";
 
+@layer base {
+	:root {
+		--sky-500: oklch(68.5% 0.169 237.323);
+		--sky-600: oklch(58.8% 0.158 241.966);
+
+		--zinc-50: oklch(98.5% 0 0);
+		--zinc-100: oklch(96.7% 0.001 286.375);
+		--zinc-200: oklch(92% 0.004 286.32);
+		--zinc-300: oklch(87.1% 0.006 286.286);
+		--zinc-400: oklch(70.5% 0.015 286.067);
+		--zinc-500: oklch(55.2% 0.016 285.938);
+		--zinc-600: oklch(44.2% 0.017 285.786);
+		--zinc-700: oklch(37.1% 0 0);
+		--zinc-800: oklch(26.8% 0.007 34.298);
+		--zinc-900: oklch(21.6% 0.006 56.043);
+		--zinc-950: oklch(14.1% 0.005 285.823);
+
+		--red-500: oklch(63.7% 0.237 25.331);
+	}
+}
+
+/* 🌙 Tema oscuro por defecto */
 :root {
-  --background: #ffffff;
-  --text: #000000;
+	/* FONDO WEBSITE */
+	--bg-color: var(--zinc-950);
+	--card: var(--zinc-900);
 
-    /* Transitions */
-    --transition-duration: 0.3s;
-    --transition-timing: ease-in-out;
-    --transition-all: all var(--transition-duration) var(--transition-timing);
-    --transition-opacity: opacity var(--transition-duration) var(--transition-timing);
-    --transition-transform: transform var(--transition-duration) var(--transition-timing);
-    --transition-colors: background-color var(--transition-duration) var(--transition-timing),
-                        color var(--transition-duration) var(--transition-timing),
-                        border-color var(--transition-duration) var(--transition-timing);
+	/* FONDO GRID */
+	--accent-color: var(--sky-500);
+	--accent-color-soft: var(--zinc-500);
+
+	/* TEXTO */
+	--text-color: var(--zinc-50);
+	--text-color-soft: var(--zinc-400);
+
+	/* NAV */
+	--bg-grid: var(--zinc-900);
+	--nav-box: var(--zinc-900);
+	--bg-button-nav: var(--accent-color);
+
+	/* VINCULOS */
+	--vinculo: var(--accent-color);
+
+	/* CAJAS */
+	--cajas: var(--zinc-900);
+
+	--favorite-color: var(--red-500);
 }
 
-[data-theme="dark"] {
-  --background: #1a1a1a;
-  --text: #ffffff;
-  transition: var(--transition-colors);
+/* ☀️ Tema claro */
+[data-theme="light"] {
+	/* FONDO WEBSITE */
+	--bg-color: var(--zinc-100);
+	--card: var(--zinc-100);
+
+	/* FONDO GRID */
+	--accent-color: var(--sky-500);
+	--accent-color-soft: var(--zinc-500);
+
+	/* TEXTO */
+	--text-color: var(--zinc-900);
+	--text-color-soft: var(--zinc-400);
+
+	/* NAV */
+	--bg-grid: var(--zinc-50);
+	--nav-box: var(--zinc-100);
+	--bg-button-nav: var(--accent-color);
+
+	/* VINCULOS */
+	--vinculo: var(--accent-color);
+
+	/* CAJAS */
+	--cajas: var(--zinc-50);
+
+	/* FAVORITOS */
+	--favorite-color: var(--red-500);
 }
 
+* {
+	font-family: system-ui, sans-serif;
+}
 body {
-  background-color: var(--background);
-  color: var(--text);
-  margin: 0;
-  padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	background-color: var(--bg-color);
+	color: var(--text-color);
+}
+/* Custom scrollbar */
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: var(--cajas) transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+	width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background-color: var(--accent-color-soft);
+	border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background-color: var(--accent-color);
 }

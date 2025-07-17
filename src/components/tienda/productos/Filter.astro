@@ -1,0 +1,488 @@
+---
+import {
+	getAllSubcategories,
+	getAllCategories,
+	getAllVariants,
+} from "../../../data/productUtils";
+
+const categories = getAllCategories();
+const allSubcategories = getAllSubcategories();
+const allVariants = getAllVariants();
+
+// Mapeo de nombres legibles para las variantes
+const variantNames: Record<string, string> = {
+	gimnasiaartistica: "Gimnasia Artística",
+	cheerleading: "Cheerleading",
+	acrobacia: "Acrobacia",
+	fitness: "Fitness",
+	crossfit: "CrossFit",
+	musculacion: "Musculación",
+	capoeira: "Capoeira",
+	judo: "Judo",
+	rollflex: "Roll Flex",
+};
+---
+
+<div class="rounded-lg mb-6">
+	<div class="flex items-center justify-between mb-3">
+		<h2 class="text-base sm:text-lg font-semibold text-[var(--text-color)]">
+			Filtros
+		</h2>
+		<button
+			id="clearFilters"
+			class="p-2 hover:bg-[var(--cajas)] hover:scale-105 rounded-lg"
+			title="Limpiar filtros"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="icon icon-tabler icons-tabler-outline icon-tabler-filter"
+				id="filterIcon"
+			>
+				<path
+					stroke="none"
+					d="M0 0h24v24H0z"
+					fill="none"
+				></path>
+				<path
+					d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z"
+				></path>
+			</svg>
+		</button>
+	</div>
+
+	<!-- Search Input svg used -->
+	<div class="mb-3 sm:mb-6 relative">
+		<input
+			type="text"
+			id="search"
+			placeholder="Buscar productos..."
+			autocomplete="off"
+			class="w-full pl-9 pr-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-[var(--cajas)] text-[var(--text-color)] border border-[var(--cajas)] rounded-lg focus:outline-none focus:ring-0 placeholder:text-[var(--text-color-soft)]"
+			style="transition: border-color 0.2s ease;"
+		/>
+		<svg
+			class="absolute left-2 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-color-soft)] pointer-events-none"
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<circle
+				cx="11"
+				cy="11"
+				r="7"
+			></circle>
+			<line
+				x1="21"
+				y1="21"
+				x2="16.65"
+				y2="16.65"
+			></line>
+		</svg>
+	</div>
+
+	<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
+		<!-- Category Filter -->
+		<div>
+			<select
+				id="category"
+				class="w-full px-2 py-1.5 sm:py-2 text-xs sm:text-sm bg-[var(--cajas)] text-[var(--text-color)] border border-[var(--cajas)] rounded-lg focus:outline-none focus:ring-0"
+				style="transition: border-color 0.2s ease;"
+			>
+				<option value="">Categoría</option>
+				{
+					categories.map((category) => (
+						<option value={category}>{category}</option>
+					))
+				}
+			</select>
+		</div>
+
+		<!-- Subcategory Filter -->
+		<div>
+			<select
+				id="subcategory"
+				class="w-full px-2 py-1.5 sm:py-2 text-xs sm:text-sm bg-[var(--cajas)] text-[var(--text-color)] border border-[var(--cajas)] rounded-lg focus:outline-none focus:ring-0"
+				style="transition: border-color 0.2s ease;"
+			>
+				<option value="">Subcategorías</option>
+				{
+					allSubcategories.map((subcategory: string) => (
+						<option value={subcategory}>{subcategory}</option>
+					))
+				}
+			</select>
+		</div>
+
+		<!-- Variant Filter -->
+		<div>
+			<select
+				id="variant"
+				class="w-full px-2 py-1.5 sm:py-2 text-xs sm:text-sm bg-[var(--cajas)] text-[var(--text-color)] border border-[var(--cajas)] rounded-lg focus:outline-none focus:ring-0"
+				style="transition: border-color 0.2s ease;"
+			>
+				<option value="">Deporte</option>
+				{
+					allVariants.map((variant: string) => (
+						<option value={variant}>{variantNames[variant] || variant}</option>
+					))
+				}
+			</select>
+		</div>
+
+		<!-- Status Filter -->
+		<div>
+			<select
+				id="status"
+				class="w-full px-2 py-1.5 sm:py-2 text-xs sm:text-sm bg-[var(--cajas)] text-[var(--text-color)] border border-[var(--cajas)] rounded-lg focus:outline-none focus:ring-0"
+				style="transition: border-color 0.2s ease;"
+			>
+				<option value="">Estado</option>
+				<option value="stock">En Stock</option>
+				<option value="import">Por Importar</option>
+				<option value="digital">Digital</option>
+			</select>
+		</div>
+
+		<!-- Condition Filter -->
+		<div>
+			<select
+				id="condition"
+				class="w-full px-2 py-1.5 sm:py-2 text-xs sm:text-sm bg-[var(--cajas)] text-[var(--text-color)] border border-[var(--cajas)] rounded-lg focus:outline-none focus:ring-0"
+				style="transition: border-color 0.2s ease;"
+			>
+				<option value="">Condición</option>
+				<option value="nuevo">Nuevo</option>
+				<option value="usado">Usado</option>
+			</select>
+		</div>
+
+		<!-- Authenticity Filter new used-->
+		<div>
+			<select
+				id="calidad"
+				class="w-full px-2 py-1.5 sm:py-2 text-xs sm:text-sm bg-[var(--cajas)] text-[var(--text-color)] border border-[var(--cajas)] rounded-lg focus:outline-none focus:ring-0"
+				style="transition: border-color 0.2s ease;"
+			>
+				<option value="">Calidad</option>
+				<option value="premium">Premium</option>
+				<option value="alta">Alta</option>
+				<option value="media">Media</option>
+				<option value="baja">Baja</option>
+			</select>
+		</div>
+	</div>
+</div>
+
+<script>
+	import {
+		getAllProducts,
+		searchProducts,
+		getProductsByCategory,
+		getProductsBySubcategory,
+		getProductsByStatus,
+		getSubcategoriesByCategory,
+		getAllSubcategories,
+		getAllCategories,
+		getAllVariants,
+	} from "../../../data/productUtils";
+
+	let currentFilters = {
+		search: "",
+		category: "",
+		subcategory: "",
+		variant: "",
+		status: "",
+		condition: "",
+		calidad: "",
+	};
+
+	let allProducts = getAllProducts(); // Cache all products
+	let allSubcategories = getAllSubcategories(); // Cache all subcategories
+
+	function updateFilterIcon() {
+		const filterIcon = document.getElementById(
+			"filterIcon"
+		) as unknown as SVGElement;
+		const hasActiveFilters = Object.values(currentFilters).some(
+			(value) => value !== ""
+		);
+
+		if (hasActiveFilters) {
+			filterIcon.innerHTML = `
+				<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+				<path d="M8 4h12v2.172a2 2 0 0 1 -.586 1.414l-3.914 3.914m-.5 3.5v4l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227" />
+				<path d="M3 3l18 18" />
+			`;
+			filterIcon.classList.add("text-[var(--accent-color)]");
+		} else {
+			filterIcon.innerHTML = `
+				<path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+				<path d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z" />
+			`;
+			filterIcon.classList.remove("text-[var(--accent-color)]");
+		}
+	}
+
+	function applyFilters() {
+		let filteredProducts = [...allProducts]; // Use cached products
+
+		// Apply search filter
+		if (currentFilters.search) {
+			const searchTerm = currentFilters.search.toLowerCase();
+			filteredProducts = filteredProducts.filter(
+				(product) =>
+					product.name.toLowerCase().includes(searchTerm) ||
+					product.shortDescription?.toLowerCase().includes(searchTerm) ||
+					product.category.toLowerCase().includes(searchTerm) ||
+					product.subcategory.toLowerCase().includes(searchTerm) ||
+					product.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+			);
+		}
+
+		// Apply category filter
+		if (currentFilters.category) {
+			filteredProducts = filteredProducts.filter(
+				(product) => product.category === currentFilters.category
+			);
+		}
+
+		// Apply subcategory filter
+		if (currentFilters.subcategory) {
+			filteredProducts = filteredProducts.filter(
+				(product) => product.subcategory === currentFilters.subcategory
+			);
+		}
+
+		// Apply variant filter
+		if (currentFilters.variant) {
+			filteredProducts = filteredProducts.filter((product) =>
+				product.variant.includes(currentFilters.variant)
+			);
+		}
+
+		// Apply status filter
+		if (currentFilters.status) {
+			filteredProducts = filteredProducts.filter(
+				(product) => product.status === currentFilters.status
+			);
+		}
+
+		// Apply condition filter
+		if (currentFilters.condition) {
+			filteredProducts = filteredProducts.filter(
+				(product) => product.condition === currentFilters.condition
+			);
+		}
+
+		// Apply calidad filter
+		if (currentFilters.calidad) {
+			filteredProducts = filteredProducts.filter(
+				(product) => product.calidad === currentFilters.calidad
+			);
+		}
+
+		// Update filter icon
+		updateFilterIcon();
+
+		// Dispatch custom event with filtered products
+		window.dispatchEvent(
+			new CustomEvent("productsFiltered", {
+				detail: { products: filteredProducts, filters: currentFilters },
+			})
+		);
+	}
+
+	function updateSubcategories(selectedCategory: string) {
+		const subcategorySelect = document.getElementById(
+			"subcategory"
+		) as HTMLSelectElement;
+
+		if (selectedCategory) {
+			const subcategories = getSubcategoriesByCategory(selectedCategory);
+
+			// Clear current options except the first one
+			subcategorySelect.innerHTML = '<option value="">Subcategorías</option>';
+
+			// Add new options
+			subcategories.forEach((subcategory) => {
+				const option = document.createElement("option");
+				option.value = subcategory;
+				option.textContent = subcategory;
+				subcategorySelect.appendChild(option);
+			});
+		} else {
+			// If no category is selected, show all subcategories
+			subcategorySelect.innerHTML = '<option value="">Subcategorías</option>';
+
+			// Add all subcategories
+			allSubcategories.forEach((subcategory: string) => {
+				const option = document.createElement("option");
+				option.value = subcategory;
+				option.textContent = subcategory;
+				subcategorySelect.appendChild(option);
+			});
+		}
+
+		// Reset subcategory filter if category changed
+		if (currentFilters.category !== selectedCategory) {
+			currentFilters.subcategory = "";
+			subcategorySelect.value = "";
+		}
+	}
+
+	function initializeFilters() {
+		const searchInput = document.getElementById("search") as HTMLInputElement;
+		const categorySelect = document.getElementById(
+			"category"
+		) as HTMLSelectElement;
+		const subcategorySelect = document.getElementById(
+			"subcategory"
+		) as HTMLSelectElement;
+		const statusSelect = document.getElementById("status") as HTMLSelectElement;
+		const conditionSelect = document.getElementById(
+			"condition"
+		) as HTMLSelectElement;
+		const calidadSelect = document.getElementById(
+			"calidad"
+		) as HTMLSelectElement;
+		const variantSelect = document.getElementById(
+			"variant"
+		) as HTMLSelectElement;
+		const clearButton = document.getElementById(
+			"clearFilters"
+		) as HTMLButtonElement;
+
+		// Verificar que todos los elementos existan antes de continuar
+		if (
+			!searchInput ||
+			!categorySelect ||
+			!subcategorySelect ||
+			!statusSelect ||
+			!conditionSelect ||
+			!calidadSelect ||
+			!variantSelect ||
+			!clearButton
+		) {
+			return; // Salir si algún elemento no existe
+		}
+
+		// Search input with debounce
+		let searchTimeout: NodeJS.Timeout;
+		searchInput.addEventListener("input", (e) => {
+			clearTimeout(searchTimeout);
+			searchTimeout = setTimeout(() => {
+				currentFilters.search = (e.target as HTMLInputElement).value;
+				applyFilters();
+			}, 300);
+		});
+
+		// Category select
+		categorySelect.addEventListener("change", (e) => {
+			const selectedCategory = (e.target as HTMLSelectElement).value;
+			currentFilters.category = selectedCategory;
+			updateSubcategories(selectedCategory);
+			applyFilters();
+		});
+
+		// Subcategory select
+		subcategorySelect.addEventListener("change", (e) => {
+			currentFilters.subcategory = (e.target as HTMLSelectElement).value;
+			applyFilters();
+		});
+
+		// Status select
+		statusSelect.addEventListener("change", (e) => {
+			currentFilters.status = (e.target as HTMLSelectElement).value;
+			applyFilters();
+		});
+
+		// Condition select
+		conditionSelect.addEventListener("change", (e) => {
+			currentFilters.condition = (e.target as HTMLSelectElement).value;
+			applyFilters();
+		});
+
+		// Calidad select
+		calidadSelect.addEventListener("change", (e) => {
+			currentFilters.calidad = (e.target as HTMLSelectElement).value;
+			applyFilters();
+		});
+
+		// Variant select
+		variantSelect.addEventListener("change", (e) => {
+			currentFilters.variant = (e.target as HTMLSelectElement).value;
+			applyFilters();
+		});
+
+		// Clear filters button
+		clearButton.addEventListener("click", () => {
+			currentFilters = {
+				search: "",
+				category: "",
+				subcategory: "",
+				status: "",
+				condition: "",
+				calidad: "",
+				variant: "",
+			};
+			searchInput.value = "";
+			categorySelect.value = "";
+			subcategorySelect.value = "";
+			statusSelect.value = "";
+			conditionSelect.value = "";
+			calidadSelect.value = "";
+			variantSelect.value = "";
+			updateSubcategories("");
+			applyFilters();
+		});
+
+		// Initial load
+		applyFilters();
+
+		// Enviar productos iniciales al Grid
+		window.dispatchEvent(
+			new CustomEvent("productsFiltered", {
+				detail: { products: allProducts, filters: currentFilters },
+			})
+		);
+	}
+
+	// Manejar el cambio de borde en focus
+	function handleFocusStyles() {
+		const inputs = document.querySelectorAll("input, select");
+
+		// Verificar que hay elementos antes de agregar listeners
+		if (inputs.length === 0) {
+			return;
+		}
+
+		inputs.forEach((input) => {
+			input.addEventListener("focus", function (this: HTMLElement) {
+				this.style.borderColor = "var(--accent-color)";
+			});
+
+			input.addEventListener("blur", function (this: HTMLElement) {
+				this.style.borderColor = "var(--cajas)";
+			});
+		});
+	}
+
+	document.addEventListener("DOMContentLoaded", () => {
+		initializeFilters();
+		handleFocusStyles();
+	});
+	document.addEventListener("astro:page-load", () => {
+		initializeFilters();
+		handleFocusStyles();
+	});
+</script>

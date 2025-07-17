@@ -1,0 +1,391 @@
+---
+import { testimonios } from "./testimonios.ts";
+const hasTestimonios = Array.isArray(testimonios) && testimonios.length > 0;
+---
+
+<div class="w-full">
+	<h3 class="text-base font-bold mb-4">Testimonios:</h3>
+</div>
+
+{
+	hasTestimonios ? (
+		<div class="flex flex-col items-center w-full">
+			<div class="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 w-full ">
+				<button
+					class="hidden md:flex text-2xl w-10 h-10  cursor-pointer transition-all duration-150 z-10 items-center justify-center group"
+					aria-label="Anterior testimonio"
+					id="carousel-prev"
+					tabindex="0"
+					type="button"
+				>
+					<svg
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						class="w-7 h-7 transition-colors duration-150 group-hover:accent-arrow scale-x-[-1]"
+					>
+						<use href="/icons/sprite.svg#arrow-right" />
+					</svg>
+				</button>
+				<div class="relative flex-1 flex justify-center overflow-hidden bg-[var(--cajas)] rounded-2xl">
+					<div
+						id="carousel-content"
+						class="w-full flex flex-col items-center"
+					>
+						{testimonios.map((t, idx) => (
+							<div
+								class={`carousel-item ${idx === 0 ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"} absolute left-0 right-0 top-0 mx-auto flex flex-col items-center justify-between w-full h-[280px] sm:h-[320px] md:h-[380px] rounded-2xl p-3 sm:p-4 md:p-8 bg-cajas z-[1]`}
+								data-index={idx}
+								aria-hidden={idx !== 0}
+								role="group"
+								tabindex={idx === 0 ? 0 : -1}
+							>
+								<span class="inline-flex items-center justify-center rounded-full mb-2 sm:mb-3 bg-gradient-to-tr from-amber-400 to-pink-600 p-[2px]">
+									<span class="bg-[var(--cajas)] rounded-full block p-[2.5px] sm:p-[3.5px] md:p-[5px]">
+										<img
+											class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full object-cover"
+											src={t.foto.replace("@public", "")}
+											alt={t.nombre}
+											loading="lazy"
+										/>
+									</span>
+								</span>
+								<div class="flex items-center justify-center gap-2 mb-1">
+									<span class="font-bold text-base sm:text-lg md:text-2xl text-center text-[var(--text-color)]">
+										{t.nombre}
+									</span>
+									{t.verificado && (
+										<svg
+											width="16"
+											height="16"
+											viewBox="0 0 24 24"
+										>
+											<use href="/icons/sprite.svg#verificado" />
+										</svg>
+									)}
+								</div>
+								{t.instagram && (
+									<a
+										href={`https://instagram.com/${t.instagram}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="block text-center text-[var(--accent-color)] font-medium mb-1 text-xs sm:text-sm md:text-lg hover:underline"
+									>
+										@{t.instagram}
+									</a>
+								)}
+								<div class="text-center text-xs sm:text-sm md:text-base mb-2 sm:mb-4 text-[var(--text-color-soft)]">
+									{t.cargo} {t.empresa && <> en {t.empresa}</>}
+								</div>
+								<div class="flex-1 flex items-center justify-center w-full">
+									<div class="text-xs sm:text-sm md:text-lg text-center italic text-[var(--text-color)]">
+										“{t.texto}”
+									</div>
+								</div>
+								<div class="flex justify-between items-center w-full mt-2 sm:mt-4 text-xs sm:text-sm text-[var(--text-color-soft)]">
+									<span>{t.pais}</span>
+									<span>
+										{t.fecha
+											? new Date(t.fecha).toLocaleString("default", {
+													month: "short",
+													year: "numeric",
+												})
+											: ""}
+									</span>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+				<button
+					class="hidden md:flex text-2xl w-10 h-10 cursor-pointer transition-all duration-150 z-10 items-center justify-center group"
+					aria-label="Siguiente testimonio"
+					id="carousel-next"
+					tabindex="0"
+					type="button"
+				>
+					<svg
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						class="w-7 h-7 transition-colors duration-150 group-hover:accent-arrow"
+					>
+						<use href="/icons/sprite.svg#arrow-right" />
+					</svg>
+				</button>
+			</div>
+			{testimonios.length > 1 && (
+				<div
+					class="flex justify-center mt-4 sm:mt-3 md:mt-5"
+					id="carousel-indicators"
+				>
+					{testimonios.map((_, idx) => (
+						<span
+							class={`w-2 h-2 rounded-full mx-1  cursor-pointer ${idx === 0 ? "dot-active" : "dot-inactive"}`}
+							data-index={idx}
+							tabindex="0"
+							role="button"
+							aria-label={`Ir al testimonio ${idx + 1}`}
+						/>
+					))}
+				</div>
+			)}
+		</div>
+	) : (
+		<div class="flex items-center justify-center min-h-40 text-[var(--text-color-soft)]">
+			No hay testimonios disponibles.
+		</div>
+	)
+}
+
+<script>
+	const config = {
+		autoPlay: true,
+		autoPlayInterval: 5500, // más rápido
+		pauseOnHover: true,
+		swipeThreshold: 50, // más sensible
+		swipeVelocityThreshold: 0.5, // más sensible
+	};
+
+	function initCarousel() {
+		const content = document.getElementById("carousel-content");
+		const items = Array.from(document.querySelectorAll(".carousel-item"));
+		const dots = Array.from(
+			document.querySelectorAll("#carousel-indicators > span")
+		);
+		const prevBtn = document.getElementById("carousel-prev");
+		const nextBtn = document.getElementById("carousel-next");
+
+		if (!content || items.length < 2) {
+			if (!content) console.warn("Carousel: No content found.");
+			return;
+		}
+
+		let currentIndex = 0;
+		const total = items.length;
+		let autoPlayTimer: ReturnType<typeof setInterval> | null = null;
+		let isThrottled = false;
+		let touchStartX = 0;
+		let touchEndX = 0;
+		let touchStartTime = 0;
+		let isTouchOnLink = false;
+
+		// Mejorar: usar requestAnimationFrame para animaciones más suaves
+		function showSlide(idx: number, animate = true) {
+			idx = ((idx % total) + total) % total;
+			if (idx === currentIndex) return; // No repintar si ya está en el slide
+			currentIndex = idx;
+
+			window.requestAnimationFrame(() => {
+				for (let i = 0; i < total; i++) {
+					const el = items[i] as HTMLElement;
+					const isActive = i === idx;
+					el.style.transition = animate
+						? "opacity 0.35s, transform 0.35s"
+						: "none";
+					el.classList.toggle("opacity-100", isActive);
+					el.classList.toggle("scale-100", isActive);
+					el.classList.toggle("pointer-events-auto", isActive);
+					el.classList.toggle("opacity-0", !isActive);
+					el.classList.toggle("scale-95", !isActive);
+					el.classList.toggle("pointer-events-none", !isActive);
+					el.setAttribute("aria-hidden", isActive ? "false" : "true");
+					el.setAttribute("tabindex", isActive ? "0" : "-1");
+				}
+				for (let i = 0; i < dots.length; i++) {
+					dots[i].classList.toggle("dot-active", i === idx);
+					dots[i].classList.toggle("dot-inactive", i !== idx);
+				}
+			});
+		}
+
+		// Mejor throttle: usa timestamp para evitar bloqueos por setTimeout
+		function throttle<T extends (...args: any[]) => any>(fn: T, limit: number) {
+			let lastCall = 0;
+			return (...args: Parameters<T>) => {
+				const now = Date.now();
+				if (now - lastCall >= limit) {
+					lastCall = now;
+					fn(...args);
+				}
+			};
+		}
+
+		function startAutoPlay() {
+			if (config.autoPlay && total > 1 && !autoPlayTimer) {
+				autoPlayTimer = setInterval(() => {
+					showSlide(currentIndex + 1);
+				}, config.autoPlayInterval);
+			}
+		}
+
+		function stopAutoPlay() {
+			if (autoPlayTimer) {
+				clearInterval(autoPlayTimer);
+				autoPlayTimer = null;
+			}
+		}
+
+		const prev = throttle(() => showSlide(currentIndex - 1), 300);
+		const next = throttle(() => showSlide(currentIndex + 1), 300);
+
+		prevBtn?.addEventListener("click", prev);
+		nextBtn?.addEventListener("click", next);
+
+		// Dots
+		dots.forEach((dot, i) => {
+			dot.addEventListener("click", (e: Event) => {
+				const target = e.target as HTMLElement;
+				if (target?.closest("a")) return;
+				showSlide(i);
+			});
+			dot.addEventListener("keydown", (e: Event) => {
+				const keyboardEvent = e as KeyboardEvent;
+				if (keyboardEvent.key === "Enter" || keyboardEvent.key === " ") {
+					e.preventDefault();
+					showSlide(i);
+				}
+			});
+		});
+
+		// Teclado
+		document.addEventListener("keydown", (e: Event) => {
+			const keyboardEvent = e as KeyboardEvent;
+			const target = e.target as HTMLElement;
+			if (
+				target &&
+				(target.tagName === "INPUT" || target.tagName === "TEXTAREA")
+			)
+				return;
+			if (keyboardEvent.key === "ArrowLeft") prevBtn?.click();
+			if (keyboardEvent.key === "ArrowRight") nextBtn?.click();
+		});
+
+		// Swipe
+		const swipe = throttle((dir: "left" | "right") => {
+			if (dir === "left") {
+				showSlide(currentIndex + 1);
+			} else {
+				showSlide(currentIndex - 1);
+			}
+		}, 300);
+
+		// --- EFECTO DE SWIPE MEJORADO: la tarjeta se mueve en la dirección correcta al arrastrar --- border
+		let lastDiff = 0;
+
+		content.addEventListener(
+			"touchstart",
+			(e: Event) => {
+				const touchEvent = e as TouchEvent;
+				const target = e.target as HTMLElement;
+				isTouchOnLink = !!target?.closest("a");
+				touchStartX = touchEvent.touches[0].clientX;
+				touchStartTime = performance.now();
+				lastDiff = 0;
+				stopAutoPlay();
+				// No preventDefault para permitir scroll vertical
+			},
+			{ passive: true }
+		);
+
+		content.addEventListener(
+			"touchmove",
+			(e: Event) => {
+				const touchEvent = e as TouchEvent;
+				touchEndX = touchEvent.touches[0].clientX;
+				const diff = touchEndX - touchStartX; // Cambiado el orden para que el signo sea intuitivo
+				lastDiff = diff;
+				const item = items[currentIndex] as HTMLElement;
+				// Limitar el movimiento a -60px a la izquierda y 60px a la derecha
+				const limitedDiff = Math.max(Math.min(diff * 0.4, 60), -60);
+				item.style.transform = `translateX(${limitedDiff}px) scale(1)`;
+			},
+			{ passive: true }
+		);
+
+		content.addEventListener(
+			"touchend",
+			() => {
+				const diff = lastDiff;
+				const duration = performance.now() - touchStartTime;
+				const velocity = Math.abs(diff) / (duration || 1);
+				const item = items[currentIndex] as HTMLElement;
+				item.style.transform = `scale(1)`;
+
+				if (
+					Math.abs(diff) > config.swipeThreshold ||
+					velocity > config.swipeVelocityThreshold
+				) {
+					if (diff < 0) {
+						swipe("left");
+					} else if (diff > 0) {
+						swipe("right");
+					}
+				} else if (isTouchOnLink) {
+					isTouchOnLink = false;
+					return;
+				}
+				startAutoPlay();
+				touchStartX = touchEndX = touchStartTime = 0;
+				lastDiff = 0;
+				isTouchOnLink = false;
+			},
+			{ passive: true }
+		);
+		// --- FIN DEL EFECTO DE SWIPE ---
+
+		if (config.pauseOnHover) {
+			content.addEventListener("mouseenter", stopAutoPlay);
+			content.addEventListener("mouseleave", startAutoPlay);
+		}
+
+		// Arranque inicial: mostrar el primer slide y autoplay
+		showSlide(0, false);
+		startAutoPlay();
+	}
+
+	if (typeof window !== "undefined") {
+		setTimeout(initCarousel, 1); // Espera a que el DOM esté listo
+	}
+	initCarousel();
+</script>
+
+<style>
+	.dot-active {
+		background-color: var(--accent-color);
+		transform: scale(1.2);
+	}
+	.dot-inactive {
+		background-color: var(--cajas);
+		transform: scale(1);
+	}
+
+	.carousel-item.opacity-100 {
+		opacity: 1;
+		transform: scale(1);
+		pointer-events: auto;
+		position: relative;
+	}
+	.group svg {
+		color: var(--text-color-soft);
+	}
+	.group:hover svg,
+	.group:focus svg {
+		color: var(--accent-color);
+	}
+	@media (min-width: 1024px) {
+		.carousel-item {
+			max-width: 700px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+	@media (max-width: 1023px) {
+		.carousel-item {
+			width: 100%;
+			max-width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+		}
+	}
+</style>

@@ -1,0 +1,167 @@
+---
+import type { Product } from "../../../data/products";
+import ButtonWsp from "../ui/ButtonWsp.astro";
+
+export interface Props {
+	product: Product;
+	mainImage: string | ImageMetadata;
+	placeholder: string;
+}
+
+const { product, mainImage, placeholder } = Astro.props;
+
+// Utilidades simples para etiquetas y descripciones
+const getShortDescription = () =>
+	product.shortDescription ||
+	(product.longDescription
+		? product.longDescription.substring(0, 100) + "..."
+		: "");
+
+const getStatusLabel = () => {
+	switch (product.status) {
+		case "stock":
+			return "En Stock";
+		case "import":
+			return "Por Importar";
+		default:
+			return "Digital";
+	}
+};
+
+const getStatusColor = () => {
+	switch (product.status) {
+		case "stock":
+			return "bg-[var(--cajas)] text-[var(--text-color)] border-[var(--border-color)]";
+		case "import":
+			return "bg-[var(--cajas-light)] text-[var(--text-color-soft)] border-[var(--border-color)]";
+		default:
+			return "bg-[var(--cajas-light)] text-[var(--text-color-soft)] border-[var(--border-color-light)]";
+	}
+};
+
+const getStatusDot = () => {
+	switch (product.status) {
+		case "stock":
+			return "bg-[var(--text-color)]";
+		case "import":
+			return "bg-[var(--text-color-soft)]";
+		default:
+			return "bg-[var(--text-color-light)]";
+	}
+};
+
+const getConditionLabel = () =>
+	product.condition === "nuevo" ? "Nuevo" : "Usado";
+
+const getConditionColor = () =>
+	product.condition === "nuevo"
+		? "bg-[var(--cajas)] text-[var(--text-color)] border-[var(--border-color)]"
+		: "bg-[var(--cajas-light)] text-[var(--text-color-soft)] border-[var(--border-color-light)]";
+
+const getConditionDot = () =>
+	product.condition === "nuevo"
+		? "bg-[var(--text-color)]"
+		: "bg-[var(--text-color-soft)]";
+---
+
+<div class="bg-cajas p-4 rounded-xl space-y-4">
+	<div class="flex items-center gap-3">
+		<div
+			class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="text-primary-soft"
+			>
+				<path
+					d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+				>
+				</path>
+				<path d="M15 12a3 3 0 1 0 -6 0a3 3 0 0 0 6 0z"></path>
+			</svg>
+		</div>
+		<div>
+			<h3 class="text-lg font-semibold text-primary">Información</h3>
+			<p class="text-xs text-primary-soft">Datos del producto</p>
+		</div>
+	</div>
+
+	<div>
+		<h1 class="text-base md:text-2xl font-bold text-accent mt-1">
+			{product.name}
+		</h1>
+		<div class="flex items-center gap-2">
+			<span class="text-xs md:text-base text-primary-soft">
+				{product.category}
+				{product.subcategory && ` / ${product.subcategory}`}
+			</span>
+		</div>
+	</div>
+
+	<div>
+		<div class="flex flex-wrap items-center gap-2 mt-1">
+			<!-- Estado del producto -->
+			<div
+				class={`inline-flex items-center px-2 py-1 rounded-full text-xs md:text-base font-medium border ${getStatusColor()}`}
+			>
+				<div class={`w-1.5 h-1.5 rounded-full mr-1.5 ${getStatusDot()}`}></div>
+				{getStatusLabel()}
+			</div>
+			<!-- Condición del producto -->
+			<div
+				class={`inline-flex items-center px-2 py-1 rounded-full text-xs md:text-base font-medium border ${getConditionColor()}`}
+			>
+				<div class={`w-1.5 h-1.5 rounded-full mr-1.5 ${getConditionDot()}`}>
+				</div>
+				{getConditionLabel()}
+			</div>
+		</div>
+	</div>
+
+	<div>
+		<label class="text-xs font-medium text-color">Descripción Corta:</label>
+		<p class="text-sm md:text-base text-primary-soft mt-1">
+			{getShortDescription()}
+		</p>
+	</div>
+
+	<div>
+		<label class="text-xs font-medium text-color">Descripción Larga:</label>
+		<p class="text-sm md:text-base text-primary-soft mt-1">
+			{product.longDescription}
+		</p>
+	</div>
+
+	{
+		product.tags && product.tags.length > 0 && (
+			<div>
+				<label class="text-xs font-medium text-color">Etiquetas:</label>
+				<div class="flex flex-wrap gap-1 mt-1">
+					{product.tags.map((tag) => (
+						<span class="px-2 py-1 bg-[var(--bg-color)] text-primary-soft text-xs md:text-base rounded">
+							{tag}
+						</span>
+					))}
+				</div>
+			</div>
+		)
+	}
+
+	<div class="mt-2">
+		<ButtonWsp
+			productName={product.name}
+			productSlug={product.slug}
+			productImage={typeof mainImage === "string"
+				? mainImage
+				: mainImage?.src || placeholder}
+		/>
+	</div>
+</div>

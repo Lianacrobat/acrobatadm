@@ -1,50 +1,82 @@
 ---
+// Props interface
 interface Props {
-  title: string;
+	title: string;
 }
 
+// Destructure props
 const { title } = Astro.props;
+
+// Import styles
+import "../styles/global.css";
+
+// Import components
+import Aside from "../components/aside/Aside.astro";
+import { ViewTransitions } from "astro:transitions";
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <slot />
-  </body>
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<meta
+			name="generator"
+			content={Astro.generator}
+		/>
+
+		<!-- Favicon -->
+		<link
+			rel="icon"
+			type="image/svg+xml"
+			href="/favicon.svg"
+		/>
+
+		<!-- Title -->
+		<title>{title}</title>
+
+		<!-- View Transitions -->
+		<ViewTransitions fallback="none" />
+
+		<!-- Swiper CSS & JS global -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"
+		></script>
+
+		<!-- Inline Scripts -->
+		<script>
+			// Load SVG sprite
+			fetch("/icons/sprite.svg")
+				.then((response) => response.text())
+				.then((svg) => {
+					const div = document.createElement("div");
+					div.innerHTML = svg;
+					div.style.display = "none";
+					document.body.appendChild(div);
+				})
+				.catch((error) => {
+					console.warn("Failed to load SVG sprite:", error);
+				});
+		</script>
+	</head>
+
+	<body class="h-svh flex tracking-tight">
+		<!-- Sidebar -->
+		<aside class="w-16 p-2 sm:w-48 h-full flex-shrink-0 flex flex-col">
+			<Aside />
+		</aside>
+
+		<!-- Main Content -->
+		<main class="flex-1 overflow-y-auto custom-scrollbar">
+			<div class="w-full max-w-7xl mx-auto px-2">
+				<slot />
+			</div>
+		</main>
+	</body>
 </html>
-
-<style is:global>
-  :root {
-    --accent: 136, 58, 234;
-    --accent-light: 224, 204, 250;
-    --accent-dark: 49, 10, 101;
-    --accent-gradient: linear-gradient(
-      45deg,
-      rgb(var(--accent)),
-      rgb(var(--accent-light)) 30%,
-      white 60%
-    );
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  html {
-    font-family: system-ui, sans-serif;
-    background: #f6f6f6;
-    background-size: 224px;
-  }
-
-  body {
-    min-height: 100vh;
-    line-height: 1.5;
-  }
-</style> 

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+    style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2" viewBox="0 0 848 1190">
+    <path
+        d="M847.546 362.977v733.215a93.078 93.078 0 0 1-128.183 86.203l-42.396-17.266-288.406-499.534H141.644v281.522l-83.219-33.891C23.372 898.951.454 864.871.454 827.023V93.808A93.078 93.078 0 0 1 128.637 7.605l56.305 22.931 285.135 493.869h236.279V242.883l83.219 33.891c35.053 14.275 57.971 48.355 57.971 86.203ZM141.644 524.405h165.401L141.644 237.923v286.482ZM706.356 933.65V665.595H551.594L706.356 933.65Z"
+        style="fill:#fff" />
+    <style>
+        path {
+            fill: #000;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            path {
+                fill: #FFF;
+            }
+        }
+    </style>
+</svg>

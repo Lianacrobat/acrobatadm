@@ -1,0 +1,68 @@
+---
+import { getAllProducts } from "../../../data/productUtils";
+import { imgRutas } from "../../../data/productosImgRutas";
+import type { Product } from "../../../data/products";
+import ProductCard from "../card/ProductCard.astro";
+
+const products = getAllProducts();
+
+// Función para mezclar aleatoriamente el array de productos
+const shuffleProducts = (products: Product[]) => {
+	const shuffled = [...products];
+	for (let i = shuffled.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+	}
+	return shuffled;
+};
+
+// Obtener productos aleatorios
+const randomProducts = shuffleProducts(products);
+---
+
+<div class="flex flex-row items-center justify-between group mb-4">
+	<div class="w-1/2 md:w-1/2">
+		<h3 class="text-base md:text-base font-bold">Productos destacados:</h3>
+	</div>
+	<div class="w-1/2 md:w-1/2 flex justify-end">
+		<a
+			href="/tienda"
+			class="inline-flex items-center gap-1 md:gap-2 text-accent hover:text-vinculo font-medium text-xs md:text-base transition-all duration-200"
+		>
+			Ver más
+			<svg
+				class="w-6 h-6 text-[var(--accent-color)]"
+				aria-hidden="true"
+			>
+				<use href={`/icons/sprite.svg#arrow-right`}></use>
+			</svg>
+		</a>
+	</div>
+</div>
+
+<!-- Grid Productos destacados Mobile-->
+<div class="grid grid-cols-1 gap-4 sm:hidden">
+	{
+		randomProducts
+			.slice(0, 3)
+			.map((product) => <ProductCard product={product} />)
+	}
+</div>
+
+<!-- Grid Productos destacados Tablet-->
+<div class="hidden sm:grid md:grid-cols-3 lg:hidden gap-4">
+	{
+		randomProducts
+			.slice(0, 6)
+			.map((product) => <ProductCard product={product} />)
+	}
+</div>
+
+<!-- Grid Productos destacados Desktop-->
+<div class="hidden lg:grid xl:grid-cols-6 lg:grid-cols-3 gap-4">
+	{
+		randomProducts
+			.slice(0, 6)
+			.map((product) => <ProductCard product={product} />)
+	}
+</div>

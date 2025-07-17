@@ -1,0 +1,14 @@
+---
+import Filter from "./Filter.astro";
+import Grid from "./Grid.astro";
+import Pagination from "./Pagination.astro";
+---
+
+<div class="container mx-auto">
+	<Filter />
+	<Grid />
+	<Pagination
+		currentPage={1}
+		totalPages={100}
+	/>
+</div>

@@ -1,0 +1,22 @@
+---
+import Mantenimiento from "../components/ui/mantenimiento.astro";
+import Layout from "../layouts/Layout.astro";
+import HeroSection from "../components/ui/HeroSection.astro";
+---
+
+<Layout title="ADM - Entrenamiento">
+	<!-- Hero Section -->
+	<section>
+		<HeroSection
+			colorHero="bg-gradient-to-r from-lime-600 to-green-800"
+			heroTitle="Entrenamiento"
+			paragraph="Entrenamiento, rutinas, y mas!"
+			heroParagraph="Entrenamiento, rutinas, y mas!"
+			heroImage="catalogo"
+		/>
+	</section>
+
+	<section>
+		<Mantenimiento />
+	</section>
+</Layout>

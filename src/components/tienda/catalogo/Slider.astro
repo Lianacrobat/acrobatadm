@@ -1,0 +1,78 @@
+---
+import Tooltip from "../../ui/Tooltip.astro";
+
+const clientes = [
+	{
+		nombre: "Gimloa",
+		imagen: "/assets/clientes/gimloa.jpg",
+	},
+	{
+		nombre: "Fuentes Gasca",
+		imagen: "/assets/clientes/circoFuentesGasca.jpg",
+	},
+	{
+		nombre: "Gimnasia Libre",
+		imagen: "/assets/clientes/gimnasiaLibre.jpg",
+	},
+	{
+		nombre: "Golden Circus",
+		imagen: "/assets/clientes/goldenCircus.jpg",
+	},
+	{
+		nombre: "Gimnasia Antofagasta",
+		imagen: "/assets/clientes/gimnasiaAntofagasta.jpg",
+	},
+	{
+		nombre: "Gigante de México",
+		imagen: "/assets/clientes/giganteDeMexico.jpg",
+	},
+	{
+		nombre: "Gimnasia La Dehesa",
+		imagen: "/assets/clientes/gimnasiaLaDehesa.jpg",
+	},
+	{
+		nombre: "Estrellas Voladoras",
+		imagen: "/assets/clientes/estrellasVoladoras.jpg",
+	},
+	{
+		nombre: "Cheetahs",
+		imagen: "/assets/clientes/cheetahs.jpg",
+	},
+	{
+		nombre: "Dreams All Stars",
+		imagen: "/assets/clientes/dreamsAllStars.jpg",
+	},
+	{
+		nombre: "Circo Acuático",
+		imagen: "/assets/clientes/circoAcuatico.jpg",
+	},
+	{
+		nombre: "Circo Acuático",
+		imagen: "/assets/clientes/goldenCircus.png",
+	},
+];
+---
+
+<div class="w-full mb-4">
+	<h3 class="text-base font-bold">Algunos de nuestros clientes:</h3>
+</div>
+
+<!-- Cuadrícula de clientes -->
+<div class="grid grid-cols-3 gap-4">
+	{
+		clientes.map((cliente) => (
+			<div class="relative group flex items-center justify-center">
+				<img
+					src={cliente.imagen}
+					class="h-22 w-22 object-contain rounded-xl hover:scale-110 transition-all duration-100"
+					alt={cliente.nombre}
+					loading="lazy"
+				/>
+				<Tooltip
+					text={cliente.nombre}
+					position="bottom"
+				/>
+			</div>
+		))
+	}
+</div>

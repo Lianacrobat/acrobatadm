@@ -5,17 +5,30 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:static": "astro build --output static",
+    "build:css": "npx @tailwindcss/cli -i ./src/styles/global.css -o ./dist/assets/css/global.css --minify",
+    "build:full": "npm run build && npm run build:css",
+    "build:github": "npm run build:static && npm run build:css",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate-products": "node scripts/generate-products.js",
+    "convert-json": "node scripts/convert-json-to-ts.js",
+    "validate-products": "node scripts/validate-products.js",
+    "sync-products": "node scripts/sync-dashboard-products.js",
+    "update-products": "npm run generate-products && npm run convert-json",
+    "build:styles": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch"
   },
   "dependencies": {
-    "@astrojs/react": "^4.3.0",
+    "@astrojs/node": "^9.3.0",
+    "@tailwindcss/cli": "^4.1.11",
     "@tailwindcss/vite": "^4.1.8",
-    "@types/react": "^19.1.7",
-    "@types/react-dom": "^19.1.6",
     "astro": "^5.9.2",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "tailwindcss": "^4.1.8"
+    "astro-swiper": "^1.0.1",
+    "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.12",
+    "tailwindcss-animated": "^2.0.0"
   }
 }

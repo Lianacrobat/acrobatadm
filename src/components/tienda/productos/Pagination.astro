@@ -1,0 +1,191 @@
+---
+export interface Props {
+	currentPage?: number;
+	totalPages?: number;
+	totalProducts?: number;
+	productsPerPage?: number;
+	baseUrl?: string;
+	showPageInfo?: boolean;
+}
+
+const {
+	currentPage = 1,
+	totalPages = 1,
+	totalProducts = 0,
+	productsPerPage = 12,
+	baseUrl = "",
+	showPageInfo = true,
+} = Astro.props;
+
+function generatePageNumbers(current: number, total: number) {
+	const pages = [];
+	const showPages = 3;
+	let startPage = Math.max(1, current - Math.floor(showPages / 2));
+	let endPage = Math.min(total, startPage + showPages - 1);
+
+	if (endPage - startPage + 1 < showPages) {
+		startPage = Math.max(1, endPage - showPages + 1);
+	}
+
+	for (let i = startPage; i <= endPage; i++) {
+		pages.push(i);
+	}
+
+	return pages;
+}
+
+const pageNumbers = generatePageNumbers(currentPage, totalPages);
+const showFirstPage = pageNumbers[0] > 1;
+const showLastPage = pageNumbers[pageNumbers.length - 1] < totalPages;
+const showFirstEllipsis = pageNumbers[0] > 2;
+const showLastEllipsis = pageNumbers[pageNumbers.length - 1] < totalPages - 1;
+---
+
+<div id="pagination-wrapper"></div>
+
+<script>
+	// Clases CSS reutilizables
+	const classes = {
+		button:
+			"px-3 py-2 text-sm font-medium text-[var(--text-color-soft)] bg-transparent border-none rounded-md transition-all duration-200 ease-in-out cursor-pointer hover:text-[var(--text-color)] hover:bg-[var(--cajas)] pagination-btn",
+		active:
+			"px-3 py-2 text-sm font-semibold text-[var(--text-color)] bg-[var(--accent-color)] border-none rounded-md",
+		disabled:
+			"px-3 py-2 text-sm font-medium text-[var(--text-color-soft)] bg-transparent border-none rounded-md cursor-not-allowed",
+		ellipsis: "px-2 py-2 text-sm text-[var(--text-color-soft)] font-medium",
+		nav: "flex justify-center items-center space-x-1 mt-8",
+		info: "text-center mt-4 text-sm text-[var(--text-color-soft)] font-normal",
+	};
+
+	// SVG icons
+	const icons = {
+		prev: '<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>',
+		next: '<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>',
+	};
+
+	function generatePageNumbers(current: number, total: number) {
+		const pages = [];
+		const showPages = 3;
+		let startPage = Math.max(1, current - Math.floor(showPages / 2));
+		let endPage = Math.min(total, startPage + showPages - 1);
+
+		if (endPage - startPage + 1 < showPages) {
+			startPage = Math.max(1, endPage - showPages + 1);
+		}
+
+		for (let i = startPage; i <= endPage; i++) {
+			pages.push(i);
+		}
+
+		return pages;
+	}
+
+	function createButton(
+		page: number,
+		text: string,
+		isActive = false,
+		isDisabled = false
+	) {
+		const baseClass = isActive
+			? classes.active
+			: isDisabled
+				? classes.disabled
+				: classes.button;
+		const tag = isDisabled ? "span" : "button";
+		const dataAttr = isDisabled ? "" : `data-page="${page}"`;
+
+		return `<${tag} class="${baseClass}" ${dataAttr}>${text}</${tag}>`;
+	}
+
+	function updatePaginationDisplay(currentPage: number, totalPages: number) {
+		const wrapper = document.querySelector("#pagination-wrapper");
+		if (!wrapper || totalPages <= 1) {
+			if (wrapper) wrapper.innerHTML = "";
+			return;
+		}
+
+		const pageNumbers = generatePageNumbers(currentPage, totalPages);
+		const showFirstPage = pageNumbers[0] > 1;
+		const showLastPage = pageNumbers[pageNumbers.length - 1] < totalPages;
+		const showFirstEllipsis = pageNumbers[0] > 2;
+		const showLastEllipsis =
+			pageNumbers[pageNumbers.length - 1] < totalPages - 1;
+
+		let html = `<nav class="${classes.nav}" aria-label="Paginación">`;
+
+		// Botón anterior
+		if (currentPage > 1) {
+			html += `<button class="${classes.button} flex items-center" data-page="${currentPage - 1}">${icons.prev}Anterior</button>`;
+		} else {
+			html += `<span class="${classes.disabled} flex items-center">${icons.prev}Anterior</span>`;
+		}
+
+		// Primera página
+		if (showFirstPage) {
+			html += createButton(1, "1");
+			if (showFirstEllipsis) {
+				html += `<span class="${classes.ellipsis}">...</span>`;
+			}
+		}
+
+		// Páginas centrales
+		pageNumbers.forEach((pageNum) => {
+			html += createButton(
+				pageNum,
+				pageNum.toString(),
+				pageNum === currentPage
+			);
+		});
+
+		// Última página
+		if (showLastPage) {
+			if (showLastEllipsis) {
+				html += `<span class="${classes.ellipsis}">...</span>`;
+			}
+			html += createButton(totalPages, totalPages.toString());
+		}
+
+		// Botón siguiente
+		if (currentPage < totalPages) {
+			html += `<button class="${classes.button} flex items-center" data-page="${currentPage + 1}">Siguiente${icons.next}</button>`;
+		} else {
+			html += `<span class="${classes.disabled} flex items-center">Siguiente${icons.next}</span>`;
+		}
+
+		html += "</nav>";
+
+		// Información de página
+		html += `<div class="${classes.info}">Página <span class="font-medium">${currentPage}</span> de <span class="font-medium">${totalPages}</span></div>`;
+
+		wrapper.innerHTML = html;
+	}
+
+	// Event delegation para clicks
+	document.addEventListener("click", (e) => {
+		const target = e.target as HTMLElement;
+		const paginationBtn = target.closest(".pagination-btn");
+
+		if (paginationBtn) {
+			e.preventDefault();
+			const page = parseInt(paginationBtn.getAttribute("data-page") || "1");
+
+			window.dispatchEvent(
+				new CustomEvent("pageChanged", { detail: { page } })
+			);
+			document
+				.getElementById("products-container")
+				?.scrollIntoView({ behavior: "smooth", block: "start" });
+		}
+	});
+
+	// Escuchar actualizaciones externas
+	window.addEventListener("paginationUpdate", (e: any) => {
+		const { currentPage, totalPages } = e.detail;
+		updatePaginationDisplay(currentPage, totalPages);
+	});
+
+	// Inicializar
+	document.addEventListener("astro:page-load", () => {
+		updatePaginationDisplay(1, 1);
+	});
+</script>

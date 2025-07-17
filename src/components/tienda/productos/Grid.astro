@@ -1,0 +1,577 @@
+---
+import type { Product } from "../../../data/products";
+import Pagination from "./Pagination.astro";
+
+export interface Props {
+	products?: Product[];
+	showPagination?: boolean;
+}
+
+const { products = [], showPagination = true } = Astro.props;
+---
+
+<div id="products-container">
+	<!-- Contador de productos integrado -->
+	<div
+		id="grid-counter"
+		class="mb-4 text-sm text-[var(--text-color-soft)]"
+	>
+		<span id="counter-text">
+			Mostrando <span
+				id="page-count"
+				class="font-semibold text-[var(--text-color)]"
+				>0</span
+			> de <span
+				id="filtered-count"
+				class="font-semibold text-[var(--text-color)]"
+				>0</span
+			> productos
+		</span>
+	</div>
+
+	<div
+		id="products-grid"
+		class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 gap-4 lg:gap-5 mb-8"
+	>
+		<!-- Products will be rendered here by JavaScript -->
+	</div>
+
+	<!-- No products message -->
+	<div
+		id="no-products"
+		class="text-center py-12 hidden"
+	>
+		<div class="mb-4 text-[var(--text-color-soft)]">
+			<svg
+				class="w-16 h-16 mx-auto"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path
+					stroke="none"
+					d="M0 0h24v24H0z"
+					fill="none"
+				></path>
+				<path d="M3 8v3a1 1 0 0 0 1 1h3"></path>
+				<path d="M7 8v8"></path>
+				<path d="M17 8v3a1 1 0 0 0 1 1h3"></path>
+				<path d="M21 8v8"></path>
+				<path d="M10 10v4a2 2 0 1 0 4 0v-4a2 2 0 1 0 -4 0"></path>
+			</svg>
+		</div>
+		<h3 class="text-lg font-medium mb-2 text-[var(--accent-color)]">
+			No se encontraron productos
+		</h3>
+		<p class="text-[var(--text-color-soft)]">
+			Intenta ajustar los filtros para encontrar lo que buscas.
+		</p>
+	</div>
+
+	<!-- Loading state -->
+	<div
+		id="loading"
+		class="text-center py-12 hidden"
+	>
+		<div
+			class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--text-color-soft)] mx-auto mb-4"
+		>
+		</div>
+		<p class="text-[var(--text-color-soft)]">Cargando productos...</p>
+	</div>
+</div>
+
+{
+	showPagination && (
+		<div id="pagination-container">
+			<Pagination
+				currentPage={1}
+				totalPages={1}
+				totalProducts={0}
+				productsPerPage={12}
+				showPageInfo={true}
+			/>
+		</div>
+	)
+}
+
+<script>
+	// Importaciones y utilidades
+	import type { Product } from "../../../data/products";
+	import { getAllProducts } from "../../../data/productUtils";
+	import { sendTelegramNotification } from "../../../utils/telegram.js";
+
+	// Estado global de productos y paginación
+	let currentProducts: Product[] = [];
+	let currentPage = 1;
+	const productsPerPage = 25;
+
+	// Sistema global de favoritos (singleton)
+	class FavoritesManager {
+		private static instance: FavoritesManager;
+
+		private constructor() {}
+
+		// Devuelve la instancia única del gestor de favoritos
+		static getInstance(): FavoritesManager {
+			if (!FavoritesManager.instance) {
+				FavoritesManager.instance = new FavoritesManager();
+			}
+			return FavoritesManager.instance;
+		}
+
+		// Obtiene los IDs de productos favoritos desde localStorage
+		getFavorites(): string[] {
+			try {
+				const favorites = localStorage.getItem("favorites");
+				return favorites ? JSON.parse(favorites) : [];
+			} catch (error) {
+				console.error("Error reading favorites from localStorage:", error);
+				return [];
+			}
+		}
+
+		// Guarda los IDs de productos favoritos en localStorage
+		saveFavorites(favorites: string[]): void {
+			try {
+				localStorage.setItem("favorites", JSON.stringify(favorites));
+			} catch (error) {
+				console.error("Error saving favorites to localStorage:", error);
+			}
+		}
+
+		// Alterna el estado de favorito de un producto y notifica por Telegram
+		async toggleFavorite(
+			productId: string,
+			productName: string
+		): Promise<boolean> {
+			const favorites = this.getFavorites();
+			const index = favorites.indexOf(productId);
+
+			if (index > -1) {
+				// Elimina de favoritos
+				favorites.splice(index, 1);
+				this.saveFavorites(favorites);
+
+				try {
+					await sendTelegramNotification(productName, "removed");
+				} catch (error) {
+					console.warn(
+						"❌ Failed to send Telegram notification for removal:",
+						error
+					);
+				}
+
+				return false;
+			} else {
+				// Agrega a favoritos
+				favorites.push(productId);
+				this.saveFavorites(favorites);
+
+				try {
+					await sendTelegramNotification(productName, "added");
+				} catch (error) {
+					console.error(
+						"❌ Failed to send Telegram notification for addition:",
+						error
+					);
+				}
+
+				return true;
+			}
+		}
+
+		// Actualiza el ícono de corazón de un botón según si es favorito
+		updateHeartIcon(button: HTMLButtonElement, isFavorite: boolean): void {
+			const heartIcon = button.querySelector(".heart-icon") as SVGElement;
+			if (heartIcon) {
+				if (isFavorite) {
+					heartIcon.classList.add(
+						"fill-[var(--favorite-color)]",
+						"text-[var(--favorite-color)]"
+					);
+					heartIcon.classList.remove(
+						"fill-none",
+						"text-[var(--text-color-soft)]"
+					);
+				} else {
+					heartIcon.classList.remove(
+						"fill-[var(--favorite-color)]",
+						"text-[var(--favorite-color)]"
+					);
+					heartIcon.classList.add("fill-none", "text-[var(--text-color-soft)]");
+				}
+			}
+		}
+
+		// Actualiza todos los íconos de corazón de un producto en la página
+		updateAllHeartIcons(productId: string, isFavorite: boolean): void {
+			const allHeartIcons = document.querySelectorAll(
+				`.favorite-btn[data-product-id="${productId}"] .heart-icon`
+			) as NodeListOf<SVGElement>;
+
+			allHeartIcons.forEach((icon) => {
+				if (isFavorite) {
+					icon.classList.add(
+						"fill-[var(--favorite-color)]",
+						"text-[var(--favorite-color)]"
+					);
+					icon.classList.remove("fill-none", "text-[var(--text-color-soft)]");
+				} else {
+					icon.classList.remove(
+						"fill-[var(--favorite-color)]",
+						"text-[var(--favorite-color)]"
+					);
+					icon.classList.add("fill-none", "text-[var(--text-color-soft)]");
+				}
+			});
+		}
+
+		// Inicializa el estado visual del botón de favorito
+		initializeButton(button: HTMLButtonElement): void {
+			const productId = button.dataset.productId!;
+			const favorites = this.getFavorites();
+			const isFavorite = favorites.includes(productId);
+
+			this.updateHeartIcon(button, isFavorite);
+		}
+	}
+
+	// Instancia global del gestor de favoritos
+	const favoritesManager = FavoritesManager.getInstance();
+
+	// Plantillas HTML para las tarjetas de producto (desktop y mobile)
+	const templates = {
+		// Tarjeta para escritorio
+		desktopCard: (product: Product, imageUrl: string) => `
+		<div class="hidden lg:block rounded-lg shadow transition-shadow overflow-hidden hover:shadow-xl bg-[var(--cajas)]">
+			<div class="relative">
+				<a href="/producto/${product.slug}" class="block">
+					<div class="aspect-square overflow-hidden">
+						<img
+							src="${imageUrl}"
+							alt="${product.name}"
+							class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+							loading="lazy"
+						/>
+					</div>
+				</a>
+
+				<div class="absolute top-3 right-3">
+					<button
+						class="favorite-btn relative w-8 h-8 transition-all duration-200 flex items-center justify-center group bg-white rounded-full p-2 shadow-lg"
+						data-product-id="${product.id}"
+						data-product-name="${product.name}"
+						aria-label="${product.name} - Agregar a favoritos"
+					>
+						<svg
+							class="heart-icon w-5 h-5 text-[var(--text-color-soft)] transition-all duration-200"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+							/>
+						</svg>
+					</button>
+				</div>
+			</div>
+			<div class="p-4">
+				<div class="mb-2">
+				</div>
+				<h3 class="font-semibold text-[var(--accent-color)] mb-2 line-clamp-2">
+					<a href="/producto/${product.slug}" class="hover:text-[var(--accent-color)] transition-colors">
+						${product.name}
+					</a>
+				</h3>
+				<p class="text-sm text-[var(--text-color)] mb-3 line-clamp-2">
+					${product.shortDescription}
+				</p>
+				<div class="flex items-center justify-between">
+					<a
+						href="/producto/${product.slug}"
+						class="text-sm font-medium transition-colors text-[var(--accent-color)] hover:text-[var(--vinculo)]"
+					>
+						Ver detalles →
+					</a>
+				</div>
+			</div>
+		</div>
+	`,
+
+		// Tarjeta para móvil
+		mobileCard: (product: Product, imageUrl: string) => `
+		<div class="flex lg:hidden h-[100px] bg-[var(--cajas)] rounded-lg overflow-hidden">
+			<div class="w-[100px] h-[100px] flex-shrink-0 relative">
+				<img
+					src="${imageUrl}"
+					alt="${product.name}"
+					class="w-full h-full object-cover"
+					loading="lazy"
+				/>
+				<!-- Favorite button positioned at top-right of image -->
+				<div class="absolute top-2 right-2 z-20">
+					<button
+						class="favorite-btn w-7 h-7 transition-all duration-200 flex items-center justify-center group bg-white rounded-full p-2 shadow-lg"
+						data-product-id="${product.id}"
+						data-product-name="${product.name}"
+						aria-label="${product.name} - Agregar a favoritos"
+					>
+						<svg
+							class="heart-icon w-3 h-3 text-[var(--text-color-soft)] transition-all duration-200"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+							/>
+						</svg>
+					</button>
+				</div>
+				<!-- Optional: subtle dark overlay for better contrast -->
+				<div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 via-black/0 to-black/0"></div>
+			</div>
+			<div class="flex-1 p-2 flex flex-col justify-between">
+				<div>
+					<h3 class="text-sm font-medium text-[var(--text-color)] line-clamp-1">
+						<a href="/producto/${product.slug}" class="hover:text-[var(--accent-color)] transition-colors">
+							${product.name}
+						</a>
+					</h3>
+					<p class="text-xs text-[var(--text-color-soft)] line-clamp-2 mt-1">
+						${product.shortDescription?.slice(0, 90)}...
+					</p>
+				</div>
+				<div class="flex items-center justify-between mt-1">
+					<a
+						href="/producto/${product.slug}"
+						class="text-xs text-[var(--accent-color)] hover:text-[var(--vinculo)] transition-colors"
+					>
+						leer más →
+					</a>
+				</div>
+			</div>
+		</div>
+	`,
+	};
+
+	// Crea un elemento de tarjeta de producto a partir de los datos
+	function createProductCard(product: Product): HTMLElement {
+		const card = document.createElement("div");
+		card.className = "product-card";
+
+		// Obtiene la imagen principal o un placeholder
+		let imageUrl =
+			"https://via.placeholder.com/400x400/374151/FFFFFF?text=Sin+Imagen";
+		if (product.images && product.images.length > 0) {
+			const mainImage = product.images[0];
+			if (typeof mainImage === "string") {
+				imageUrl = mainImage;
+			} else if (
+				mainImage &&
+				typeof mainImage === "object" &&
+				"src" in mainImage
+			) {
+				imageUrl = mainImage.src;
+			}
+		}
+
+		card.innerHTML =
+			templates.desktopCard(product, imageUrl) +
+			templates.mobileCard(product, imageUrl);
+		return card;
+	}
+
+	// Actualiza el contador de productos mostrados y filtrados
+	function updateCounter(pageProducts: Product[], totalFiltered: number) {
+		const pageCountElement = document.getElementById("page-count");
+		const filteredCountElement = document.getElementById("filtered-count");
+		const counterText = document.getElementById("counter-text");
+
+		if (pageCountElement && filteredCountElement && counterText) {
+			const pageCount = pageProducts.length;
+
+			pageCountElement.textContent = pageCount.toString();
+			filteredCountElement.textContent = totalFiltered.toString();
+
+			// Actualiza el texto del contador
+			counterText.innerHTML = `Mostrando <span id="page-count" class="font-semibold text-[var(--text-color)]">${pageCount}</span> de <span id="filtered-count" class="font-semibold text-[var(--text-color)]">${totalFiltered}</span> productos`;
+		}
+	}
+
+	// Actualiza el componente de paginación mediante un evento
+	function updatePaginationComponent(
+		totalProducts: number,
+		currentPageNum: number
+	) {
+		const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+		// Dispara un evento para actualizar la paginación
+		window.dispatchEvent(
+			new CustomEvent("paginationUpdate", {
+				detail: {
+					currentPage: currentPageNum,
+					totalPages: totalPages,
+					totalProducts: totalProducts,
+					productsPerPage: productsPerPage,
+				},
+			})
+		);
+	}
+
+	// Renderiza los productos en el grid según la página
+	function renderProducts(products: Product[], page: number = 1) {
+		const grid = document.getElementById("products-grid");
+		const noProducts = document.getElementById("no-products");
+		const loading = document.getElementById("loading");
+
+		if (!grid || !noProducts || !loading) {
+			return;
+		}
+
+		if (page === 1) {
+			loading.classList.remove("hidden");
+			grid.classList.add("hidden");
+			noProducts.classList.add("hidden");
+		}
+
+		setTimeout(() => {
+			const startIndex = (page - 1) * productsPerPage;
+			const endIndex = startIndex + productsPerPage;
+			const pageProducts = products.slice(startIndex, endIndex);
+
+			if (pageProducts.length === 0) {
+				grid.classList.add("hidden");
+				noProducts.classList.remove("hidden");
+				updateCounter([], products.length);
+			} else {
+				grid.innerHTML = "";
+				pageProducts.forEach((product) => {
+					const productCard = createProductCard(product);
+					grid.appendChild(productCard);
+				});
+
+				grid.classList.remove("hidden");
+				noProducts.classList.add("hidden");
+				updateCounter(pageProducts, products.length);
+			}
+
+			loading.classList.add("hidden");
+			updatePaginationComponent(products.length, page);
+
+			// Inicializa los botones de favoritos después de renderizar
+			setTimeout(() => {
+				initializeFavoriteButtons();
+			}, 100);
+		}, 300);
+	}
+
+	// Maneja el click en el botón de favorito
+	async function handleFavoriteClick(e: Event) {
+		// Prevenir que el clic se propague al enlace padre
+		e.preventDefault();
+		e.stopPropagation();
+
+		const button = e.currentTarget as HTMLButtonElement;
+		const productId = button.dataset.productId!;
+		const productName = button.dataset.productName!;
+
+		// Previene clicks múltiples
+		if (button.disabled) return;
+
+		button.disabled = true;
+
+		try {
+			const newIsFavorite = await favoritesManager.toggleFavorite(
+				productId,
+				productName
+			);
+
+			// Actualiza todos los íconos de corazón de este producto
+			favoritesManager.updateAllHeartIcons(productId, newIsFavorite);
+
+			// Dispara evento para notificar a otros componentes
+			window.dispatchEvent(
+				new CustomEvent("favoritesChanged", {
+					detail: { productId, isFavorite: newIsFavorite, productName },
+				})
+			);
+
+			// Actualiza el contador de favoritos si existe la función global
+			if (window.updateFavoritesCount) {
+				const favorites = favoritesManager.getFavorites();
+				window.updateFavoritesCount(favorites.length);
+			}
+		} catch (error) {
+			console.error("Error toggling favorite:", error);
+		} finally {
+			button.disabled = false;
+		}
+	}
+
+	// Inicializa los botones de favoritos en la página
+	function initializeFavoriteButtons() {
+		const favoriteButtons = document.querySelectorAll(
+			".favorite-btn"
+		) as NodeListOf<HTMLButtonElement>;
+
+		favoriteButtons.forEach((button) => {
+			// Inicializa el estado visual
+			favoritesManager.initializeButton(button);
+
+			// Elimina listeners previos para evitar duplicados
+			const newButton = button.cloneNode(true) as HTMLButtonElement;
+			button.parentNode?.replaceChild(newButton, button);
+
+			// Agrega el listener de click
+			newButton.addEventListener("click", handleFavoriteClick);
+		});
+	}
+
+	// Inicializa el grid y listeners globales
+	function initializeGrid() {
+		// Escucha cambios de página desde la paginación
+		window.addEventListener("pageChanged", (e: any) => {
+			const { page } = e.detail;
+			currentPage = page;
+			renderProducts(currentProducts, page);
+		});
+
+		// Escucha filtrado de productos
+		window.addEventListener("productsFiltered", (e: any) => {
+			currentProducts = e.detail.products;
+			currentPage = 1;
+			renderProducts(currentProducts, 1);
+		});
+
+		// Escucha cambios de favoritos desde otros componentes
+		window.addEventListener("favoritesChanged", () => {
+			// Re-inicializa todos los botones para actualizar su estado
+			setTimeout(initializeFavoriteButtons, 100);
+		});
+
+		// Carga productos por defecto si no hay filtros
+		if (currentProducts.length === 0) {
+			currentProducts = getAllProducts();
+			renderProducts(currentProducts, 1);
+		}
+	}
+
+	// Inicializa el grid al cargar la página o navegar
+	// DOMContentLoaded: primera carga
+	// astro:page-load: navegación interna en Astro
+	//
+	document.addEventListener("DOMContentLoaded", initializeGrid);
+	document.addEventListener("astro:page-load", initializeGrid);
+</script>
