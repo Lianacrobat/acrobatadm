@@ -1,31 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ComunidadFather from "../components/comunidad/ComunidadFather.astro";
+import HeroSection from "@components/ui/HeroSection.astro";
 ---
 
 <Layout title="Comunidad">
 	<section class="relative overflow-hidden">
-		<div
-			class="bg-gradient-to-r from-[var(--accent-color)] to-[var(--accent-color-soft)] text-[var(--text-color)] h-32 flex items-center justify-center rounded-b-xl"
-		>
-			<!-- Fondo decorativo con overlay -->
-			<div
-				class="absolute inset-0 bg-[url('https://i.pinimg.com/736x/2d/8f/23/2d8f231914575b263e8f951ebfd74ce4.jpg')] opacity-10 bg-cover bg-center"
-			>
-				<div class="absolute inset-0 bg-[var(--text-color)]/30"></div>
-			</div>
-			<div class="relative w-full px-4 text-center">
-				<h1 class="text-2xl md:text-4xl font-bold tracking-tight mb-2 md:mb-4">
-					Comunidad
-				</h1>
-				<p
-					class="text-sm md:text-base font-bold text-[var(--text-color-soft)] max-w-2xl mx-auto"
-				>
-					Conecta con otros artistas, atletas y acróbatas. Comparte
-					experiencias, resuelve dudas y participa en la comunidad.
-				</p>
-			</div>
-		</div>
+		<HeroSection
+			colorHero="bg-gradient-to-r from-sky-400 to-blue-600"
+			heroTitle="Comunidad"
+			heroParagraph="Conecta con otros atletas y acróbatas"
+			heroImage="comunidad"
+		/>
 	</section>
 	<ComunidadFather />
 </Layout>
