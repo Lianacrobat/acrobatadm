@@ -22,13 +22,13 @@
 	function initCoverTiendaAnimation() {
 		clearAnimation();
 		const products = [
-			{ src: "/assets/springFloor.png", alt: "Spring Floor" },
-			{ src: "/assets/xpe.png", alt: "XPE" },
-			{ src: "/assets/arnes.png", alt: "Arnes" },
-			{ src: "/assets/podium.png", alt: "Podium" },
-			{ src: "/assets/springTrack.png", alt: "Spring Track" },
-			{ src: "/assets/franjas.png", alt: "Franjas" },
-			{ src: "/assets/trampolin.png", alt: "Trampolin" },
+			{ src: `${import.meta.env.BASE_URL}assets/springFloor.png`, alt: "Spring Floor" },
+			{ src: `${import.meta.env.BASE_URL}assets/xpe.png`, alt: "XPE" },
+			{ src: `${import.meta.env.BASE_URL}assets/arnes.png`, alt: "Arnes" },
+			{ src: `${import.meta.env.BASE_URL}assets/podium.png`, alt: "Podium" },
+			{ src: `${import.meta.env.BASE_URL}assets/springTrack.png`, alt: "Spring Track" },
+			{ src: `${import.meta.env.BASE_URL}assets/franjas.png`, alt: "Franjas" },
+			{ src: `${import.meta.env.BASE_URL}assets/trampolin.png`, alt: "Trampolin" },
 		];
 
 		const container = document.getElementById("floating-container");

@@ -103,11 +103,28 @@ const { products = [], showPagination = true } = Astro.props;
 	import type { Product } from "../../../data/products";
 	import { getAllProducts } from "../../../data/productUtils";
 	import { sendTelegramNotification } from "../../../utils/telegram.js";
+	import { favoritesStorage } from "../../../utils/secureStorage.js";
+
+	// Extiende el tipo Window para evitar error TS
+	declare global {
+		interface Window {
+			updateFavoritesCount?: (count: number) => void;
+		}
+	}
 
 	// Estado global de productos y paginación
 	let currentProducts: Product[] = [];
 	let currentPage = 1;
 	const productsPerPage = 25;
+
+	// Función para mezclar un array aleatoriamente (Fisher-Yates)
+	function shuffleArray(array: any[]) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+		return array;
+	}
 
 	// Sistema global de favoritos (singleton)
 	class FavoritesManager {
@@ -115,7 +132,6 @@ const { products = [], showPagination = true } = Astro.props;
 
 		private constructor() {}
 
-		// Devuelve la instancia única del gestor de favoritos
 		static getInstance(): FavoritesManager {
 			if (!FavoritesManager.instance) {
 				FavoritesManager.instance = new FavoritesManager();
@@ -123,68 +139,55 @@ const { products = [], showPagination = true } = Astro.props;
 			return FavoritesManager.instance;
 		}
 
-		// Obtiene los IDs de productos favoritos desde localStorage
 		getFavorites(): string[] {
-			try {
-				const favorites = localStorage.getItem("favorites");
-				return favorites ? JSON.parse(favorites) : [];
-			} catch (error) {
-				console.error("Error reading favorites from localStorage:", error);
-				return [];
-			}
+			return favoritesStorage.get();
 		}
 
-		// Guarda los IDs de productos favoritos en localStorage
-		saveFavorites(favorites: string[]): void {
-			try {
-				localStorage.setItem("favorites", JSON.stringify(favorites));
-			} catch (error) {
-				console.error("Error saving favorites to localStorage:", error);
-			}
+		saveFavorites(favorites: string[]): boolean {
+			return favoritesStorage.set(favorites);
 		}
 
-		// Alterna el estado de favorito de un producto y notifica por Telegram
-		async toggleFavorite(
-			productId: string,
-			productName: string
-		): Promise<boolean> {
-			const favorites = this.getFavorites();
-			const index = favorites.indexOf(productId);
-
-			if (index > -1) {
-				// Elimina de favoritos
-				favorites.splice(index, 1);
-				this.saveFavorites(favorites);
-
-				try {
-					await sendTelegramNotification(productName, "removed");
-				} catch (error) {
-					console.warn(
-						"❌ Failed to send Telegram notification for removal:",
-						error
-					);
-				}
-
+		// Cambia el estado de favorito de un producto y retorna el nuevo estado (sincrónico)
+		toggleFavoriteSync(productId: string): boolean {
+			// Validar y sanitizar productId
+			if (!productId || typeof productId !== 'string') {
+				console.warn('Invalid product ID provided');
 				return false;
+			}
+
+			// Sanitizar productId
+			const sanitizedId = productId.replace(/[^a-zA-Z0-9-_]/g, '').substring(0, 50);
+			if (!sanitizedId) {
+				console.warn('Product ID became empty after sanitization');
+				return false;
+			}
+
+			const favorites = this.getFavorites();
+			const isFavorite = favorites.includes(sanitizedId);
+			
+			let success: boolean;
+			if (isFavorite) {
+				success = favoritesStorage.remove(sanitizedId);
 			} else {
-				// Agrega a favoritos
-				favorites.push(productId);
-				this.saveFavorites(favorites);
+				success = favoritesStorage.add(sanitizedId);
+			}
 
-				try {
-					await sendTelegramNotification(productName, "added");
-				} catch (error) {
-					console.error(
-						"❌ Failed to send Telegram notification for addition:",
-						error
-					);
-				}
+			if (!success) {
+				console.error('Failed to update favorites in secure storage');
+				return isFavorite; // Retornar estado anterior si falla
+			}
 
-				return true;
+			return !isFavorite; // Retornar nuevo estado
+		}
+
+		async notifyTelegram(productName: string, action: "added" | "removed") {
+			try {
+				await sendTelegramNotification(productName, action);
+			} catch (error) {
+				console.warn("❌ Failed to send Telegram notification:", error);
 			}
 		}
 
-		// Actualiza el ícono de corazón de un botón según si es favorito
 		updateHeartIcon(button: HTMLButtonElement, isFavorite: boolean): void {
 			const heartIcon = button.querySelector(".heart-icon") as SVGElement;
 			if (heartIcon) {
@@ -207,7 +210,6 @@ const { products = [], showPagination = true } = Astro.props;
 			}
 		}
 
-		// Actualiza todos los íconos de corazón de un producto en la página
 		updateAllHeartIcons(productId: string, isFavorite: boolean): void {
 			const allHeartIcons = document.querySelectorAll(
 				`.favorite-btn[data-product-id="${productId}"] .heart-icon`
@@ -230,17 +232,14 @@ const { products = [], showPagination = true } = Astro.props;
 			});
 		}
 
-		// Inicializa el estado visual del botón de favorito
 		initializeButton(button: HTMLButtonElement): void {
 			const productId = button.dataset.productId!;
 			const favorites = this.getFavorites();
 			const isFavorite = favorites.includes(productId);
-
 			this.updateHeartIcon(button, isFavorite);
 		}
 	}
 
-	// Instancia global del gestor de favoritos
 	const favoritesManager = FavoritesManager.getInstance();
 
 	// Plantillas HTML para las tarjetas de producto (desktop y mobile)
@@ -367,7 +366,7 @@ const { products = [], showPagination = true } = Astro.props;
 	};
 
 	// Crea un elemento de tarjeta de producto a partir de los datos
-	function createProductCard(product: Product): HTMLElement {
+	function createProductCard(product: Product) {
 		const card = document.createElement("div");
 		card.className = "product-card";
 
@@ -479,7 +478,6 @@ const { products = [], showPagination = true } = Astro.props;
 
 	// Maneja el click en el botón de favorito
 	async function handleFavoriteClick(e: Event) {
-		// Prevenir que el clic se propague al enlace padre
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -487,91 +485,61 @@ const { products = [], showPagination = true } = Astro.props;
 		const productId = button.dataset.productId!;
 		const productName = button.dataset.productName!;
 
-		// Previene clicks múltiples
 		if (button.disabled) return;
-
 		button.disabled = true;
 
-		try {
-			const newIsFavorite = await favoritesManager.toggleFavorite(
-				productId,
-				productName
-			);
+		const newIsFavorite = favoritesManager.toggleFavoriteSync(productId);
+		favoritesManager.updateAllHeartIcons(productId, newIsFavorite);
 
-			// Actualiza todos los íconos de corazón de este producto
-			favoritesManager.updateAllHeartIcons(productId, newIsFavorite);
+		window.dispatchEvent(
+			new CustomEvent("favoritesChanged", {
+				detail: { productId, isFavorite: newIsFavorite, productName },
+			})
+		);
 
-			// Dispara evento para notificar a otros componentes
-			window.dispatchEvent(
-				new CustomEvent("favoritesChanged", {
-					detail: { productId, isFavorite: newIsFavorite, productName },
-				})
-			);
-
-			// Actualiza el contador de favoritos si existe la función global
-			if (window.updateFavoritesCount) {
-				const favorites = favoritesManager.getFavorites();
-				window.updateFavoritesCount(favorites.length);
-			}
-		} catch (error) {
-			console.error("Error toggling favorite:", error);
-		} finally {
-			button.disabled = false;
+		if (window.updateFavoritesCount) {
+			const favorites = favoritesManager.getFavorites();
+			window.updateFavoritesCount(favorites.length);
 		}
+
+		favoritesManager
+			.notifyTelegram(productName, newIsFavorite ? "added" : "removed")
+			.finally(() => {
+				button.disabled = false;
+			});
 	}
 
-	// Inicializa los botones de favoritos en la página
 	function initializeFavoriteButtons() {
 		const favoriteButtons = document.querySelectorAll(
 			".favorite-btn"
 		) as NodeListOf<HTMLButtonElement>;
-
 		favoriteButtons.forEach((button) => {
-			// Inicializa el estado visual
 			favoritesManager.initializeButton(button);
-
-			// Elimina listeners previos para evitar duplicados
 			const newButton = button.cloneNode(true) as HTMLButtonElement;
 			button.parentNode?.replaceChild(newButton, button);
-
-			// Agrega el listener de click
 			newButton.addEventListener("click", handleFavoriteClick);
 		});
 	}
 
-	// Inicializa el grid y listeners globales
 	function initializeGrid() {
-		// Escucha cambios de página desde la paginación
 		window.addEventListener("pageChanged", (e: any) => {
 			const { page } = e.detail;
 			currentPage = page;
 			renderProducts(currentProducts, page);
 		});
-
-		// Escucha filtrado de productos
 		window.addEventListener("productsFiltered", (e: any) => {
 			currentProducts = e.detail.products;
 			currentPage = 1;
 			renderProducts(currentProducts, 1);
 		});
-
-		// Escucha cambios de favoritos desde otros componentes
 		window.addEventListener("favoritesChanged", () => {
-			// Re-inicializa todos los botones para actualizar su estado
 			setTimeout(initializeFavoriteButtons, 100);
 		});
-
-		// Carga productos por defecto si no hay filtros
 		if (currentProducts.length === 0) {
-			currentProducts = getAllProducts();
+			currentProducts = shuffleArray(getAllProducts());
 			renderProducts(currentProducts, 1);
 		}
 	}
-
-	// Inicializa el grid al cargar la página o navegar
-	// DOMContentLoaded: primera carga
-	// astro:page-load: navegación interna en Astro
-	//
 	document.addEventListener("DOMContentLoaded", initializeGrid);
 	document.addEventListener("astro:page-load", initializeGrid);
 </script>

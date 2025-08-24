@@ -376,12 +376,32 @@ const variantNames: Record<string, string> = {
 			return; // Salir si algún elemento no existe
 		}
 
-		// Search input with debounce
+		// Función para sanitizar entrada del usuario
+		function sanitizeInput(input: string): string {
+			// Remover caracteres peligrosos y limitar longitud
+			return input
+				.replace(/[<>"'&]/g, '') // Remover caracteres HTML peligrosos
+				.replace(/javascript:/gi, '') // Remover javascript: URLs
+				.replace(/on\w+=/gi, '') // Remover event handlers
+				.replace(/script/gi, '') // Remover referencias a script
+				.trim()
+				.substring(0, 100); // Limitar a 100 caracteres
+		}
+
+		// Search input with debounce y sanitización
 		let searchTimeout: NodeJS.Timeout;
 		searchInput.addEventListener("input", (e) => {
 			clearTimeout(searchTimeout);
 			searchTimeout = setTimeout(() => {
-				currentFilters.search = (e.target as HTMLInputElement).value;
+				const rawValue = (e.target as HTMLInputElement).value;
+				const sanitizedValue = sanitizeInput(rawValue);
+				
+				// Actualizar el input si fue sanitizado
+				if (rawValue !== sanitizedValue) {
+					(e.target as HTMLInputElement).value = sanitizedValue;
+				}
+				
+				currentFilters.search = sanitizedValue;
 				applyFilters();
 			}, 300);
 		});

@@ -27,7 +27,7 @@ import Tooltip from "../ui/Tooltip.astro";
 			class="w-6 h-6"
 			aria-hidden="true"
 		>
-			<use href={`/icons/sprite.svg#${nameIcon}`}></use>
+			<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#${nameIcon}`}></use>
 		</svg>
 		<span class="sm:hidden">
 			<Tooltip

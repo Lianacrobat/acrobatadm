@@ -100,9 +100,9 @@ export function getFeaturedProducts(limit = 6): Product[] {
 /**
  * Obtiene productos similares
  */
-export function getSimilarProducts(product: Product, limit = 4): Product[] {
+export function getSimilarProducts(product: Product): Product[] {
   const relatedProducts = getRelatedProducts(product.id);
-  return relatedProducts.slice(0, limit);
+  return relatedProducts;
 }
 
 /**

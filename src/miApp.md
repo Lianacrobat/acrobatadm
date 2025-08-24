@@ -338,3 +338,57 @@ interface Product[object Object]id: string;
 ---
 
 *Este documento se actualiza constantemente según el desarrollo del proyecto.*
+
+
+[
+  {
+    "id": "xpe-roll-flex",
+    "name": "XPE Roll Flex",
+    "shortDescription": "Descripción breve",
+    "longDescription": "descripción completa del producto",
+    "category": "Acrobáticos",
+    "subcategory": "Pisos",
+    "status": "stock",
+    "condition": "nuevo",
+    "calidad": "promedio",
+    "tags": [
+      "Tapete",
+      "Piso de gimnasia",
+      "Colchonetas",
+      "Rollup"
+    ],
+    "images": [
+      "https://www.cheerequipment.com.au/images/products/8_one.jpg",
+      "https://sc04.alicdn.com/kf/HTB1YLT4alv0gK0jSZKbq6zK2FXa6.jpg"
+    ],
+    "relatedProducts": [],
+    "specifications": {
+      "Largo": "Personalizado"
+    },
+    "features": [
+      "Colores personalizados",
+      "Fácil de transportar",
+      "Económico"
+    ],
+    "slug": "xpe-roll-flex",
+    "variant": [
+      "Cheerleading"
+    ]
+  },
+  {
+    "id": "nuevo-producto-1753241769956",
+    "name": "Nuevo Producto",
+    "category": "Sin categoría",
+    "subcategory": "Sin subcategoría",
+    "status": "stock",
+    "condition": "nuevo",
+    "calidad": "estandar",
+    "tags": [],
+    "images": [],
+    "relatedProducts": [],
+    "specifications": {},
+    "features": [],
+    "slug": "nuevo-producto-1753241769956",
+    "variant": []
+  }
+]

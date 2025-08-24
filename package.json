@@ -1,5 +1,5 @@
 {
-  "name": "p02",
+  "name": "admapp",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -8,7 +8,7 @@
     "build:static": "astro build --output static",
     "build:css": "npx @tailwindcss/cli -i ./src/styles/global.css -o ./dist/assets/css/global.css --minify",
     "build:full": "npm run build && npm run build:css",
-    "build:github": "npm run build:static && npm run build:css",
+    "build:github": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "generate-products": "node scripts/generate-products.js",

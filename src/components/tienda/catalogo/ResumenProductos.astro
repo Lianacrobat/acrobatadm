@@ -8,12 +8,15 @@ const categories = getAllCategories();
 
 <!-- Resumen -->
 <div class="flex flex-row justify-between gap-4">
-	<div class="bg-[var(--cajas)] rounded-lg p-2 sm:p-6 text-center flex-1">
+	<a
+		href="/tienda"
+		class="bg-[var(--cajas)] rounded-lg p-2 sm:p-6 text-center flex-1 cursor-pointer hover:shadow-lg transition"
+	>
 		<div class="text-lg sm:text-3xl font-bold text-sky-600">
 			{products.length}
 		</div>
 		<div class="text-xs sm:text-sm">Productos</div>
-	</div>
+	</a>
 	<div class="bg-[var(--cajas)] rounded-lg p-2 sm:p-6 text-center flex-1">
 		<div class="text-lg sm:text-3xl font-bold text-sky-600">
 			{categories.length}

@@ -11,6 +11,47 @@ export interface Props {
 const { product, mainImage, placeholder } = Astro.props;
 ---
 
+<script is:inline>
+	let showScrollHint = true;
+	/**
+	 * @param {'left'|'right'} direction
+	 */
+	function scrollThumbnails(direction) {
+		const thumbnailsContainer = document.getElementById('thumbnails-scroll');
+		if (thumbnailsContainer && typeof thumbnailsContainer.scrollBy === 'function') {
+			const scrollAmount = thumbnailsContainer.offsetHeight + 32; // tamaño cuadrado + gap
+			thumbnailsContainer.scrollBy({
+				top: 0,
+				left: direction === 'left' ? -scrollAmount : scrollAmount,
+				behavior: 'smooth',
+			});
+		}
+	}
+
+	// Mostrar flecha de sugerencia solo si hay overflow y el usuario no ha hecho scroll
+	window.addEventListener('DOMContentLoaded', () => {
+		const thumbnailsContainer = document.getElementById('thumbnails-scroll');
+		if (!thumbnailsContainer) return;
+		function checkScrollHint() {
+			if (thumbnailsContainer.scrollLeft > 0 || thumbnailsContainer.scrollWidth <= thumbnailsContainer.clientWidth) {
+				showScrollHint = false;
+				thumbnailsContainer.classList.remove('show-scroll-hint');
+			} else {
+				showScrollHint = true;
+				thumbnailsContainer.classList.add('show-scroll-hint');
+			}
+		}
+		checkScrollHint();
+		thumbnailsContainer.addEventListener('scroll', () => {
+			if (showScrollHint && thumbnailsContainer.scrollLeft > 0) {
+				showScrollHint = false;
+				thumbnailsContainer.classList.remove('show-scroll-hint');
+			}
+		});
+		window.addEventListener('resize', checkScrollHint);
+	});
+</script>
+
 <div class="w-full flex flex-col gap-4 bg-[var(--cajas)] p-4 rounded-xl">
 	<div class="flex items-center gap-3">
 		<div
@@ -46,7 +87,7 @@ const { product, mainImage, placeholder } = Astro.props;
 	</div>
 
 	<div
-		class="aspect-square w-full rounded-lg overflow-hidden relative bg-[var(--card)] flex items-center justify-center"
+		class="aspect-square w-full rounded-lg overflow-hidden relative bg-[var(--cajas)] flex items-center justify-center"
 	>
 		<img
 			src={typeof mainImage === "string"
@@ -65,29 +106,67 @@ const { product, mainImage, placeholder } = Astro.props;
 	</div>
 	{
 		product.images.length > 1 && (
-			<div class="flex gap-4 justify-center mt-4">
-				{product.images.slice(0, 3).map((image, idx) => (
-					<button
-						type="button"
-						class={`aspect-square w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 mb-1 ${
-							idx === 0
-								? "border-blue-500 shadow-lg"
-								: "border-gray-200 hover:border-blue-300"
-						}`}
-						data-image-thumbnail
-						aria-label={`Miniatura ${idx + 1}`}
-						onclick={`selectProductImage(${idx})`}
-					>
-						<img
-							src={
-								typeof image === "string" ? image : image?.src || placeholder
-							}
-							alt={`${product.name} miniatura ${idx + 1}`}
-							class="w-full h-full object-cover"
-						/>
-					</button>
-				))}
+			<div class="relative w-full flex items-center">
+				<!-- Flecha izquierda -->
+				<button
+					onclick="scrollThumbnails('left')"
+					class="hidden md:flex absolute left-2 z-10 bg-[var(--cajas)] rounded-full p-1 shadow-md hover:bg-[var(--accent-color-soft)] transition disabled:opacity-30"
+					aria-label="Scroll miniaturas a la izquierda"
+					type="button"
+					style="top: 50%; transform: translateY(-50%);"
+				>
+					<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+				</button>
+				<!-- Miniaturas -->
+				<div
+					id="thumbnails-scroll"
+					class="flex gap-3 overflow-x-auto px-0 md:px-10 w-full scrollbar-thin scrollbar-thumb-[var(--accent-color-soft)] scrollbar-track-[var(--cajas)]"
+					style="scrollbar-color: var(--accent-color-soft) var(--cajas);"
+				>
+					{product.images.map((image, idx) => (
+						<button
+							type="button"
+							class={`w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+								idx === 0
+									? "border-[var(--accent-color)] shadow-lg"
+									: "border-[var(--cajas)] hover:border-[var(--accent-color)]"
+							}`}
+							data-image-thumbnail
+							aria-label={`Miniatura ${idx + 1}`}
+							onclick={`selectProductImage(${idx})`}
+						>
+							<img
+								src={
+									typeof image === "string" ? image : image?.src || placeholder
+								}
+								alt={`${product.name} miniatura ${idx + 1}`}
+								class="w-full h-full object-cover"
+								style="aspect-ratio: 1/1;"
+							/>
+						</button>
+					))}
+					<!-- Flecha de sugerencia solo móvil, fija -->
+					<div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 z-20 md:hidden transition-opacity duration-300 opacity-0 thumbnails-scroll-hint bg-white rounded-full shadow-lg flex items-center justify-center w-8 h-8">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+					</div>
+				</div>
+				<!-- Flecha derecha -->
+				<button
+					onclick="scrollThumbnails('right')"
+					class="hidden md:flex absolute right-2 z-10 bg-[var(--cajas)] rounded-full p-1 shadow-md hover:bg-[var(--accent-color-soft)] transition disabled:opacity-30"
+					aria-label="Scroll miniaturas a la derecha"
+					type="button"
+					style="top: 50%; transform: translateY(-50%);"
+				>
+					<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+				</button>
 			</div>
 		)
 	}
 </div>
+
+<style>
+.thumbnails-scroll-hint {
+  opacity: 1 !important;
+}
+</style>

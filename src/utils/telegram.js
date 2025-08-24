@@ -1,7 +1,15 @@
 // Telegram notification utility
-const TELEGRAM_BOT_TOKEN = import.meta.env.TELEGRAM_BOT_TOKEN || "7555861557:AAGfZFvIiXAYxYUB21e7HHGCD7XPOXffM3g"
-const TELEGRAM_CHAT_ID = import.meta.env.TELEGRAM_CHAT_ID || "1223367230"
+import { handleError, handleAsyncError } from "./errorHandler.js";
+
+// Configuración directa de Telegram (para desarrollo local)
+const TELEGRAM_BOT_TOKEN = "7555861557:AAGfZFvIiXAYxYUB21e7HHGCD7XPOXffM3g"
+const TELEGRAM_CHAT_ID = "1223367230"
 const TELEGRAM_API_BASE = "https://api.telegram.org/bot"
+
+// Validación de configuración requerida
+if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+  console.warn('⚠️ Telegram configuration missing.')
+}
 
 // Message templates with more detailed information
 const MESSAGES = {
@@ -50,7 +58,22 @@ async function telegramApiCall(method, params = {}) {
 
 // Main function to send notification with enhanced formatting
 export async function sendTelegramNotification(productName, action = "added") {
-  try {
+  return await handleAsyncError(async () => {
+    // Verificar configuración antes de intentar enviar
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+      const error = handleError(
+        new Error('Telegram configuration missing'),
+        'sendTelegramNotification - configuration check'
+      )
+      return { success: false, error: error.message }
+    }
+
+    // Sanitizar entrada para prevenir inyección
+    const sanitizedProductName = String(productName).replace(/[<>&"']/g, (char) => {
+      const entities = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&#x27;' }
+      return entities[char] || char
+    })
+    
     const template = MESSAGES[action] || MESSAGES.default
     const timestamp = new Date().toLocaleString('es-ES', {
       timeZone: 'America/Mexico_City',
@@ -63,7 +86,7 @@ export async function sendTelegramNotification(productName, action = "added") {
     
     const message = `${template.color} <b>${template.text}</b>
 
-📦 <b>Producto:</b> "${productName}"
+📦 <b>Producto:</b> "${sanitizedProductName}"
 ⏰ <b>Hora:</b> ${timestamp}
 🌐 <b>Origen:</b> Tienda Web
 
@@ -76,13 +99,12 @@ ${template.emoji} <i>Acción realizada desde la tienda online</i>`
       disable_web_page_preview: true
     })
     
-    console.log(`✅ Telegram notification sent: ${productName} (${action})`)
+    console.log(`✅ Telegram notification sent: ${sanitizedProductName} (${action})`)
     return { success: true, result }
     
-  } catch (error) {
-    console.error(`❌ Telegram error: ${error.message}`)
-    return { success: false, error: error.message }
-  }
+  }, 'sendTelegramNotification', {
+    defaultValue: { success: false, error: 'Failed to send notification' }
+  })
 }
 
 // Enhanced test connection with more details
