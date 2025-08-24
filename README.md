@@ -1,47 +1,43 @@
-# Astro Starter Kit: Minimal
+# Acrobat Admin Application
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Aplicación web desarrollada con Astro para la gestión administrativa de productos acrobáticos.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## 🚀 Estructura del Proyecto
 
 ```text
 /
 ├── public/
+│   ├── assets/
+│   └── icons/
 ├── src/
-│   └── pages/
-│       └── index.astro
+│   ├── components/
+│   ├── layouts/
+│   ├── pages/
+│   ├── data/
+│   └── utils/
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🧞 Comandos
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Todos los comandos se ejecutan desde la raíz del proyecto:
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
+| Comando                   | Acción                                           |
 | :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm install`             | Instala las dependencias                        |
+| `npm run dev`             | Inicia el servidor de desarrollo en `localhost:4323` |
+| `npm run build`           | Construye el sitio para producción en `./dist/` |
+| `npm run preview`         | Previsualiza la construcción localmente         |
+| `npm run astro ...`       | Ejecuta comandos CLI como `astro add`, `astro check` |
+| `npm run astro -- --help` | Obtiene ayuda usando el CLI de Astro            |
 
-## 👀 Want to learn more?
+## 📱 Características
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Catálogo de productos acrobáticos
+- Sistema de favoritos con notificaciones Telegram
+- Diseño responsivo con Tailwind CSS
+- Optimizado para GitHub Pages
+
+## 🌐 Despliegue
+
+Este proyecto está configurado para desplegarse automáticamente en GitHub Pages.
