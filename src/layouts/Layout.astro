@@ -52,6 +52,52 @@ import { ViewTransitions } from "astro:transitions";
 		<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"
 		></script>
 
+		<!-- Theme initialization script - MUST be before body to prevent flashing -->
+		<script is:inline>
+			(function() {
+				// Get theme from localStorage or cookie, fallback to system
+				function getStoredTheme() {
+					// Try localStorage first
+					const localTheme = localStorage.getItem('theme');
+					if (localTheme && ['dark', 'light', 'system'].includes(localTheme)) {
+						return localTheme;
+					}
+					
+					// Try cookie as fallback
+					const cookieMatch = document.cookie.match(/theme=([^;]+)/);
+					if (cookieMatch && ['dark', 'light', 'system'].includes(cookieMatch[1])) {
+						return cookieMatch[1];
+					}
+					
+					return 'system';
+				}
+				
+				// Get system preference
+				function getSystemTheme() {
+					return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+				}
+				
+				// Apply theme immediately
+				function applyThemeImmediate(theme) {
+					let actualTheme;
+					if (theme === 'system') {
+						actualTheme = getSystemTheme();
+					} else {
+						actualTheme = theme;
+					}
+					
+					document.documentElement.dataset.theme = actualTheme;
+				}
+				
+				// Initialize theme immediately
+				const theme = getStoredTheme();
+				applyThemeImmediate(theme);
+				
+				// Store the theme for later use by the component
+				window.__INITIAL_THEME__ = theme;
+			})();
+		</script>
+
 		<!-- Inline Scripts -->
 		<script>
 			// Load SVG sprite

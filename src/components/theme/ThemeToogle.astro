@@ -19,6 +19,13 @@ import Sistema from "@icons/Sistema.astro";
 </button>
 
 <script>
+	// Extend Window interface for TypeScript
+	declare global {
+		interface Window {
+			__INITIAL_THEME__?: string;
+		}
+	}
+
 	function initializeTheme() {
 		const toggleButton = document.getElementById("theme-toggle");
 		const themeIconDark = document.getElementById("theme-icon-dark");
@@ -29,8 +36,14 @@ import Sistema from "@icons/Sistema.astro";
 			return;
 		}
 
-		// Get initial theme - System theme by default
+		// Get initial theme - Use the theme already set by Layout or fallback
 		const getTheme = (): "dark" | "light" | "system" => {
+			// Use the theme already initialized by Layout
+			if (window.__INITIAL_THEME__) {
+				return window.__INITIAL_THEME__ as "dark" | "light" | "system";
+			}
+			
+			// Fallback to localStorage
 			const savedTheme = localStorage.getItem("theme");
 			if (savedTheme && ["dark", "light", "system"].includes(savedTheme)) {
 				return savedTheme as "dark" | "light" | "system";
@@ -54,7 +67,10 @@ import Sistema from "@icons/Sistema.astro";
 				actualTheme = theme;
 			}
 
-			document.documentElement.dataset.theme = actualTheme;
+			// Only update if different to avoid unnecessary DOM changes
+			if (document.documentElement.dataset.theme !== actualTheme) {
+				document.documentElement.dataset.theme = actualTheme;
+			}
 			
 			// Show/hide icons based on selected theme mode
 			themeIconDark.classList.toggle("hidden", theme !== "dark");
@@ -71,8 +87,12 @@ import Sistema from "@icons/Sistema.astro";
 				themeLabel.textContent = labels[theme];
 			}
 			
+			
 			localStorage.setItem("theme", theme);
 			document.cookie = `theme=${theme};path=/;max-age=31536000;SameSite=Strict`;
+			
+			// Update the global reference
+			window.__INITIAL_THEME__ = theme;
 		};
 
 		// Listen for system theme changes

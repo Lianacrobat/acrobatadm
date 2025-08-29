@@ -117,3 +117,40 @@ body {
 		padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
 	}
 }
+
+/* Prevenir parpadeos durante cambios de tema */
+:root {
+	/* Transición suave para cambios de tema */
+	transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Prevenir flash de contenido sin estilo (FOUC) */
+html {
+	/* Asegurar que el tema se aplique antes del renderizado */
+	color-scheme: dark light;
+}
+
+/* Transiciones suaves para elementos que cambian con el tema */
+body,
+*[style*="background"],
+*[class*="bg-"],
+*[class*="text-"] {
+	transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+/* Optimización para reducir parpadeos en navegación */
+@media (prefers-reduced-motion: no-preference) {
+	body {
+		transition: background-color 0.1s ease-out, color 0.1s ease-out;
+	}
+}
+
+/* Desactivar transiciones para usuarios que prefieren movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		transition: none !important;
+		animation: none !important;
+	}
+}
