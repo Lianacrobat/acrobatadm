@@ -43,7 +43,7 @@
 /* Focus específico para enlaces de navegación */
 aside a:focus-visible,
 aside button:focus-visible {
-  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline: var(--focus-ring-width) solid transparent;
   outline-offset: var(--focus-ring-offset);
   background-color: rgba(59, 130, 246, 0.1);
   transform: translateX(4px);
