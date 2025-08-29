@@ -48,9 +48,9 @@ import { sendTelegramNotification } from "../../../utils/telegram.js";
 		root.innerHTML = `
 			<div class="flex justify-between items-center mb-6">
 				<span class="text-sm text-[var(--text-color-soft)]">( ${products.length} favoritos )</span>
-				<button id="clear-favs" class="flex items-center gap-2 px-3 py-2 text-xs text-[var(--favorite-color)] hover:text-[var(--favorite-color)] hover:bg-[var(--favorite-color)]/10 rounded-lg transition-all duration-200 font-medium border border-[var(--favorite-color)]/30 hover:border-[var(--favorite-color)]/50">🗑 Eliminar todo</button>
+				<button id="clear-favs" class="flex items-center gap-2 px-3 py-2 text-xs text-[var(--favorite-color)] hover:text-[var(--favorite-color)] hover:bg-[var(--favorite-color)]/10 rounded-lg transition-all duration-200 font-medium border border-[var(--favorite-color)]/50 hover:border-[var(--favorite-color)]/50">Eliminar todo</button>
 			</div>
-			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6 mb-8">
+			<div class="grid grid-cols-3  lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6 mb-8">
 				${products
 					.map(
 						(product: any) => `

@@ -67,17 +67,19 @@ import { ViewTransitions } from "astro:transitions";
 					console.warn("Failed to load SVG sprite:", error);
 				});
 		</script>
+
+
 	</head>
 
-	<body class="h-svh flex tracking-tight">
+	<body class="h-dvh flex tracking-tight">
 		<!-- Sidebar -->
-		<aside class="w-16 p-2 sm:w-48 h-full flex-shrink-0 flex flex-col">
+		<aside class="w-16 sm:w-48 flex-shrink-0 flex flex-col">
 			<Aside />
 		</aside>
 
 		<!-- Main Content -->
 		<main class="flex-1 overflow-y-auto custom-scrollbar">
-			<div class="w-full max-w-7xl mx-auto px-2">
+			<div class="max-w-7xl mx-auto px-2">
 				<slot />
 			</div>
 		</main>

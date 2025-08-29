@@ -1,0 +1,412 @@
+/**
+ * Estilos de accesibilidad mejorada
+ * Incluye focus indicators, reduced motion, high contrast y mejoras de UX
+ */
+
+/* Variables CSS para accesibilidad */
+:root {
+  --focus-ring-color: #3b82f6;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --animation-duration: 0.2s;
+  --transition-duration: 0.15s;
+  --reduced-motion-duration: 0.01ms;
+  --high-contrast-border: 2px solid currentColor;
+}
+
+/* Clase para elementos solo visibles por lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus visible mejorado */
+.focus-visible,
+*:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: 4px;
+}
+
+/* Remover outline por defecto cuando no es necesario */
+*:focus:not(.focus-visible) {
+  outline: none;
+}
+
+/* Focus específico para enlaces de navegación */
+aside a:focus-visible,
+aside button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  background-color: rgba(59, 130, 246, 0.1);
+  transform: translateX(4px);
+  transition: all var(--transition-duration) ease;
+}
+
+/* Indicador visual para enlaces activos */
+aside a[aria-current="page"]::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-radius: 2px;
+  opacity: 1;
+  transition: all var(--transition-duration) ease;
+}
+
+/* Mejoras para tooltips accesibles */
+[role="tooltip"] {
+  position: absolute;
+  z-index: 1000;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  max-width: 200px;
+  word-wrap: break-word;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all var(--transition-duration) ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[role="tooltip"]:not([aria-hidden="true"]) {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Flecha del tooltip */
+[role="tooltip"]::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+}
+
+/* Posiciones de tooltip */
+[role="tooltip"][data-position="top"]::before {
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+[role="tooltip"][data-position="bottom"]::before {
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: rgba(0, 0, 0, 0.9);
+}
+
+[role="tooltip"][data-position="left"]::before {
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: rgba(0, 0, 0, 0.9);
+}
+
+[role="tooltip"][data-position="right"]::before {
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: rgba(0, 0, 0, 0.9);
+}
+
+/* Animaciones suaves para hover */
+.icon-hover-effect {
+  transition: all var(--transition-duration) ease;
+}
+
+.icon-hover-effect:hover {
+  transform: scale(1.05);
+}
+
+/* Estados de carga accesibles */
+.loading-state {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-state::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Mejoras para usuarios de teclado */
+.keyboard-user *:focus {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.keyboard-user button:focus,
+.keyboard-user a:focus {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Soporte para movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: var(--reduced-motion-duration) !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: var(--reduced-motion-duration) !important;
+    scroll-behavior: auto !important;
+  }
+
+  .loading-state::after {
+    animation: none;
+  }
+}
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: var(--reduced-motion-duration) !important;
+  transition-duration: var(--reduced-motion-duration) !important;
+}
+
+/* Soporte para alto contraste */
+@media (prefers-contrast: high) {
+  :root {
+    --focus-ring-width: 3px;
+    --focus-ring-color: #000;
+  }
+
+  aside a,
+  aside button {
+    border: 1px solid currentColor;
+  }
+
+  [role="tooltip"] {
+    background: #000;
+    border: 2px solid #fff;
+  }
+
+  .icon-hover-effect:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.high-contrast aside a,
+.high-contrast aside button {
+  border: var(--high-contrast-border);
+}
+
+.high-contrast [role="tooltip"] {
+  background: #000;
+  border: 2px solid #fff;
+}
+
+/* Mejoras para pantallas táctiles */
+@media (hover: none) and (pointer: coarse) {
+  /* Aumentar área de toque */
+  aside a,
+  aside button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px;
+  }
+
+  /* Tooltips en dispositivos táctiles */
+  [role="tooltip"] {
+    font-size: 1rem;
+    padding: 12px 16px;
+    max-width: 280px;
+  }
+
+  /* Remover hover effects en touch */
+  .icon-hover-effect:hover {
+    transform: none;
+  }
+}
+
+/* Mejoras para pantallas pequeñas */
+@media (max-width: 768px) {
+  .focus-visible,
+  *:focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+
+  [role="tooltip"] {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: none;
+    transform: translateY(100%);
+    transition: transform var(--transition-duration) ease;
+  }
+
+  [role="tooltip"]:not([aria-hidden="true"]) {
+    transform: translateY(0);
+  }
+
+  [role="tooltip"]::before {
+    display: none;
+  }
+}
+
+/* Indicadores de estado para lectores de pantalla */
+.status-indicator {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* Mejoras para enlaces externos */
+a[target="_blank"]::after {
+  content: ' (abre en nueva ventana)';
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* Indicador visual para enlaces externos */
+a[target="_blank"] svg {
+  position: relative;
+}
+
+a[target="_blank"] svg::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: #3b82f6;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+/* Animaciones de entrada suaves */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp var(--animation-duration) ease-out;
+}
+
+.animate-fade-in-left {
+  animation: fadeInLeft var(--animation-duration) ease-out;
+}
+
+/* Mejoras de rendimiento */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Contenedor con scroll suave */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Mejoras para modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --focus-ring-color: #60a5fa;
+  }
+
+  [role="tooltip"] {
+    background: rgba(255, 255, 255, 0.95);
+    color: #1f2937;
+    backdrop-filter: blur(8px);
+  }
+
+  [role="tooltip"]::before {
+    border-top-color: rgba(255, 255, 255, 0.95);
+    border-bottom-color: rgba(255, 255, 255, 0.95);
+    border-left-color: rgba(255, 255, 255, 0.95);
+    border-right-color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+/* Utilidades de espaciado accesible */
+.accessible-spacing {
+  margin: 0.5rem 0;
+}
+
+.accessible-padding {
+  padding: 0.75rem;
+}
+
+/* Skip links para navegación rápida */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 9999;
+  transition: top var(--transition-duration) ease;
+}
+
+.skip-link:focus {
+  top: 6px;
+}

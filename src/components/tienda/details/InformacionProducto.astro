@@ -1,6 +1,7 @@
 ---
 import type { Product } from "../../../data/products";
 import ButtonWsp from "../ui/ButtonWsp.astro";
+import FavoriteButton from "../ui/FavoriteButton.astro";
 
 export interface Props {
 	product: Product;
@@ -155,7 +156,13 @@ const getConditionDot = () =>
 		)
 	}
 
-	<div class="mt-2">
+	<div class="flex flex-col sm:flex-row gap-3 mt-4">
+		<FavoriteButton
+			productId={product.id}
+			productName={product.name}
+			showText={true}
+			class="flex-1 sm:flex-none"
+		/>
 		<ButtonWsp
 			productName={product.name}
 			productSlug={product.slug}

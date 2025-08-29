@@ -1,61 +1,44 @@
 ---
+// Tooltip simple y funcional
 interface Props {
 	text: string;
-	position:
-		| "top"
-		| "bottom"
-		| "left"
-		| "right"
-		| "top-start"
-		| "top-end"
-		| "bottom-start"
-		| "bottom-end"
-		| "left-start"
-		| "left-end"
-		| "right-start"
-		| "right-end";
-	delay?: number; // ms
+	position?: 'right' | 'left' | 'top' | 'bottom';
+	maxWidth?: string;
+	disabled?: boolean;
 }
 
-const { text, position = "top", delay = 100 } = Astro.props;
+const { 
+	text, 
+	position = 'right', 
+	maxWidth = '200px',
+	disabled = false
+} = Astro.props;
 
-// Mejoras: 
-// - Mejor manejo de clases y posiciones
-// - Mejor accesibilidad (aria-label, role)
-// - Mejor animación y visibilidad
-// - Permite personalizar el delay
-
+// Clases de posicionamiento simples
 const positionClasses = {
-	top: "left-1/2 -translate-x-1/2 -top-10",
-	"top-start": "left-0 -top-10",
-	"top-end": "right-0 -top-10",
-	bottom: "left-1/2 -translate-x-1/2 top-10",
-	"bottom-start": "left-0 top-10",
-	"bottom-end": "right-0 top-10",
-	left: "-left-2 top-1/2 -translate-y-1/2 -translate-x-full",
-	"left-start": "-left-2 top-0 -translate-x-full",
-	"left-end": "-left-2 bottom-0 -translate-x-full",
-	right: "-right-2 top-1/2 -translate-y-1/2 translate-x-full",
-	"right-start": "-right-2 top-0 translate-x-full",
-	"right-end": "-right-2 bottom-0 translate-x-full",
-} as const;
-
-type PositionKey = keyof typeof positionClasses;
-
-function getPositionClass(pos: PositionKey) {
-	return positionClasses[pos] || positionClasses.top;
-}
+	right: 'left-full top-1/2 -translate-y-1/2 ml-2',
+	left: 'right-full top-1/2 -translate-y-1/2 mr-2',
+	top: 'left-1/2 -translate-x-1/2 bottom-full mb-2',
+	bottom: 'left-1/2 -translate-x-1/2 top-full mt-2'
+};
 ---
 
-<span
-	role="tooltip"
-	aria-label={text}
-	tabindex="0"
-	class:list={[
-		"pointer-events-none absolute px-3 py-1.5 text-xs font-medium rounded shadow-lg bg-[var(--tooltip-bg,black)] text-[var(--tooltip-text,white)] opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 group-focus:opacity-100 group-focus:scale-100 transition-all duration-200 whitespace-nowrap z-50",
-		getPositionClass(position as PositionKey),
-	]}
-	style={`transition-delay: ${delay}ms;`}
->
-	{text}
-</span>
+<!-- Tooltip simple y funcional -->
+{!disabled && (
+	<span
+		role="tooltip"
+		class={`absolute ${positionClasses[position]} px-3 py-2 text-xs font-medium text-white bg-black rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[9999]`}
+		style={`max-width: ${maxWidth};`}
+	>
+		{text}
+		<!-- Flecha simple -->
+		<div 
+			class={`absolute w-2 h-2 bg-black transform rotate-45 ${
+				position === 'right' ? 'right-full top-1/2 -translate-y-1/2 -mr-1' :
+				position === 'left' ? 'left-full top-1/2 -translate-y-1/2 -ml-1' :
+				position === 'top' ? 'top-full left-1/2 -translate-x-1/2 -mt-1' :
+				'bottom-full left-1/2 -translate-x-1/2 -mb-1'
+			}`}
+		></div>
+	</span>
+)}

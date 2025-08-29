@@ -1,0 +1,586 @@
+---
+import { deportes } from "../../../data/deportes.js";
+
+// Tipos para las categorías disponibles
+type Categoria = 
+	| "urbano" 
+	| "fitness" 
+	| "recreativo" 
+	| "olimpico" 
+	| "arte-marcial" 
+	| "extremo" 
+	| "acuatico" 
+	| "circo" 
+	| "cultura" 
+	| "danza";
+
+// Props para el componente
+interface Props {
+	activeCategory?: Categoria | "";
+}
+
+const { activeCategory = "" } = Astro.props;
+
+// Función para contar deportes por categoría con tipado estricto
+const contarDeportesPorCategoria = (categoria: Categoria): number => {
+	return deportes.filter((deporte) => deporte.categorias.includes(categoria)).length;
+};
+
+// Contadores para cada categoría con tipado explícito
+const contadores: Record<Categoria, number> = {
+	urbano: contarDeportesPorCategoria("urbano"),
+	fitness: contarDeportesPorCategoria("fitness"),
+	recreativo: contarDeportesPorCategoria("recreativo"),
+	olimpico: contarDeportesPorCategoria("olimpico"),
+	"arte-marcial": contarDeportesPorCategoria("arte-marcial"),
+	extremo: contarDeportesPorCategoria("extremo"),
+	acuatico: contarDeportesPorCategoria("acuatico"),
+	circo: contarDeportesPorCategoria("circo"),
+	cultura: contarDeportesPorCategoria("cultura"),
+	danza: contarDeportesPorCategoria("danza"),
+};
+
+const styleTooltip =
+	"absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded whitespace-nowrap bg-[#000] text-white border border-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-20 pointer-events-none md:hidden";
+
+const styleNotification =
+	"absolute -top-2 -right-2 bg-gray-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow-lg";
+---
+
+<header
+	class="p-4 md:p-8 rounded-xl mb-8 shadow-2xl"
+	style="background: var(--card); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);"
+>
+	<div class="max-w-6xl mx-auto">
+		<h2
+			class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6"
+			style="color: var(--text-color);"
+		>
+			Categorias:
+		</h2>
+		<div
+			class="grid grid-cols-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-4 justify-items-center"
+		>
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "urbano"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="urbano"
+				title="Urbano"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>🚀</span
+				>
+				<span class="hidden md:inline ml-2">Urbano</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores.urbano}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Urbano
+				</div>
+			</button>
+
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "fitness"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="fitness"
+				title="Fitness"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>🍏</span
+				>
+				<span class="hidden md:inline ml-2">Fitness</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores.fitness}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Fitness
+				</div>
+			</button>
+
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "recreativo"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="recreativo"
+				title="Recreativo"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>🎯</span
+				>
+				<span class="hidden md:inline ml-2">Recreativo</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores.recreativo}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Recreativo
+				</div>
+			</button>
+
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "olimpico"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="olimpico"
+				title="Olímpico"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>🏆</span
+				>
+				<span class="hidden md:inline ml-2">Olímpico</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores.olimpico}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Olímpico
+				</div>
+			</button>
+
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "arte-marcial"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="arte-marcial"
+				title="Arte Marcial"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>🥋</span
+				>
+				<span class="hidden md:inline ml-2">Arte Marcial</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores["arte-marcial"]}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Arte Marcial
+				</div>
+			</button>
+
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "extremo"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="extremo"
+				title="Extremo"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>⚡</span
+				>
+				<span class="hidden md:inline ml-2">Extremo</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores.extremo}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Extremo
+				</div>
+			</button>
+
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "acuatico"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="acuatico"
+				title="Acuático"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>🌊</span
+				>
+				<span class="hidden md:inline ml-2">Acuático</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores.acuatico}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Acuático
+				</div>
+			</button>
+
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "circo"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="circo"
+				title="Circo"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>🎪</span
+				>
+				<span class="hidden md:inline ml-2">Circo</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores.circo}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Circo
+				</div>
+			</button>
+
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "cultura"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="cultura"
+				title="Cultura"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>🎭</span
+				>
+				<span class="hidden md:inline ml-2">Cultura</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores.cultura}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Cultura
+				</div>
+			</button>
+
+			<button
+				class={`
+        border-1 rounded-full
+        px-2 py-2 md:px-6 md:py-3
+        text-xs md:text-sm font-semibold
+        w-12 h-12 md:min-w-44 md:w-auto md:h-auto
+        flex items-center justify-center gap-0 md:gap-2
+        cursor-pointer
+        hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0
+        relative group
+        ${
+					activeCategory === "danza"
+						? "bg-accent border-accent text-primary shadow-accent/40"
+						: "bg-background border-accent-soft text-primary"
+				}
+    `}
+				data-category="danza"
+				title="Danza"
+			>
+				<span
+					class="text-lg md:text-base"
+					aria-hidden="true"
+					>💃</span
+				>
+				<span class="hidden md:inline ml-2">Danza</span>
+
+				<!-- Contador -->
+				<span class={styleNotification}>
+					{contadores.danza}
+				</span>
+
+				<!-- Tooltip for mobile -->
+				<div
+					class={styleTooltip}
+					role="tooltip"
+				>
+					Danza
+				</div>
+			</button>
+		</div>
+	</div>
+</header>
+
+<script>
+	import filterStore from "../../../utils/filterStore.js";
+
+	// Tipos para mejor tipado
+	type Categoria = 
+		| "urbano" 
+		| "fitness" 
+		| "recreativo" 
+		| "olimpico" 
+		| "arte-marcial" 
+		| "extremo" 
+		| "acuatico" 
+		| "circo" 
+		| "cultura" 
+		| "danza";
+
+	interface FilterChange {
+		type: string;
+		state: {
+			activeCategories: Categoria[];
+		};
+	}
+
+	// Funcionalidad mejorada para manejar la selección de categorías
+	document.addEventListener("DOMContentLoaded", () => {
+		// Suscribirse a cambios del store con tipado
+		const unsubscribe = filterStore.subscribe((change: FilterChange) => {
+			if (
+				change.type === "CATEGORY_CHANGED" ||
+				change.type === "FILTERS_CLEARED"
+			) {
+				updateButtonStates(change.state.activeCategories);
+			}
+		});
+
+		// Función optimizada para actualizar el estado visual de los botones con tipado
+		function updateButtonStates(activeCategories: Categoria[] = []): void {
+			const buttons = document.querySelectorAll<HTMLButtonElement>("[data-category]");
+
+			// Usar requestAnimationFrame para optimizar renderizado
+			requestAnimationFrame(() => {
+				buttons.forEach((button: HTMLButtonElement) => {
+					const category = button.dataset.category as Categoria;
+					if (!category) return;
+					
+					const isActive = activeCategories.includes(category);
+
+					// Aplicar estilos de manera más eficiente
+					if (isActive) {
+						// Estilos para botones activos
+						button.style.backgroundColor = "var(--accent-color)";
+						button.style.borderColor = "var(--accent-color)";
+						button.style.color = "white";
+						button.style.boxShadow = "0 4px 12px rgba(var(--accent-rgb), 0.4)";
+
+						// Agregar atributo ARIA para accesibilidad
+						button.setAttribute("aria-pressed", "true");
+					} else {
+						// Estilos para botones inactivos
+						button.style.backgroundColor = "var(--background)";
+						button.style.borderColor = "var(--accent-color-soft)";
+						button.style.color = "var(--text-color)";
+						button.style.boxShadow = "none";
+
+						// Actualizar atributo ARIA
+						button.setAttribute("aria-pressed", "false");
+					}
+				});
+			});
+		}
+
+		// Manejar clics en botones de categoría con mejor UX y tipado
+		document.addEventListener("click", (event: MouseEvent) => {
+			const target = event.target as HTMLElement;
+			const button = target.closest<HTMLButtonElement>("[data-category]");
+			if (!button) return;
+
+			const category = button.dataset.category as Categoria;
+			if (!category) return;
+
+			// Feedback visual inmediato
+			button.style.transform = "scale(0.95)";
+			setTimeout(() => {
+				button.style.transform = "";
+			}, 150);
+
+			// Actualizar estado a través del store
+			filterStore.toggleCategory(category);
+		});
+
+		// Manejar navegación por teclado para accesibilidad con tipado
+		document.addEventListener("keydown", (event: KeyboardEvent) => {
+			if (event.key === "Enter" || event.key === " ") {
+				const target = event.target as HTMLElement;
+				const button = target.closest<HTMLButtonElement>("[data-category]");
+				if (button) {
+					event.preventDefault();
+					button.click();
+				}
+			}
+		});
+
+		// Inicializar estado desde el store
+		const initialState = filterStore.getState();
+		updateButtonStates(initialState.activeCategories);
+
+		// Limpiar suscripción al desmontar (para SPAs)
+		window.addEventListener("beforeunload", unsubscribe);
+	});
+</script>

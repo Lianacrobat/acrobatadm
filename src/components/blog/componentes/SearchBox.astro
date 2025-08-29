@@ -1,0 +1,542 @@
+---
+// Componente de búsqueda en tiempo real para el blog de deportes
+---
+
+<div class="search-container relative mb-6">
+	<div class="relative">
+		<input 
+			id="search-input"
+			type="text" 
+			placeholder="Buscar deportes, actividades o palabras clave..."
+			class="search-input"
+			autocomplete="off"
+			aria-label="Buscar deportes"
+			aria-describedby="search-help"
+		/>
+		
+		<!-- Icono de búsqueda -->
+		<div class="search-icon">
+			<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+			</svg>
+		</div>
+		
+		<!-- Botón de limpiar -->
+		<button 
+			id="clear-search"
+			class="clear-button"
+			aria-label="Limpiar búsqueda"
+			type="button"
+		>
+			<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+			</svg>
+		</button>
+	</div>
+	
+	<!-- Sugerencias de búsqueda -->
+	<div 
+		id="search-suggestions"
+		class="suggestions-container hidden"
+		role="listbox"
+		aria-label="Sugerencias de búsqueda"
+	>
+		<div id="suggestions-list" class="suggestions-list">
+			<!-- Las sugerencias se generarán dinámicamente -->
+		</div>
+	</div>
+	
+	<!-- Texto de ayuda -->
+	<div id="search-help" class="search-help hidden">
+		Presiona Enter para buscar o selecciona una sugerencia
+	</div>
+	
+	<!-- Indicador de resultados -->
+	<div id="search-results-count" class="results-count hidden">
+		<span id="results-count">0</span> resultados encontrados
+	</div>
+</div>
+
+<style>
+	.search-container {
+		max-width: 100%;
+		position: relative;
+		margin-bottom: 1.5rem;
+	}
+
+	.search-input {
+		width: 100%;
+		padding: 0.75rem 2.5rem 0.75rem 3rem;
+		color: var(--text-color);
+		background: var(--background);
+		border: 2px solid var(--accent-color-soft);
+		border-radius: 0.75rem;
+		font-size: 1rem;
+		transition: all 0.3s ease;
+		outline: none;
+	}
+
+	.search-input:focus {
+		border-color: var(--accent-color);
+		box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+	}
+
+	.search-icon {
+		position: absolute;
+		left: 1rem;
+		top: 50%;
+		transform: translateY(-50%);
+		color: var(--accent-color-soft);
+		pointer-events: none;
+	}
+
+	.clear-button {
+		position: absolute;
+		right: 0.75rem;
+		top: 50%;
+		transform: translateY(-50%);
+		color: var(--accent-color-soft);
+		background: none;
+		border: none;
+		cursor: pointer;
+		opacity: 0;
+		pointer-events: none;
+		transition: all 0.2s ease;
+		padding: 0.25rem;
+		border-radius: 0.25rem;
+	}
+
+	.clear-button:hover {
+		color: var(--accent-color);
+		background: rgba(var(--accent-rgb), 0.1);
+	}
+
+	.clear-button.show {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.icon {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.suggestions-container {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		background: var(--background);
+		border: 1px solid var(--accent-color-soft);
+		border-radius: 0.5rem;
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+		margin-top: 0.5rem;
+		z-index: 50;
+		max-height: 15rem;
+		overflow-y: auto;
+		transition: all 0.2s ease;
+		transform: translateY(-10px);
+		opacity: 0;
+	}
+
+	.suggestions-container.show {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	.suggestions-list {
+		padding: 0.5rem 0;
+	}
+
+	.suggestion-item {
+		padding: 0.5rem 1rem;
+		cursor: pointer;
+		transition: background-color 0.15s ease;
+		border-bottom: 1px solid rgba(var(--accent-rgb), 0.1);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.suggestion-item:last-child {
+		border-bottom: none;
+	}
+
+	.suggestion-item:hover,
+	.suggestion-item.highlighted {
+		background: rgba(var(--accent-rgb), 0.1);
+	}
+
+	.suggestion-text {
+		color: var(--text-color);
+		font-size: 0.875rem;
+	}
+
+	.suggestion-category {
+		font-size: 0.75rem;
+		color: var(--accent-color-soft);
+		margin-left: 0.5rem;
+	}
+
+	.search-help {
+		font-size: 0.75rem;
+		color: var(--accent-color-soft);
+		margin-top: 0.5rem;
+	}
+
+	.results-count {
+		font-size: 0.875rem;
+		color: var(--accent-color-soft);
+		margin-top: 0.5rem;
+	}
+
+	.search-loading {
+		position: absolute;
+		right: 3rem;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.search-loading::after {
+		content: '';
+		width: 1rem;
+		height: 1rem;
+		border: 2px solid var(--accent-color-soft);
+		border-top: 2px solid var(--accent-color);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+
+	@keyframes spin {
+		from { transform: rotate(0deg); }
+		to { transform: rotate(360deg); }
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	/* Responsive */
+	@media (max-width: 640px) {
+		.search-container {
+			margin-bottom: 1rem;
+		}
+		
+		.search-input {
+			padding: 0.75rem 2.5rem 0.75rem 3rem;
+			font-size: 0.875rem;
+		}
+	}
+</style>
+
+<script>
+	import filterStore from '../../../utils/filterStore.js';
+	import deporteFilter from '../../../utils/deporteFilter.js';
+
+	// Variables para el manejo de la búsqueda
+	let searchTimeout;
+	let currentSuggestionIndex = -1;
+	let suggestions = [];
+	let isSearching = false;
+
+	// Elementos del DOM
+	let searchInput;
+	let clearButton;
+	let suggestionsContainer;
+	let suggestionsList;
+	let searchHelp;
+	let resultsCount;
+	let resultsCountElement;
+
+	// Función para inicializar la búsqueda
+	function initializeSearch() {
+		searchInput = document.getElementById('search-input');
+		clearButton = document.getElementById('clear-search');
+		suggestionsContainer = document.getElementById('search-suggestions');
+		suggestionsList = document.getElementById('suggestions-list');
+		searchHelp = document.getElementById('search-help');
+		resultsCount = document.getElementById('search-results-count');
+		resultsCountElement = document.getElementById('results-count');
+
+		if (!searchInput) return;
+
+		// Event listeners
+		searchInput.addEventListener('input', handleSearchInput);
+		searchInput.addEventListener('keydown', handleKeyNavigation);
+		searchInput.addEventListener('focus', handleSearchFocus);
+		searchInput.addEventListener('blur', handleSearchBlur);
+		clearButton?.addEventListener('click', clearSearch);
+
+		// Cerrar sugerencias al hacer clic fuera
+		document.addEventListener('click', (e) => {
+			if (!e.target.closest('.search-container')) {
+				hideSuggestions();
+			}
+		});
+
+		// Inicializar con el estado actual del store
+		const currentState = filterStore.getState();
+		if (currentState.searchQuery) {
+			searchInput.value = currentState.searchQuery;
+			showClearButton();
+		}
+	}
+
+	// Manejar entrada de texto en el campo de búsqueda
+	function handleSearchInput(event) {
+		const query = event.target.value.trim();
+		
+		// Mostrar/ocultar botón de limpiar
+		if (query.length > 0) {
+			showClearButton();
+		} else {
+			hideClearButton();
+			hideSuggestions();
+		}
+
+		// Debouncing para optimizar rendimiento
+		clearTimeout(searchTimeout);
+		searchTimeout = setTimeout(() => {
+			performSearch(query);
+		}, 300);
+
+		// Generar sugerencias si hay texto
+		if (query.length >= 2) {
+			generateSuggestions(query);
+		} else {
+			hideSuggestions();
+		}
+	}
+
+	// Realizar búsqueda
+	function performSearch(query) {
+		if (isSearching) return;
+		
+		isSearching = true;
+		showLoadingIndicator();
+
+		// Actualizar estado en el store
+		filterStore.setSearchQuery(query);
+
+		// Simular delay de búsqueda para UX
+		setTimeout(() => {
+			hideLoadingIndicator();
+			isSearching = false;
+			
+			// Actualizar contador de resultados
+			updateResultsCount();
+		}, 150);
+	}
+
+	// Generar sugerencias basadas en la consulta
+	function generateSuggestions(query) {
+		suggestions = deporteFilter.getSuggestions(query, 8);
+		
+		if (suggestions.length > 0) {
+			renderSuggestions();
+			showSuggestions();
+		} else {
+			hideSuggestions();
+		}
+	}
+
+	// Renderizar sugerencias en el DOM
+	function renderSuggestions() {
+		if (!suggestionsList) return;
+
+		suggestionsList.innerHTML = suggestions.map((suggestion, index) => `
+			<div 
+				class="suggestion-item" 
+				data-index="${index}"
+				data-value="${suggestion.text}"
+				role="option"
+				aria-selected="false"
+			>
+				<span class="suggestion-text">${highlightMatch(suggestion.text, searchInput.value)}</span>
+				${suggestion.category ? `<span class="suggestion-category">${suggestion.category}</span>` : ''}
+			</div>
+		`).join('');
+
+		// Agregar event listeners a las sugerencias
+		suggestionsList.querySelectorAll('.suggestion-item').forEach(item => {
+			item.addEventListener('click', () => selectSuggestion(item.dataset.value));
+			item.addEventListener('mouseenter', () => highlightSuggestion(parseInt(item.dataset.index)));
+		});
+	}
+
+	// Resaltar coincidencias en las sugerencias
+	function highlightMatch(text, query) {
+		if (!query) return text;
+		
+		const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+		return text.replace(regex, '<strong>$1</strong>');
+	}
+
+	// Manejar navegación por teclado
+	function handleKeyNavigation(event) {
+		if (!suggestionsContainer.classList.contains('show')) return;
+
+		switch (event.key) {
+			case 'ArrowDown':
+				event.preventDefault();
+				currentSuggestionIndex = Math.min(currentSuggestionIndex + 1, suggestions.length - 1);
+				highlightSuggestion(currentSuggestionIndex);
+				break;
+				
+			case 'ArrowUp':
+				event.preventDefault();
+				currentSuggestionIndex = Math.max(currentSuggestionIndex - 1, -1);
+				highlightSuggestion(currentSuggestionIndex);
+				break;
+				
+			case 'Enter':
+				event.preventDefault();
+				if (currentSuggestionIndex >= 0 && suggestions[currentSuggestionIndex]) {
+					selectSuggestion(suggestions[currentSuggestionIndex].text);
+				} else {
+					performSearch(searchInput.value.trim());
+					hideSuggestions();
+				}
+				break;
+				
+			case 'Escape':
+				hideSuggestions();
+				searchInput.blur();
+				break;
+		}
+	}
+
+	// Resaltar sugerencia específica
+	function highlightSuggestion(index) {
+		const items = suggestionsList.querySelectorAll('.suggestion-item');
+		
+		items.forEach((item, i) => {
+			if (i === index) {
+				item.classList.add('highlighted');
+				item.setAttribute('aria-selected', 'true');
+			} else {
+				item.classList.remove('highlighted');
+				item.setAttribute('aria-selected', 'false');
+			}
+		});
+	}
+
+	// Seleccionar una sugerencia
+	function selectSuggestion(value) {
+		searchInput.value = value;
+		performSearch(value);
+		hideSuggestions();
+		showClearButton();
+	}
+
+	// Mostrar/ocultar elementos de la UI
+	function showSuggestions() {
+		if (suggestionsContainer) {
+			suggestionsContainer.classList.remove('hidden');
+			setTimeout(() => suggestionsContainer.classList.add('show'), 10);
+		}
+		currentSuggestionIndex = -1;
+	}
+
+	function hideSuggestions() {
+		if (suggestionsContainer) {
+			suggestionsContainer.classList.remove('show');
+			setTimeout(() => suggestionsContainer.classList.add('hidden'), 200);
+		}
+		currentSuggestionIndex = -1;
+	}
+
+	function showClearButton() {
+		if (clearButton) {
+			clearButton.classList.add('show');
+		}
+	}
+
+	function hideClearButton() {
+		if (clearButton) {
+			clearButton.classList.remove('show');
+		}
+	}
+
+	function showLoadingIndicator() {
+		const loadingDiv = document.createElement('div');
+		loadingDiv.className = 'search-loading';
+		loadingDiv.id = 'search-loading';
+		searchInput.parentNode.appendChild(loadingDiv);
+	}
+
+	function hideLoadingIndicator() {
+		const loading = document.getElementById('search-loading');
+		if (loading) {
+			loading.remove();
+		}
+	}
+
+	// Limpiar búsqueda
+	function clearSearch() {
+		searchInput.value = '';
+		filterStore.setSearchQuery('');
+		hideClearButton();
+		hideSuggestions();
+		hideResultsCount();
+		searchInput.focus();
+	}
+
+	// Manejar eventos de foco
+	function handleSearchFocus() {
+		if (searchHelp) {
+			searchHelp.classList.remove('hidden');
+		}
+		
+		if (searchInput.value.length >= 2) {
+			generateSuggestions(searchInput.value);
+		}
+	}
+
+	function handleSearchBlur() {
+		// Delay para permitir clics en sugerencias
+		setTimeout(() => {
+			if (searchHelp) {
+				searchHelp.classList.add('hidden');
+			}
+		}, 150);
+	}
+
+	// Actualizar contador de resultados
+	function updateResultsCount() {
+		const state = filterStore.getState();
+		const results = deporteFilter.filterDeportes({
+			categories: state.activeCategories,
+			searchQuery: state.searchQuery,
+			sortBy: state.sortBy
+		});
+
+		if (resultsCountElement && resultsCount) {
+			resultsCountElement.textContent = results.length;
+			
+			if (state.searchQuery || state.activeCategories.length > 0) {
+				resultsCount.classList.remove('hidden');
+			} else {
+				resultsCount.classList.add('hidden');
+			}
+		}
+	}
+
+	function hideResultsCount() {
+		if (resultsCount) {
+			resultsCount.classList.add('hidden');
+		}
+	}
+
+	// Inicializar cuando el DOM esté listo
+	document.addEventListener('DOMContentLoaded', () => {
+		initializeSearch();
+		
+		// Suscribirse a cambios del store para actualizar contador
+		filterStore.subscribe((change) => {
+			if (['CATEGORY_CHANGED', 'SEARCH_CHANGED', 'SORT_CHANGED', 'FILTERS_CLEARED'].includes(change.type)) {
+				updateResultsCount();
+			}
+		});
+	});
+</script>

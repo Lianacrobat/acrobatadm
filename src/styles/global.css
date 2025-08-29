@@ -105,3 +105,15 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
 	background-color: var(--accent-color);
 }
+
+/* Safe area para dispositivos móviles */
+.pb-safe {
+	padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
+}
+
+/* Asegurar que el botón de tema sea siempre visible en móviles */
+@media (max-width: 640px) {
+	.pb-safe {
+		padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+	}
+}

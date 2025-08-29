@@ -1,16 +1,21 @@
 ---
 import Luna from "@icons/Luna.astro";
 import Sol from "@icons/Sol.astro";
+import Sistema from "@icons/Sistema.astro";
 ---
 
 <button
 	id="theme-toggle"
-	class="group relative flex items-center justify-center cursor-pointer"
+	class="group relative flex flex-col items-center justify-center cursor-pointer w-16 h-16 sm:w-14 sm:h-14 rounded-lg hover:bg-[var(--accent-color)]/10 transition-colors duration-200"
 	aria-label="Cambio de tema"
 	title="Cambio de tema"
 >
-	<Luna />
-	<Sol />
+	<div class="flex items-center justify-center mb-1">
+		<Luna />
+		<Sol />
+		<Sistema />
+	</div>
+	<span id="theme-label" class="text-xs text-[var(--text-color-soft)] font-medium leading-none">Sistema</span>
 </button>
 
 <script>
@@ -18,36 +23,79 @@ import Sol from "@icons/Sol.astro";
 		const toggleButton = document.getElementById("theme-toggle");
 		const themeIconDark = document.getElementById("theme-icon-dark");
 		const themeIconLight = document.getElementById("theme-icon-light");
+		const themeIconSystem = document.getElementById("theme-icon-system");
 
-		if (!toggleButton || !themeIconDark || !themeIconLight) {
+		if (!toggleButton || !themeIconDark || !themeIconLight || !themeIconSystem) {
 			return;
 		}
 
-		// Get initial theme - Dark theme by default
-		const getTheme = (): "dark" | "light" => {
+		// Get initial theme - System theme by default
+		const getTheme = (): "dark" | "light" | "system" => {
 			const savedTheme = localStorage.getItem("theme");
-			if (savedTheme) {
-				return savedTheme as "dark" | "light";
+			if (savedTheme && ["dark", "light", "system"].includes(savedTheme)) {
+				return savedTheme as "dark" | "light" | "system";
 			}
-			return "dark";
+			return "system";
+		};
+
+		// Get system preference
+		const getSystemTheme = (): "dark" | "light" => {
+			return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 		};
 
 		// Apply theme to document
-		const applyTheme = (theme: "dark" | "light") => {
-			document.documentElement.dataset.theme = theme;
-			themeIconDark.classList.toggle("hidden", theme === "dark");
-			themeIconLight.classList.toggle("hidden", theme === "light");
+		const applyTheme = (theme: "dark" | "light" | "system") => {
+			const themeLabel = document.getElementById("theme-label");
+			let actualTheme: "dark" | "light";
+			
+			if (theme === "system") {
+				actualTheme = getSystemTheme();
+			} else {
+				actualTheme = theme;
+			}
+
+			document.documentElement.dataset.theme = actualTheme;
+			
+			// Show/hide icons based on selected theme mode
+			themeIconDark.classList.toggle("hidden", theme !== "dark");
+			themeIconLight.classList.toggle("hidden", theme !== "light");
+			themeIconSystem.classList.toggle("hidden", theme !== "system");
+			
+			// Update label text
+			if (themeLabel) {
+				const labels = {
+					dark: "Oscuro",
+					light: "Claro",
+					system: "Sistema"
+				};
+				themeLabel.textContent = labels[theme];
+			}
+			
 			localStorage.setItem("theme", theme);
 			document.cookie = `theme=${theme};path=/;max-age=31536000;SameSite=Strict`;
 		};
+
+		// Listen for system theme changes
+		const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+		mediaQuery.addEventListener("change", () => {
+			if (currentTheme === "system") {
+				applyTheme("system");
+			}
+		});
 
 		// Initialize theme
 		let currentTheme = getTheme();
 		applyTheme(currentTheme);
 
-		// Toggle theme on click
+		// Cycle through themes on click: system -> light -> dark -> system
 		toggleButton.addEventListener("click", () => {
-			currentTheme = currentTheme === "dark" ? "light" : "dark";
+			if (currentTheme === "system") {
+				currentTheme = "light";
+			} else if (currentTheme === "light") {
+				currentTheme = "dark";
+			} else {
+				currentTheme = "system";
+			}
 			applyTheme(currentTheme);
 		});
 	}

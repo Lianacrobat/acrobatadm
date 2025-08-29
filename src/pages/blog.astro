@@ -1,0 +1,33 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BotonCategoria from "../components/blog/componentes/BotonCategoria.astro";
+import GridPost from "../components/blog/componentes/GridPost.astro";
+import SearchBox from "../components/blog/componentes/SearchBox.astro";
+import SortOptions from "../components/blog/componentes/SortOptions.astro";
+import HeroSection from "@components/ui/HeroSection.astro";
+---
+
+<Layout title="Blog de Deportes">
+	<main class="blog-page">
+		<div class="blog-container">
+			<!-- Header del blog -->
+			<HeroSection
+				colorHero="bg-gradient-to-r from-sky-400 to-blue-600"
+				heroTitle="Variantes Acrobaticas"
+				heroParagraph="Descubre las variantes acrobáticas más emocionantes"
+				heroImage="comunidad"
+			/>
+			<!-- Componente de filtros por categoría -->
+			<section class="filters-section pt-4">
+				<BotonCategoria />
+			</section>
+
+
+
+			<!-- Grid de deportes -->
+			<section class="content-section">
+				<GridPost />
+			</section>
+		</div>
+	</main>
+</Layout>

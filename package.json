@@ -11,6 +11,9 @@
     "build:github": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "deploy:vercel": "npm run build && vercel --prod",
+    "deploy:preview": "npm run build && vercel",
+    "deploy:check": "npm run build",
     "generate-products": "node scripts/generate-products.js",
     "convert-json": "node scripts/convert-json-to-ts.js",
     "validate-products": "node scripts/validate-products.js",
@@ -20,6 +23,7 @@
   },
   "dependencies": {
     "@astrojs/node": "^9.3.0",
+    "@astrojs/vercel": "^8.2.6",
     "@tailwindcss/cli": "^4.1.11",
     "@tailwindcss/vite": "^4.1.8",
     "astro": "^5.9.2",

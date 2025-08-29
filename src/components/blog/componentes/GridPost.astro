@@ -1,0 +1,472 @@
+---
+import { deportes, getDeportesPorCategorias } from "../../../data/deportes.js";
+
+// Mapeo de iconos para cada categoría
+const categoryIcons: Record<string, string> = {
+	urbano: "🚀",
+	fitness: "🍏",
+	recreativo: "🎯",
+	olimpico: "🏆",
+	"arte-marcial": "🥋",
+	extremo: "⚡",
+	acuatico: "🌊",
+	circo: "🎪",
+	cultura: "🎭",
+	danza: "💃",
+	espectaculo: "🎬"
+};
+---
+
+<div class="grid-post-container">
+	<!-- Grid de deportes -->
+	<div
+		class="deportes-grid"
+		id="deportes-grid"
+	>
+		{
+			deportes.map((deporte) => (
+				<article
+					class="deporte-card"
+					data-id={deporte.id}
+					data-categorias={JSON.stringify(deporte.categorias)}
+				>
+					<div class="card-image">
+						<img
+							src={deporte.imagen}
+							alt={deporte.nombre}
+							loading="lazy"
+							onerror="this.src='/assets/images/placeholder.jpg'"
+						/>
+						<div class="difficulty-badge">{deporte.dificultad}</div>
+					</div>
+
+					<div class="card-content">
+						<h3 class="deporte-title">{deporte.nombre}</h3>
+						<p class="deporte-description">{deporte.descripcion}</p>
+
+						<div class="card-meta">
+							<span class="duration">
+								<svg
+									class="icon"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+								>
+									<circle
+										cx="12"
+										cy="12"
+										r="10"
+									/>
+									<polyline points="12,6 12,12 16,14" />
+								</svg>
+								{deporte.duracion}
+							</span>
+						</div>
+
+						<div class="categorias-tags">
+							{deporte.categorias.map((categoria) => (
+								<span
+									class="categoria-tag"
+									data-categoria={categoria}
+									title={categoria}
+								>
+									<span class="categoria-icon">{categoryIcons[categoria] || "📋"}</span>
+								</span>
+							))}
+						</div>
+					</div>
+				</article>
+			))
+		}
+	</div>
+
+	<!-- Mensaje cuando no hay resultados -->
+	<div
+		class="no-results"
+		id="no-results"
+		style="display: none;"
+	>
+		<div class="no-results-content">
+			<svg
+				class="no-results-icon"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+			>
+				<circle
+					cx="11"
+					cy="11"
+					r="8"
+				></circle>
+				<path d="m21 21-4.35-4.35"></path>
+			</svg>
+			<h3>No se encontraron deportes</h3>
+			<p>
+				Intenta seleccionar diferentes categorías o elimina algunos filtros.
+			</p>
+		</div>
+	</div>
+</div>
+
+<style>
+	.grid-post-container {
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.deportes-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 2rem;
+		margin-bottom: 2rem;
+	}
+
+	.deporte-card {
+		background: var(--card);
+		border: 1px solid var(--accent-color-soft);
+		border-radius: 12px;
+		overflow: hidden;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	.deporte-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+		border-color: var(--accent-color);
+	}
+
+	.card-image {
+		position: relative;
+		height: 200px;
+		overflow: hidden;
+	}
+
+	.card-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.deporte-card:hover .card-image img {
+		transform: scale(1.05);
+	}
+
+	.difficulty-badge {
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		background: var(--accent-color);
+		color: var(--text-color);
+		padding: 4px 8px;
+		border-radius: 6px;
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	.card-content {
+		padding: 1.5rem;
+	}
+
+	.deporte-title {
+		color: var(--text-color);
+		font-size: 1.25rem;
+		font-weight: 700;
+		margin: 0 0 0.75rem 0;
+		line-height: 1.3;
+	}
+
+	.deporte-description {
+		color: var(--text-color);
+		opacity: 0.8;
+		font-size: 0.9rem;
+		line-height: 1.5;
+		margin: 0 0 1rem 0;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.card-meta {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 1rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid var(--accent-color-soft);
+	}
+
+	.duration {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--text-color);
+		font-size: 0.85rem;
+		font-weight: 500;
+	}
+
+	.icon {
+		width: 16px;
+		height: 16px;
+		stroke-width: 2;
+	}
+
+	.categorias-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.categoria-tag {
+		background: transparent;
+		color: var(--accent-color);
+		border: none;
+		padding: 6px 8px;
+		border-radius: 8px;
+		font-size: 0.75rem;
+		font-weight: 500;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 32px;
+		height: 32px;
+	}
+
+	.categoria-icon {
+		font-size: 1.1rem;
+		line-height: 1;
+		display: block;
+	}
+
+	.no-results {
+		text-align: center;
+		padding: 4rem 2rem;
+	}
+
+	.no-results-content {
+		max-width: 400px;
+		margin: 0 auto;
+	}
+
+	.no-results-icon {
+		width: 64px;
+		height: 64px;
+		color: var(--accent-color-soft);
+		margin: 0 auto 1.5rem;
+		display: block;
+	}
+
+	.no-results h3 {
+		color: var(--text-color);
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin: 0 0 0.75rem 0;
+	}
+
+	.no-results p {
+		color: var(--text-color);
+		opacity: 0.7;
+		font-size: 1rem;
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	/* Cards filtradas sin animaciones */
+	.deporte-card.hidden {
+		display: none;
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.grid-post-container {
+		}
+
+		.deportes-grid {
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 1.5rem;
+		}
+
+		.card-content {
+			padding: 1rem;
+		}
+
+		.deporte-title {
+			font-size: 1.1rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.deportes-grid {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+		}
+	}
+</style>
+
+<script>
+	// Declaraciones de tipos para el DOM
+	declare global {
+		interface HTMLElement {
+			dataset: DOMStringMap;
+		}
+		interface Window {
+			IntersectionObserver: typeof IntersectionObserver;
+		}
+	}
+
+	import { deportes } from "../../../data/deportes.js";
+	import filterStore from "../../../utils/filterStore.js";
+	import deporteFilter from "../../../utils/deporteFilter.js";
+
+	// Tipos para el estado del filtro
+	interface FilterState {
+		activeCategories?: string[];
+		searchQuery?: string;
+		sortBy?: string;
+	}
+
+	// Tipos para los deportes
+	interface Deporte {
+		id: number;
+		nombre: string;
+		descripcion: string;
+		imagen: string;
+		dificultad: string;
+		categorias: string[];
+	}
+
+	// Variables para optimización
+	let lastFilterTime: number = 0;
+
+	// Función optimizada para filtrar deportes con mejor rendimiento
+	function filtrarDeportes(state: FilterState = {}): void {
+		const { activeCategories = [], searchQuery = "", sortBy = "fecha" } = state;
+		const currentTime: number = Date.now();
+
+		// Debouncing para evitar filtrados excesivos
+		if (currentTime - lastFilterTime < 100) {
+			return;
+		}
+		lastFilterTime = currentTime;
+
+		// Usar el sistema de filtrado optimizado
+		const filteredResults = deporteFilter.filterDeportes({
+			activeCategories: activeCategories,
+			searchQuery: searchQuery,
+			sortBy: sortBy,
+		});
+
+		// Aplicar filtros instantáneamente
+		applyFiltersWithAnimation(
+			filteredResults,
+			activeCategories.length > 0 || searchQuery.length > 0
+		);
+	}
+
+	// Función para aplicar filtros sin animaciones
+	function applyFiltersWithAnimation(filteredResults: Deporte[], hasActiveFilters: boolean): void {
+		const cards: NodeListOf<HTMLElement> = document.querySelectorAll(".deporte-card");
+		const noResults: HTMLElement | null = document.getElementById("no-results");
+		const filteredIds: Set<number> = new Set(filteredResults.map((item: Deporte) => item.id));
+		let deportesVisibles: number = 0;
+
+		// Aplicar filtros instantáneamente
+		cards.forEach((card: HTMLElement) => {
+			const cardId: number = parseInt(card.dataset.id || '0');
+			const shouldShow: boolean = filteredIds.has(cardId);
+
+			if (shouldShow) {
+				card.classList.remove("hidden");
+				card.style.opacity = "1";
+				card.style.transform = "none";
+				deportesVisibles++;
+			} else {
+				card.classList.add("hidden");
+			}
+		});
+
+		// Manejar mensaje de "sin resultados" instantáneamente
+		if (noResults) {
+			if (deportesVisibles === 0 && hasActiveFilters) {
+				noResults.style.display = "block";
+				noResults.style.opacity = "1";
+				noResults.style.transform = "none";
+			} else {
+				noResults.style.display = "none";
+			}
+		}
+	}
+
+	// Función para lazy loading de imágenes
+	function setupLazyLoading(): void {
+		const imageObserver: IntersectionObserver = new IntersectionObserver(
+			(entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+				entries.forEach((entry: IntersectionObserverEntry) => {
+					if (entry.isIntersecting) {
+						const img = entry.target as HTMLImageElement;
+						const src: string | undefined = img.dataset.src;
+
+						if (src) {
+							img.src = src;
+							img.removeAttribute("data-src");
+							img.classList.add("loaded");
+							observer.unobserve(img);
+						}
+					}
+				});
+			},
+			{
+				rootMargin: "50px 0px",
+				threshold: 0.1,
+			}
+		);
+
+		// Observar todas las imágenes con data-src
+		document.querySelectorAll("img[data-src]").forEach((img: Element) => {
+			imageObserver.observe(img as HTMLImageElement);
+		});
+	}
+
+	// Inicialización cuando el DOM está listo
+	document.addEventListener("DOMContentLoaded", () => {
+		// Inicializar filtro de deportes
+		deporteFilter.initialize(deportes);
+
+		// Suscribirse a cambios del store
+		const unsubscribe: () => void = filterStore.subscribe((change: any) => {
+			if (
+				[
+					"CATEGORY_CHANGED",
+					"SEARCH_CHANGED",
+					"SORT_CHANGED",
+					"FILTERS_CLEARED",
+				].includes(change.type)
+			) {
+				filtrarDeportes(change.state);
+			}
+		});
+
+		// Configurar lazy loading
+		setupLazyLoading();
+
+		// Agregar data-id a las tarjetas para optimización
+		document.querySelectorAll(".deporte-card").forEach((card: Element, index: number) => {
+			const htmlCard = card as HTMLElement;
+			if (!htmlCard.dataset.id) {
+				htmlCard.dataset.id = String(deportes[index]?.id || index);
+			}
+		});
+
+		// Inicializar con estado actual del store
+		const initialState: FilterState = filterStore.getState();
+		filtrarDeportes(initialState);
+
+		// Limpiar suscripción al desmontar
+		window.addEventListener("beforeunload", unsubscribe);
+	});
+</script>
