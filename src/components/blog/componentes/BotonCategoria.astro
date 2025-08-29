@@ -51,6 +51,48 @@ const styleNotification =
 	class="p-4 md:p-8 rounded-xl mb-8 shadow-2xl"
 	style="background: var(--card); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);"
 >
+	<style>
+		/* Estilos específicos para mejorar la experiencia táctil */
+		.category-button {
+			transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+			-webkit-tap-highlight-color: transparent;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			touch-action: manipulation;
+		}
+
+		.category-button:active {
+			transform: scale(0.95);
+		}
+
+		/* Mejoras específicas para dispositivos táctiles */
+		@media (hover: none) and (pointer: coarse) {
+			.category-button {
+				min-height: 44px;
+				min-width: 44px;
+			}
+
+			.category-button:hover {
+				transform: none;
+				box-shadow: none;
+			}
+
+			.category-button:active {
+				transform: scale(0.95);
+				opacity: 0.8;
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+			}
+		}
+
+		/* Animaciones suaves para feedback visual */
+		.category-button.touching {
+			transform: scale(0.95);
+			opacity: 0.8;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+		}
+	</style>
 	<div class="max-w-6xl mx-auto">
 		<h2
 			class="text-2xl md:text-3xl font-bold text-center mb-4 md:mb-6"
@@ -63,6 +105,7 @@ const styleNotification =
 		>
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -104,6 +147,7 @@ const styleNotification =
 
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -145,6 +189,7 @@ const styleNotification =
 
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -186,6 +231,7 @@ const styleNotification =
 
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -227,6 +273,7 @@ const styleNotification =
 
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -268,6 +315,7 @@ const styleNotification =
 
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -309,6 +357,7 @@ const styleNotification =
 
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -350,6 +399,7 @@ const styleNotification =
 
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -391,6 +441,7 @@ const styleNotification =
 
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -432,6 +483,7 @@ const styleNotification =
 
 			<button
 				class={`
+        category-button
         border-1 rounded-full
         px-2 py-2 md:px-6 md:py-3
         text-xs md:text-sm font-semibold
@@ -545,12 +597,12 @@ const styleNotification =
 			});
 		}
 
-		// Manejar clics en botones de categoría con mejor UX y tipado
-		document.addEventListener("click", (event: MouseEvent) => {
-			const target = event.target as HTMLElement;
-			const button = target.closest<HTMLButtonElement>("[data-category]");
-			if (!button) return;
+		// Variables para manejar eventos táctiles
+		let touchStartTime = 0;
+		let touchStartTarget = null;
 
+		// Función para manejar la selección de categoría
+		function handleCategorySelection(button: HTMLButtonElement) {
 			const category = button.dataset.category as Categoria;
 			if (!category) return;
 
@@ -562,6 +614,67 @@ const styleNotification =
 
 			// Actualizar estado a través del store
 			filterStore.toggleCategory(category);
+		}
+
+		// Manejar eventos táctiles para móviles
+		document.addEventListener("touchstart", (event: TouchEvent) => {
+			const target = event.target as HTMLElement;
+			const button = target.closest<HTMLButtonElement>("[data-category]");
+			if (!button) return;
+
+			touchStartTime = Date.now();
+			touchStartTarget = button;
+
+			// Feedback visual inmediato para touch usando clases CSS
+			button.classList.add('touching');
+		}, { passive: true });
+
+		document.addEventListener("touchend", (event: TouchEvent) => {
+			const target = event.target as HTMLElement;
+			const button = target.closest<HTMLButtonElement>("[data-category]");
+			
+			// Restaurar estilos visuales
+			if (touchStartTarget) {
+				touchStartTarget.classList.remove('touching');
+			}
+
+			if (!button || button !== touchStartTarget) {
+				touchStartTarget = null;
+				touchStartTime = 0;
+				return;
+			}
+
+			const touchDuration = Date.now() - touchStartTime;
+			
+			// Solo procesar si es un tap rápido (menos de 300ms)
+			if (touchDuration < 300) {
+				event.preventDefault(); // Prevenir el click duplicado
+				handleCategorySelection(button);
+			}
+
+			touchStartTarget = null;
+			touchStartTime = 0;
+		}, { passive: false });
+
+		// Manejar cancelación de touch (cuando el usuario desliza fuera del botón)
+		document.addEventListener("touchcancel", (event: TouchEvent) => {
+			if (touchStartTarget) {
+				touchStartTarget.classList.remove('touching');
+				touchStartTarget = null;
+				touchStartTime = 0;
+			}
+		}, { passive: true });
+
+		// Manejar clics para dispositivos no táctiles
+		document.addEventListener("click", (event: MouseEvent) => {
+			// Evitar procesar clicks en dispositivos táctiles
+			if ('ontouchstart' in window) return;
+
+			const target = event.target as HTMLElement;
+			const button = target.closest<HTMLButtonElement>("[data-category]");
+			if (!button) return;
+
+			handleCategorySelection(button);
 		});
 
 		// Manejar navegación por teclado para accesibilidad con tipado
