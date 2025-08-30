@@ -1,8 +1,118 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import LayoutSEO from "../layouts/LayoutSEO.astro";
 import IndexFather from "../components/index/indexFather.astro";
+
+// SEO optimizado para la página principal
+const seoData = {
+	title: "Acrobata Demente - Equipos Profesionales de Acrobacia y Gimnasia",
+	description: "Descubre la mejor selección de equipos acrobáticos profesionales: trampolines, XPE, spring floors, arneses y más. Calidad premium para atletas, gimnasios y centros deportivos.",
+	keywords: "equipos acrobáticos, trampolines profesionales, XPE, spring floor, arneses deportivos, gimnasia acrobática, equipos deportivos, acrobacia profesional, gimnasio equipamiento",
+	author: "Acrobata Demente - Equipos Deportivos",
+	robots: "index, follow, max-image-preview:large, max-snippet:-1",
+	canonical: "https://admapp.vercel.app/",
+	lang: "es",
+	
+	// Open Graph optimizado
+	og: {
+		title: "Acrobata Demente | Equipos Profesionales de Acrobacia",
+		description: "La tienda líder en equipos acrobáticos profesionales. Trampolines, XPE, spring floors y más equipamiento de alta calidad para atletas y gimnasios.",
+		image: "/assets/images/og-home.jpg",
+		url: "https://admapp.vercel.app/",
+		type: "website",
+		site_name: "Acrobata Demente - Equipos Deportivos Profesionales"
+	},
+	
+	// Twitter Cards optimizado
+	twitter: {
+		card: "summary_large_image",
+		site: "@AcrobataDemente",
+		creator: "@AcrobataDemente",
+		title: "Acrobata Demente - Equipos Acrobáticos Profesionales",
+		description: "Equipos de acrobacia y gimnasia de calidad premium. Trampolines, XPE, spring floors y más para atletas profesionales.",
+		image: "/assets/images/twitter-home.jpg"
+	},
+	
+	// Structured Data para la organización
+	structuredData: {
+		"@context": "https://schema.org",
+		"@type": "Organization",
+		"name": "Acrobata Demente",
+		"description": "Tienda especializada en equipos profesionales de acrobacia, gimnasia y deportes acrobáticos",
+		"url": "https://admapp.vercel.app",
+		"logo": {
+			"@type": "ImageObject",
+			"url": "https://admapp.vercel.app/assets/images/logo.png",
+			"width": 300,
+			"height": 300
+		},
+		"contactPoint": {
+			"@type": "ContactPoint",
+			"contactType": "customer service",
+			"availableLanguage": "Spanish"
+		},
+		"sameAs": [
+			"https://twitter.com/AcrobataDemente",
+			"https://instagram.com/acrobatademente"
+		],
+		"hasOfferCatalog": {
+			"@type": "OfferCatalog",
+			"name": "Equipos Acrobáticos",
+			"itemListElement": [
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "Product",
+						"name": "Trampolines Profesionales",
+						"category": "Equipos de Gimnasia"
+					}
+				},
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "Product",
+						"name": "Espuma XPE",
+						"category": "Equipos de Entrenamiento"
+					}
+				},
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "Product",
+						"name": "Spring Floor",
+						"category": "Pisos Deportivos"
+					}
+				}
+			]
+		},
+		"breadcrumb": {
+			"@type": "BreadcrumbList",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Inicio",
+					"item": "https://admapp.vercel.app"
+				}
+			]
+		}
+	},
+	
+	// Meta tags adicionales para SEO técnico
+	additionalMeta: [
+		{ name: "theme-color", content: "#0f172a" },
+		{ name: "msapplication-TileColor", content: "#0f172a" },
+		{ name: "apple-mobile-web-app-capable", content: "yes" },
+		{ name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+		{ name: "apple-mobile-web-app-title", content: "Acrobata Demente" },
+		{ property: "og:locale", content: "es_ES" },
+		{ name: "format-detection", content: "telephone=no" },
+		{ name: "mobile-web-app-capable", content: "yes" },
+		{ name: "application-name", content: "Acrobata Demente" },
+		{ name: "msapplication-tooltip", content: "Equipos Acrobáticos Profesionales" }
+	]
+};
 ---
 
-<Layout title="Acrobata Demente">
+<LayoutSEO {...seoData}>
 	<IndexFather />
-</Layout>
+</LayoutSEO>

@@ -599,7 +599,7 @@ const styleNotification =
 
 		// Variables para manejar eventos táctiles
 		let touchStartTime = 0;
-		let touchStartTarget = null;
+		let touchStartTarget: HTMLButtonElement | null = null;
 
 		// Función para manejar la selección de categoría
 		function handleCategorySelection(button: HTMLButtonElement) {

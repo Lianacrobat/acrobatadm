@@ -1,13 +1,114 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import LayoutSEO from "../layouts/LayoutSEO.astro";
 import BotonCategoria from "../components/blog/componentes/BotonCategoria.astro";
 import GridPost from "../components/blog/componentes/GridPost.astro";
 import SearchBox from "../components/blog/componentes/SearchBox.astro";
-import SortOptions from "../components/blog/componentes/SortOptions.astro";
 import HeroSection from "@components/ui/HeroSection.astro";
+
+const seoData = {
+	title: "Blog de Deportes - ADM | Noticias y Consejos Deportivos",
+	description:
+		"Descubre las últimas noticias, consejos y técnicas del mundo deportivo. Blog especializado en deportes, entrenamiento y bienestar físico con contenido actualizado.",
+	keywords:
+		"blog deportes, noticias deportivas, consejos entrenamiento, técnicas deportivas, fitness, acondicionamiento físico, deportes acrobáticos, variantes acrobáticas",
+	author: "ADM - Academia de Movimiento",
+	robots: "index, follow",
+	canonicalURL: Astro.site
+		? new URL(Astro.url.pathname, Astro.site).href
+		: Astro.url.pathname,
+	// Open Graph
+	ogTitle: "Blog de Deportes - ADM | Noticias y Consejos Deportivos",
+	ogDescription:
+		"Descubre las últimas noticias, consejos y técnicas del mundo deportivo. Blog especializado en deportes y entrenamiento.",
+	ogImage: "/assets/images/blog-og.jpg",
+	ogType: "website",
+	// Twitter Cards
+	twitterCard: "summary_large_image",
+	twitterTitle: "Blog de Deportes - ADM | Noticias y Consejos Deportivos",
+	twitterDescription:
+		"Descubre las últimas noticias, consejos y técnicas del mundo deportivo.",
+	twitterImage: "/assets/images/blog-twitter.jpg",
+	// Structured Data
+	structuredData: {
+		"@context": "https://schema.org",
+		"@type": "Blog",
+		name: "Blog de Deportes - ADM",
+		description:
+			"Blog especializado en deportes, entrenamiento y bienestar físico con noticias y consejos actualizados.",
+		url: Astro.url.href,
+		author: {
+			"@type": "Organization",
+			name: "ADM - Academia de Movimiento",
+		},
+		publisher: {
+			"@type": "Organization",
+			name: "ADM - Academia de Movimiento",
+		},
+		blogPost: {
+			"@type": "BlogPosting",
+			headline: "Variantes Acrobáticas y Deportes",
+			description:
+				"Descubre las variantes acrobáticas más emocionantes y técnicas deportivas avanzadas.",
+		},
+		breadcrumb: {
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{
+					"@type": "ListItem",
+					position: 1,
+					name: "Inicio",
+					item: Astro.site,
+				},
+				{
+					"@type": "ListItem",
+					position: 2,
+					name: "Blog",
+					item: Astro.url.href,
+				},
+			],
+		},
+	},
+	// Additional meta tags
+	additionalMetaTags: [
+		{ name: "theme-color", content: "#0ea5e9" },
+		{ name: "apple-mobile-web-app-capable", content: "yes" },
+		{ name: "apple-mobile-web-app-status-bar-style", content: "default" },
+		{ name: "format-detection", content: "telephone=no" },
+		{ name: "category", content: "Sports & Fitness" },
+		{ name: "coverage", content: "Worldwide" },
+		{ name: "distribution", content: "Global" },
+		{ name: "rating", content: "General" },
+		{ name: "revisit-after", content: "3 days" },
+		{ name: "target", content: "all" },
+		{ name: "HandheldFriendly", content: "True" },
+		{ name: "MobileOptimized", content: "320" },
+		{ name: "apple-mobile-web-app-title", content: "ADM Blog" },
+	],
+};
 ---
 
-<Layout title="Blog de Deportes">
+<LayoutSEO
+	title={seoData.title}
+	description={seoData.description}
+	keywords={seoData.keywords}
+	author={seoData.author}
+	robots={seoData.robots}
+	canonical={seoData.canonicalURL}
+	og={{
+		title: seoData.ogTitle,
+		description: seoData.ogDescription,
+		image: seoData.ogImage,
+		type: seoData.ogType,
+	}}
+	twitter={{
+		card: seoData.twitterCard,
+		title: seoData.twitterTitle,
+		description: seoData.twitterDescription,
+		image: seoData.twitterImage,
+	}}
+	structuredData={seoData.structuredData}
+	additionalMeta={seoData.additionalMetaTags}
+>
 	<main class="blog-page">
 		<div class="blog-container">
 			<!-- Header del blog -->
@@ -17,12 +118,13 @@ import HeroSection from "@components/ui/HeroSection.astro";
 				heroParagraph="Descubre las variantes acrobáticas más emocionantes"
 				heroImage="comunidad"
 			/>
+
+			<SearchBox />
+
 			<!-- Componente de filtros por categoría -->
 			<section class="filters-section pt-4">
 				<BotonCategoria />
 			</section>
-
-
 
 			<!-- Grid de deportes -->
 			<section class="content-section">
@@ -30,4 +132,4 @@ import HeroSection from "@components/ui/HeroSection.astro";
 			</section>
 		</div>
 	</main>
-</Layout>
+</LayoutSEO>

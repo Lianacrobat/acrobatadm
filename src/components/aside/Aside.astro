@@ -246,20 +246,27 @@ const navigationSections: NavSection[] = [
 		}
 	}
 
-	// Declaración del módulo para evitar errores de TypeScript
-	declare module '/src/scripts/accessibility.js' {
-		const AccessibilityManager: any;
-		export default AccessibilityManager;
-	}
-
 	// Importar y inicializar el manager de accesibilidad
-	import('/src/scripts/accessibility.js').then(module => {
-		if (typeof window !== 'undefined' && !window.accessibilityManagerInitialized) {
+	if (typeof window !== 'undefined' && !window.accessibilityManagerInitialized) {
+		try {
+			// Inicializar funcionalidad básica de accesibilidad sin importación externa
 			window.accessibilityManagerInitialized = true;
+			
+			// Configurar navegación por teclado básica
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'Tab') {
+					// Mejorar visibilidad del focus
+					document.body.classList.add('keyboard-navigation');
+				}
+			});
+			
+			document.addEventListener('mousedown', () => {
+				document.body.classList.remove('keyboard-navigation');
+			});
+		} catch (error) {
+			console.warn('No se pudo inicializar la accesibilidad:', error);
 		}
-	}).catch(error => {
-		console.warn('No se pudo cargar el script de accesibilidad:', error);
-	});
+	}
 
 	// Atajos de teclado específicos para navegación
 	document.addEventListener('keydown', (e) => {

@@ -234,24 +234,24 @@
 	import deporteFilter from '../../../utils/deporteFilter.js';
 
 	// Variables para el manejo de la búsqueda
-	let searchTimeout;
-	let currentSuggestionIndex = -1;
-	let suggestions = [];
-	let isSearching = false;
+	let searchTimeout: number | undefined;
+	let currentSuggestionIndex: number = -1;
+	let suggestions: string[] = [];
+	let isSearching: boolean = false;
 
 	// Elementos del DOM
-	let searchInput;
-	let clearButton;
-	let suggestionsContainer;
-	let suggestionsList;
-	let searchHelp;
-	let resultsCount;
-	let resultsCountElement;
+	let searchInput: HTMLInputElement | null;
+	let clearButton: HTMLButtonElement | null;
+	let suggestionsContainer: HTMLElement | null;
+	let suggestionsList: HTMLElement | null;
+	let searchHelp: HTMLElement | null;
+	let resultsCount: HTMLElement | null;
+	let resultsCountElement: HTMLElement | null;
 
 	// Función para inicializar la búsqueda
 	function initializeSearch() {
-		searchInput = document.getElementById('search-input');
-		clearButton = document.getElementById('clear-search');
+		searchInput = document.getElementById('search-input') as HTMLInputElement | null;
+		clearButton = document.getElementById('clear-search') as HTMLButtonElement | null;
 		suggestionsContainer = document.getElementById('search-suggestions');
 		suggestionsList = document.getElementById('suggestions-list');
 		searchHelp = document.getElementById('search-help');
@@ -268,8 +268,8 @@
 		clearButton?.addEventListener('click', clearSearch);
 
 		// Cerrar sugerencias al hacer clic fuera
-		document.addEventListener('click', (e) => {
-			if (!e.target.closest('.search-container')) {
+		document.addEventListener('click', (e: Event) => {
+			if (e.target && (e.target as HTMLElement).closest && !(e.target as HTMLElement).closest('.search-container')) {
 				hideSuggestions();
 			}
 		});
@@ -283,8 +283,9 @@
 	}
 
 	// Manejar entrada de texto en el campo de búsqueda
-	function handleSearchInput(event) {
-		const query = event.target.value.trim();
+	function handleSearchInput(event: Event): void {
+		const target = event.target as HTMLInputElement;
+		const query = target.value.trim();
 		
 		// Mostrar/ocultar botón de limpiar
 		if (query.length > 0) {
@@ -296,7 +297,7 @@
 
 		// Debouncing para optimizar rendimiento
 		clearTimeout(searchTimeout);
-		searchTimeout = setTimeout(() => {
+		searchTimeout = window.setTimeout(() => {
 			performSearch(query);
 		}, 300);
 
@@ -309,7 +310,7 @@
 	}
 
 	// Realizar búsqueda
-	function performSearch(query) {
+	function performSearch(query: string): void {
 		if (isSearching) return;
 		
 		isSearching = true;
@@ -329,7 +330,7 @@
 	}
 
 	// Generar sugerencias basadas en la consulta
-	function generateSuggestions(query) {
+	function generateSuggestions(query: string): void {
 		suggestions = deporteFilter.getSuggestions(query, 8);
 		
 		if (suggestions.length > 0) {
@@ -341,31 +342,31 @@
 	}
 
 	// Renderizar sugerencias en el DOM
-	function renderSuggestions() {
+	function renderSuggestions(): void {
 		if (!suggestionsList) return;
 
 		suggestionsList.innerHTML = suggestions.map((suggestion, index) => `
 			<div 
 				class="suggestion-item" 
 				data-index="${index}"
-				data-value="${suggestion.text}"
+				data-value="${suggestion}"
 				role="option"
 				aria-selected="false"
 			>
-				<span class="suggestion-text">${highlightMatch(suggestion.text, searchInput.value)}</span>
-				${suggestion.category ? `<span class="suggestion-category">${suggestion.category}</span>` : ''}
+				<span class="suggestion-text">${highlightMatch(suggestion, searchInput?.value || '')}</span>
 			</div>
 		`).join('');
 
 		// Agregar event listeners a las sugerencias
 		suggestionsList.querySelectorAll('.suggestion-item').forEach(item => {
-			item.addEventListener('click', () => selectSuggestion(item.dataset.value));
-			item.addEventListener('mouseenter', () => highlightSuggestion(parseInt(item.dataset.index)));
+			const htmlItem = item as HTMLElement;
+			htmlItem.addEventListener('click', () => selectSuggestion(htmlItem.dataset.value || ''));
+			htmlItem.addEventListener('mouseenter', () => highlightSuggestion(parseInt(htmlItem.dataset.index || '0')));
 		});
 	}
 
 	// Resaltar coincidencias en las sugerencias
-	function highlightMatch(text, query) {
+	function highlightMatch(text: string, query: string): string {
 		if (!query) return text;
 		
 		const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
@@ -373,8 +374,8 @@
 	}
 
 	// Manejar navegación por teclado
-	function handleKeyNavigation(event) {
-		if (!suggestionsContainer.classList.contains('show')) return;
+	function handleKeyNavigation(event: KeyboardEvent): void {
+		if (!suggestionsContainer || !suggestionsContainer.classList.contains('show')) return;
 
 		switch (event.key) {
 			case 'ArrowDown':
@@ -392,8 +393,8 @@
 			case 'Enter':
 				event.preventDefault();
 				if (currentSuggestionIndex >= 0 && suggestions[currentSuggestionIndex]) {
-					selectSuggestion(suggestions[currentSuggestionIndex].text);
-				} else {
+					selectSuggestion(suggestions[currentSuggestionIndex]);
+				} else if (searchInput) {
 					performSearch(searchInput.value.trim());
 					hideSuggestions();
 				}
@@ -401,13 +402,14 @@
 				
 			case 'Escape':
 				hideSuggestions();
-				searchInput.blur();
+				if (searchInput) searchInput.blur();
 				break;
 		}
 	}
 
 	// Resaltar sugerencia específica
-	function highlightSuggestion(index) {
+	function highlightSuggestion(index: number): void {
+		if (!suggestionsList) return;
 		const items = suggestionsList.querySelectorAll('.suggestion-item');
 		
 		items.forEach((item, i) => {
@@ -422,50 +424,57 @@
 	}
 
 	// Seleccionar una sugerencia
-	function selectSuggestion(value) {
-		searchInput.value = value;
-		performSearch(value);
-		hideSuggestions();
-		showClearButton();
+	function selectSuggestion(value: string): void {
+		if (searchInput) {
+			searchInput.value = value;
+			performSearch(value);
+			hideSuggestions();
+			showClearButton();
+		}
 	}
 
 	// Mostrar/ocultar elementos de la UI
-	function showSuggestions() {
+	function showSuggestions(): void {
 		if (suggestionsContainer) {
 			suggestionsContainer.classList.remove('hidden');
-			setTimeout(() => suggestionsContainer.classList.add('show'), 10);
+			setTimeout(() => {
+				if (suggestionsContainer) suggestionsContainer.classList.add('show');
+			}, 10);
 		}
 		currentSuggestionIndex = -1;
 	}
 
-	function hideSuggestions() {
+	function hideSuggestions(): void {
 		if (suggestionsContainer) {
 			suggestionsContainer.classList.remove('show');
-			setTimeout(() => suggestionsContainer.classList.add('hidden'), 200);
+			setTimeout(() => {
+				if (suggestionsContainer) suggestionsContainer.classList.add('hidden');
+			}, 200);
 		}
 		currentSuggestionIndex = -1;
 	}
 
-	function showClearButton() {
+	function showClearButton(): void {
 		if (clearButton) {
 			clearButton.classList.add('show');
 		}
 	}
 
-	function hideClearButton() {
+	function hideClearButton(): void {
 		if (clearButton) {
 			clearButton.classList.remove('show');
 		}
 	}
 
-	function showLoadingIndicator() {
+	function showLoadingIndicator(): void {
+		if (!searchInput || !searchInput.parentNode) return;
 		const loadingDiv = document.createElement('div');
 		loadingDiv.className = 'search-loading';
 		loadingDiv.id = 'search-loading';
 		searchInput.parentNode.appendChild(loadingDiv);
 	}
 
-	function hideLoadingIndicator() {
+	function hideLoadingIndicator(): void {
 		const loading = document.getElementById('search-loading');
 		if (loading) {
 			loading.remove();
@@ -473,13 +482,15 @@
 	}
 
 	// Limpiar búsqueda
-	function clearSearch() {
-		searchInput.value = '';
-		filterStore.setSearchQuery('');
-		hideClearButton();
-		hideSuggestions();
-		hideResultsCount();
-		searchInput.focus();
+	function clearSearch(): void {
+		if (searchInput) {
+			searchInput.value = '';
+			filterStore.setSearchQuery('');
+			hideClearButton();
+			hideSuggestions();
+			hideResultsCount();
+			searchInput.focus();
+		}
 	}
 
 	// Manejar eventos de foco
@@ -488,7 +499,7 @@
 			searchHelp.classList.remove('hidden');
 		}
 		
-		if (searchInput.value.length >= 2) {
+		if (searchInput && searchInput.value.length >= 2) {
 			generateSuggestions(searchInput.value);
 		}
 	}
@@ -503,10 +514,10 @@
 	}
 
 	// Actualizar contador de resultados
-	function updateResultsCount() {
+	function updateResultsCount(): void {
 		const state = filterStore.getState();
 		const results = deporteFilter.filterDeportes({
-			categories: state.activeCategories,
+			activeCategories: state.activeCategories,
 			searchQuery: state.searchQuery,
 			sortBy: state.sortBy
 		});
@@ -522,7 +533,7 @@
 		}
 	}
 
-	function hideResultsCount() {
+	function hideResultsCount(): void {
 		if (resultsCount) {
 			resultsCount.classList.add('hidden');
 		}
@@ -533,7 +544,7 @@
 		initializeSearch();
 		
 		// Suscribirse a cambios del store para actualizar contador
-		filterStore.subscribe((change) => {
+		filterStore.subscribe((change: any) => {
 			if (['CATEGORY_CHANGED', 'SEARCH_CHANGED', 'SORT_CHANGED', 'FILTERS_CLEARED'].includes(change.type)) {
 				updateResultsCount();
 			}

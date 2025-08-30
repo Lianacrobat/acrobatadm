@@ -1,13 +1,10 @@
 # 🚀 INSTRUCCIONES RÁPIDAS - SUBIR A LA WEB
 
-## ⚡ Opción 1: Script Automático (RECOMENDADO)
+## ⚡ Script Automático (RECOMENDADO)
 
-### Windows (Comando/PowerShell)
+### Windows PowerShell
 ```bash
-# Opción A: Batch Script
-.\init-github.bat
-
-# Opción B: PowerShell
+# Ejecutar script de configuración inicial
 .\init-github.ps1
 ```
 
@@ -99,6 +96,13 @@ Si tienes problemas:
 1. Revisa `DEPLOY.md` para solución de problemas
 2. Verifica los logs en GitHub Actions
 3. Asegúrate de que los secrets estén configurados correctamente
+
+---
+
+## 🔄 Actualizaciones Futuras
+
+**Para actualizaciones posteriores del proyecto**, consulta:
+📖 **GUIA-ACTUALIZACIONES.md** - Proceso unificado para GitHub y Vercel
 
 ---
 

@@ -1,11 +1,192 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import LayoutSEO from "../layouts/LayoutSEO.astro";
 
 import CatalogoFather from "../components/tienda/catalogo/CatalogoFather.astro";
 ---
 
-<Layout title="Catálogo 2025">
+<LayoutSEO
+	title="Catálogo 2025 - Equipos Acrobáticos Profesionales | Acrobata Demente"
+	description="Descubre el catálogo más completo de equipos acrobáticos 2025: trampolines, colchonetas, arneses, franjas elásticas, pisos de resorte y más. Productos profesionales para gimnasios, escuelas y atletas."
+	keywords="catálogo acrobático 2025, equipos gimnasia, trampolines profesionales, colchonetas acrobáticas, arneses seguridad, franjas elásticas, pisos resorte, equipos circo, material deportivo, gimnasio acrobático"
+	author="Acrobata Demente"
+	robots="index, follow"
+	canonical="https://acrobatademente.com/catalogo"
+	lang="es"
+	og={{
+		title: "Catálogo 2025 - Equipos Acrobáticos y Gimnasia Profesional",
+		description: "Explora más de 50 productos acrobáticos: trampolines, colchonetas, arneses, franjas elásticas y equipos profesionales. Calidad garantizada para atletas y gimnasios.",
+		image: "https://acrobatademente.com/assets/cover/catalogo-2025.jpg",
+		url: "https://acrobatademente.com/catalogo",
+		type: "website",
+		site_name: "Acrobata Demente"
+	}}
+	twitter={{
+		card: "summary_large_image",
+		site: "@AcrobataDemente",
+		creator: "@AcrobataDemente",
+		title: "Catálogo 2025 - Equipos Acrobáticos Profesionales",
+		description: "Descubre más de 50 productos acrobáticos: trampolines, colchonetas, arneses y equipos profesionales para gimnasios y atletas.",
+		image: "https://acrobatademente.com/assets/cover/catalogo-2025.jpg"
+	}}
+	structuredData={{
+		"@context": "https://schema.org",
+		"@type": "CollectionPage",
+		"name": "Catálogo 2025 - Equipos Acrobáticos",
+		"description": "Catálogo completo de equipos y productos acrobáticos profesionales para gimnasios, escuelas y atletas.",
+		"url": "https://acrobatademente.com/catalogo",
+		"inLanguage": "es-ES",
+		"isPartOf": {
+			"@type": "WebSite",
+			"name": "Acrobata Demente",
+			"url": "https://acrobatademente.com"
+		},
+		"mainEntity": {
+			"@type": "ItemList",
+			"name": "Productos Acrobáticos 2025",
+			"description": "Colección completa de equipos acrobáticos y de gimnasia profesional",
+			"numberOfItems": 50,
+			"itemListElement": [
+				{
+					"@type": "Product",
+					"name": "Trampolines Profesionales",
+					"description": "Trampolines de alta calidad para entrenamiento acrobático",
+					"category": "Equipos de Salto",
+					"brand": "Acrobata Demente",
+					"offers": {
+						"@type": "AggregateOffer",
+						"priceCurrency": "USD",
+						"lowPrice": "299",
+						"highPrice": "1299",
+						"availability": "https://schema.org/InStock"
+					}
+				},
+				{
+					"@type": "Product",
+					"name": "Colchonetas Acrobáticas",
+					"description": "Colchonetas de seguridad para entrenamientos acrobáticos",
+					"category": "Equipos de Seguridad",
+					"brand": "Acrobata Demente",
+					"offers": {
+						"@type": "AggregateOffer",
+						"priceCurrency": "USD",
+						"lowPrice": "89",
+						"highPrice": "599",
+						"availability": "https://schema.org/InStock"
+					}
+				},
+				{
+					"@type": "Product",
+					"name": "Arneses de Seguridad",
+					"description": "Arneses profesionales para entrenamiento aéreo seguro",
+					"category": "Equipos de Seguridad",
+					"brand": "Acrobata Demente",
+					"offers": {
+						"@type": "AggregateOffer",
+						"priceCurrency": "USD",
+						"lowPrice": "149",
+						"highPrice": "399",
+						"availability": "https://schema.org/InStock"
+					}
+				},
+				{
+					"@type": "Product",
+					"name": "Franjas Elásticas",
+					"description": "Franjas elásticas para entrenamiento de fuerza y flexibilidad",
+					"category": "Equipos de Entrenamiento",
+					"brand": "Acrobata Demente",
+					"offers": {
+						"@type": "AggregateOffer",
+						"priceCurrency": "USD",
+						"lowPrice": "29",
+						"highPrice": "89",
+						"availability": "https://schema.org/InStock"
+					}
+				},
+				{
+					"@type": "Product",
+					"name": "Pisos de Resorte",
+					"description": "Pisos con sistema de resortes para gimnasios profesionales",
+					"category": "Infraestructura",
+					"brand": "Acrobata Demente",
+					"offers": {
+						"@type": "AggregateOffer",
+						"priceCurrency": "USD",
+						"lowPrice": "1999",
+						"highPrice": "9999",
+						"availability": "https://schema.org/InStock"
+					}
+				}
+			]
+		},
+		"provider": {
+			"@type": "Organization",
+			"name": "Acrobata Demente",
+			"url": "https://acrobatademente.com",
+			"logo": "https://acrobatademente.com/assets/favicon.png",
+			"contactPoint": {
+				"@type": "ContactPoint",
+				"contactType": "customer service",
+				"availableLanguage": "Spanish"
+			}
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Gymnasts, Athletes, Acrobats, Gym Owners, Schools",
+			"geographicArea": {
+				"@type": "Place",
+				"name": "Worldwide"
+			}
+		},
+		"breadcrumb": {
+			"@type": "BreadcrumbList",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Inicio",
+					"item": "https://acrobatademente.com"
+				},
+				{
+					"@type": "ListItem",
+					"position": 2,
+					"name": "Catálogo 2025",
+					"item": "https://acrobatademente.com/catalogo"
+				}
+			]
+		},
+		"potentialAction": {
+			"@type": "SearchAction",
+			"target": {
+				"@type": "EntryPoint",
+				"urlTemplate": "https://acrobatademente.com/catalogo?search={search_term_string}"
+			},
+			"query-input": "required name=search_term_string"
+		}
+	}}
+	additionalMeta={[
+		{ name: "theme-color", content: "#0ea5e9" },
+		{ name: "application-name", content: "Catálogo Acrobático 2025" },
+		{ name: "apple-mobile-web-app-title", content: "Catálogo 2025" },
+		{ name: "apple-mobile-web-app-capable", content: "yes" },
+		{ name: "mobile-web-app-capable", content: "yes" },
+		{ name: "format-detection", content: "telephone=no" },
+		{ name: "category", content: "sports, equipment, gymnastics, acrobatics, catalog" },
+		{ name: "coverage", content: "Worldwide" },
+		{ name: "target", content: "gymnasts, athletes, acrobats, gym owners, schools" },
+		{ name: "HandheldFriendly", content: "True" },
+		{ name: "MobileOptimized", content: "320" },
+		{ name: "rating", content: "General" },
+		{ name: "distribution", content: "Global" },
+		{ name: "revisit-after", content: "7 days" },
+		{ name: "expires", content: "never" },
+		{ name: "product-type", content: "Sports Equipment" },
+		{ name: "price-range", content: "$29-$9999" },
+		{ name: "availability", content: "In Stock" },
+		{ name: "shipping", content: "Worldwide" },
+		{ name: "warranty", content: "1-3 years" }
+	]}
+>
 	<section class="mb-4">
 		<CatalogoFather />
 	</section>
-</Layout>
+</LayoutSEO>

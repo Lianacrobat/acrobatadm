@@ -1,10 +1,104 @@
 ---
 import Mantenimiento from "../components/ui/mantenimiento.astro";
-import Layout from "../layouts/Layout.astro";
+import LayoutSEO from "../layouts/LayoutSEO.astro";
 import HeroSection from "../components/ui/HeroSection.astro";
+
+const seoData = {
+	title: "Nutrición Deportiva - ADM | Alimentación para Atletas",
+	description: "Descubre los mejores consejos de nutrición deportiva para atletas. Planes alimentarios, suplementos y guías nutricionales para optimizar tu rendimiento deportivo.",
+	keywords: "nutrición deportiva, alimentación atletas, suplementos deportivos, dieta deportiva, nutrición fitness, alimentación saludable, rendimiento deportivo",
+	author: "ADM - Academia de Movimiento",
+	robots: "index, follow",
+	canonicalURL: Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname,
+	// Open Graph
+	ogTitle: "Nutrición Deportiva - ADM | Alimentación para Atletas",
+	ogDescription: "Descubre los mejores consejos de nutrición deportiva para atletas. Planes alimentarios, suplementos y guías nutricionales para optimizar tu rendimiento deportivo.",
+	ogImage: "/assets/images/nutricion-og.jpg",
+	ogType: "website",
+	// Twitter Cards
+	twitterCard: "summary_large_image",
+	twitterTitle: "Nutrición Deportiva - ADM | Alimentación para Atletas",
+	twitterDescription: "Descubre los mejores consejos de nutrición deportiva para atletas. Planes alimentarios, suplementos y guías nutricionales.",
+	twitterImage: "/assets/images/nutricion-twitter.jpg",
+	// Structured Data
+	structuredData: {
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"name": "Nutrición Deportiva - ADM",
+		"description": "Descubre los mejores consejos de nutrición deportiva para atletas. Planes alimentarios, suplementos y guías nutricionales para optimizar tu rendimiento deportivo.",
+		"url": Astro.url.href,
+		"mainEntity": {
+			"@type": "Article",
+			"headline": "Nutrición Deportiva para Atletas",
+			"description": "Guía completa de nutrición deportiva, alimentación saludable y suplementos para optimizar el rendimiento atlético.",
+			"author": {
+				"@type": "Organization",
+				"name": "ADM - Academia de Movimiento"
+			},
+			"publisher": {
+				"@type": "Organization",
+				"name": "ADM - Academia de Movimiento"
+			}
+		},
+		"breadcrumb": {
+			"@type": "BreadcrumbList",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Inicio",
+					"item": Astro.site
+				},
+				{
+					"@type": "ListItem",
+					"position": 2,
+					"name": "Nutrición",
+					"item": Astro.url.href
+				}
+			]
+		}
+	},
+	// Additional meta tags
+	additionalMetaTags: [
+		{ name: "theme-color", content: "#16a34a" },
+		{ name: "apple-mobile-web-app-capable", content: "yes" },
+		{ name: "apple-mobile-web-app-status-bar-style", content: "default" },
+		{ name: "format-detection", content: "telephone=no" },
+		{ name: "category", content: "Health & Fitness" },
+		{ name: "coverage", content: "Worldwide" },
+		{ name: "distribution", content: "Global" },
+		{ name: "rating", content: "General" },
+		{ name: "revisit-after", content: "7 days" },
+		{ name: "target", content: "all" },
+		{ name: "HandheldFriendly", content: "True" },
+		{ name: "MobileOptimized", content: "320" },
+		{ name: "apple-mobile-web-app-title", content: "ADM Nutrición" }
+	]
+};
 ---
 
-<Layout title="ADM - Nutrición">
+<LayoutSEO 
+	title={seoData.title}
+	description={seoData.description}
+	keywords={seoData.keywords}
+	author={seoData.author}
+	robots={seoData.robots}
+	canonical={seoData.canonicalURL}
+	og={{
+		title: seoData.ogTitle,
+		description: seoData.ogDescription,
+		image: seoData.ogImage,
+		type: seoData.ogType
+	}}
+	twitter={{
+		card: seoData.twitterCard,
+		title: seoData.twitterTitle,
+		description: seoData.twitterDescription,
+		image: seoData.twitterImage
+	}}
+	structuredData={seoData.structuredData}
+	additionalMeta={seoData.additionalMetaTags}
+>
 	<!-- Hero Section -->
 	<section>
 		<HeroSection
@@ -19,4 +113,4 @@ import HeroSection from "../components/ui/HeroSection.astro";
 	<section>
 		<Mantenimiento />
 	</section>
-</Layout>
+</LayoutSEO>

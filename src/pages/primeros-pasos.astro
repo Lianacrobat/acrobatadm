@@ -1,9 +1,107 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import LayoutSEO from "../layouts/LayoutSEO.astro";
 import HeroSection from "../components/ui/HeroSection.astro";
 ---
 
-<Layout title="Primeros Pasos">
+<LayoutSEO
+	title="Primeros Pasos - Guía Completa para Acróbatas | Acrobata Demente"
+	description="Descubre todos los recursos esenciales para artistas, atletas y acróbatas. Catálogo 2025, comunidad, nutrición, variantes acrobáticas y más en tu primer paso hacia la excelencia."
+	keywords="primeros pasos acrobacia, guía acróbatas, recursos artistas, catálogo acrobático, comunidad acróbatas, nutrición deportiva, variantes acrobáticas, testimonios acrobacia"
+	author="Acrobata Demente"
+	robots="index, follow"
+	canonical="https://acrobatademente.com/primeros-pasos"
+	lang="es"
+	og={{
+		title: "Primeros Pasos - Tu Guía Completa en el Mundo de la Acrobacia",
+		description: "Explora el catálogo 2025, únete a la comunidad, descubre consejos de nutrición y variantes acrobáticas. Todo lo que necesitas para comenzar tu journey acrobático.",
+		image: "https://acrobatademente.com/heroBackground/primerosPasos.webp",
+		url: "https://acrobatademente.com/primeros-pasos",
+		type: "website",
+		site_name: "Acrobata Demente"
+	}}
+	twitter={{
+		card: "summary_large_image",
+		site: "@AcrobataDemente",
+		creator: "@AcrobataDemente",
+		title: "Primeros Pasos - Guía Completa para Acróbatas",
+		description: "Descubre recursos esenciales: catálogo 2025, comunidad, nutrición y variantes acrobáticas para artistas y atletas.",
+		image: "https://acrobatademente.com/heroBackground/primerosPasos.webp"
+	}}
+	structuredData={{
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"name": "Primeros Pasos - Guía para Acróbatas",
+		"description": "Página de recursos esenciales para artistas, atletas y acróbatas que comienzan su journey en el mundo acrobático.",
+		"url": "https://acrobatademente.com/primeros-pasos",
+		"inLanguage": "es-ES",
+		"isPartOf": {
+			"@type": "WebSite",
+			"name": "Acrobata Demente",
+			"url": "https://acrobatademente.com"
+		},
+		"mainEntity": {
+			"@type": "ItemList",
+			"name": "Recursos para Acróbatas",
+			"description": "Lista completa de recursos disponibles para artistas y atletas acrobáticos",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Catálogo 2025",
+					"description": "Productos, servicios y herramientas acrobáticas"
+				},
+				{
+					"@type": "ListItem",
+					"position": 2,
+					"name": "Comunidad",
+					"description": "Red de artistas y atletas acrobáticos"
+				},
+				{
+					"@type": "ListItem",
+					"position": 3,
+					"name": "Nutrición Deportiva",
+					"description": "Consejos nutricionales para acróbatas"
+				},
+				{
+					"@type": "ListItem",
+					"position": 4,
+					"name": "Variantes Acrobáticas",
+					"description": "Diferentes disciplinas y estilos acrobáticos"
+				}
+			]
+		},
+		"breadcrumb": {
+			"@type": "BreadcrumbList",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Inicio",
+					"item": "https://acrobatademente.com"
+				},
+				{
+					"@type": "ListItem",
+					"position": 2,
+					"name": "Primeros Pasos",
+					"item": "https://acrobatademente.com/primeros-pasos"
+				}
+			]
+		}
+	}}
+	additionalMeta={[
+		{ name: "theme-color", content: "#0ea5e9" },
+		{ name: "application-name", content: "Acrobata Demente" },
+		{ name: "apple-mobile-web-app-title", content: "Acrobata Demente" },
+		{ name: "apple-mobile-web-app-capable", content: "yes" },
+		{ name: "mobile-web-app-capable", content: "yes" },
+		{ name: "format-detection", content: "telephone=no" },
+		{ name: "category", content: "sports, fitness, acrobatics" },
+		{ name: "coverage", content: "Worldwide" },
+		{ name: "target", content: "athletes, artists, acrobats" },
+		{ name: "HandheldFriendly", content: "True" },
+		{ name: "MobileOptimized", content: "320" }
+	]}
+>
 	<!-- Hero Section -->
 	<section>
 		<HeroSection
@@ -188,4 +286,4 @@ import HeroSection from "../components/ui/HeroSection.astro";
 		</div>
 	</section>
 	<div class="h-10"></div>
-</Layout>
+</LayoutSEO>

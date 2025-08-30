@@ -1,5 +1,100 @@
 ---
-import Layout from "@/src/layouts/Layout.astro";
+import LayoutSEO from "@/src/layouts/LayoutSEO.astro";
+
+const seoData = {
+	title: "Mi Lista de Lectura - ADM | Biblioteca Personal de Artículos Acrobáticos",
+	description: "Guarda y organiza tus artículos favoritos sobre acrobacias, técnicas y entrenamientos. Crea tu biblioteca personal de contenido acrobático seleccionado.",
+	keywords: "lista lectura acrobacias, biblioteca artículos, favoritos acrobáticos, guardar artículos, colección acrobacias, biblioteca personal, artículos guardados",
+	author: "ADM - Academia de Movimiento",
+	robots: "noindex, nofollow",
+	canonicalURL: Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname,
+	// Open Graph
+	ogTitle: "Mi Lista de Lectura - ADM | Biblioteca Personal",
+	ogDescription: "Organiza y guarda tus artículos favoritos sobre acrobacias y técnicas de movimiento en tu biblioteca personal.",
+	ogImage: "/assets/images/lista-lectura-og.jpg",
+	ogType: "website",
+	// Twitter Cards
+	twitterCard: "summary_large_image",
+	twitterTitle: "Mi Lista de Lectura - ADM | Biblioteca Personal",
+	twitterDescription: "Organiza tus artículos favoritos sobre acrobacias en tu biblioteca personal.",
+	twitterImage: "/assets/images/lista-lectura-twitter.jpg",
+	// Structured Data
+	structuredData: {
+		"@context": "https://schema.org",
+		"@graph": [
+			{
+				"@type": "WebPage",
+				"@id": Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname,
+				"url": Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname,
+				"name": "Mi Lista de Lectura - ADM",
+				"description": "Biblioteca personal de artículos acrobáticos favoritos",
+				"isPartOf": {
+					"@type": "WebSite",
+					"name": "ADM - Academia de Movimiento",
+					"url": Astro.site ? Astro.site.href : "/"
+				},
+				"mainEntity": {
+					"@type": "ItemList",
+					"name": "Lista de Lectura Personal",
+					"description": "Colección curada de artículos sobre acrobacias y técnicas de movimiento",
+					"numberOfItems": 0
+				},
+				"potentialAction": {
+					"@type": "ReadAction",
+					"target": Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname
+				}
+			},
+			{
+				"@type": "BreadcrumbList",
+				"itemListElement": [
+					{
+						"@type": "ListItem",
+						"position": 1,
+						"name": "Inicio",
+						"item": Astro.site ? Astro.site.href : "/"
+					},
+					{
+						"@type": "ListItem",
+						"position": 2,
+						"name": "Variantes",
+						"item": Astro.site ? new URL("/Variantes", Astro.site).href : "/Variantes"
+					},
+					{
+						"@type": "ListItem",
+						"position": 3,
+						"name": "Lista de Lectura",
+						"item": Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname
+					}
+				]
+			},
+			{
+				"@type": "Audience",
+				"audienceType": "Athletes, Gymnasts, Acrobats",
+				"name": "Acrobatic Athletes and Enthusiasts"
+			}
+		]
+	},
+	// Additional Meta Tags
+	additionalMeta: [
+		{ name: "category", content: "Personal Library" },
+		{ name: "coverage", content: "Worldwide" },
+		{ name: "distribution", content: "Global" },
+		{ name: "rating", content: "General" },
+		{ property: "article:section", content: "Reading List" },
+		{ name: "theme-color", content: "#1a202c" },
+		{ name: "msapplication-navbutton-color", content: "#1a202c" },
+		{ name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+		{ name: "mobile-web-app-capable", content: "yes" },
+		{ name: "apple-mobile-web-app-capable", content: "yes" },
+		{ name: "application-name", content: "ADM Reading List" },
+		{ name: "msapplication-tooltip", content: "Personal Acrobatic Articles Library" },
+		{ name: "msapplication-starturl", content: "/Variantes/lista-lectura" },
+		{ name: "privacy", content: "Personal content - User specific" },
+		{ name: "user-content", content: "true" }
+	]
+};
 ---
 
-<Layout title="Lectura" />
+<LayoutSEO {...seoData}>
+	<!-- Contenido de la lista de lectura aquí -->
+</LayoutSEO>

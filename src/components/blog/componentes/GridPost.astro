@@ -346,6 +346,7 @@ const categoryIcons: Record<string, string> = {
 	// Función optimizada para filtrar deportes con mejor rendimiento
 	function filtrarDeportes(state: FilterState = {}): void {
 		const { activeCategories = [], searchQuery = "", sortBy = "fecha" } = state;
+		const typedActiveCategories: string[] = activeCategories || [];
 		const currentTime: number = Date.now();
 
 		// Debouncing para evitar filtrados excesivos
@@ -356,7 +357,7 @@ const categoryIcons: Record<string, string> = {
 
 		// Usar el sistema de filtrado optimizado
 		const filteredResults = deporteFilter.filterDeportes({
-			activeCategories: activeCategories,
+			activeCategories: typedActiveCategories, 
 			searchQuery: searchQuery,
 			sortBy: sortBy,
 		});
@@ -435,7 +436,7 @@ const categoryIcons: Record<string, string> = {
 	// Inicialización cuando el DOM está listo
 	document.addEventListener("DOMContentLoaded", () => {
 		// Inicializar filtro de deportes
-		deporteFilter.initialize(deportes);
+		deporteFilter.initialize();
 
 		// Suscribirse a cambios del store
 		const unsubscribe: () => void = filterStore.subscribe((change: any) => {

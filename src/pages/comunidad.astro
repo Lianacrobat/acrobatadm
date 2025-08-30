@@ -1,10 +1,109 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import LayoutSEO from "../layouts/LayoutSEO.astro";
 import ComunidadFather from "../components/comunidad/ComunidadFather.astro";
 import HeroSection from "@components/ui/HeroSection.astro";
 ---
 
-<Layout title="Comunidad">
+<LayoutSEO
+	title="Comunidad Acrobática - Conecta con Atletas y Artistas | Acrobata Demente"
+	description="Únete a la comunidad más grande de acróbatas, atletas y artistas en español. Conecta, comparte experiencias, aprende y crece junto a profesionales del mundo acrobático."
+	keywords="comunidad acrobática, atletas acróbatas, artistas circo, red acróbatas, comunidad deportiva, acrobacia social, conectar acróbatas, foro acrobacia"
+	author="Acrobata Demente"
+	robots="index, follow"
+	canonical="https://acrobatademente.com/comunidad"
+	lang="es"
+	og={{
+		title: "Comunidad Acrobática - Conecta con Atletas y Artistas del Mundo",
+		description: "La red social más grande de acróbatas en español. Comparte experiencias, conecta con profesionales y crece en tu disciplina acrobática.",
+		image: "https://acrobatademente.com/heroBackground/comunidad.jpg",
+		url: "https://acrobatademente.com/comunidad",
+		type: "website",
+		site_name: "Acrobata Demente"
+	}}
+	twitter={{
+		card: "summary_large_image",
+		site: "@AcrobataDemente",
+		creator: "@AcrobataDemente",
+		title: "Comunidad Acrobática - Conecta con Atletas y Artistas",
+		description: "Únete a la red de acróbatas más grande en español. Conecta, aprende y crece con profesionales del mundo acrobático.",
+		image: "https://acrobatademente.com/heroBackground/comunidad.jpg"
+	}}
+	structuredData={{
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"name": "Comunidad Acrobática",
+		"description": "Plataforma de conexión para atletas, artistas y acróbatas profesionales y aficionados.",
+		"url": "https://acrobatademente.com/comunidad",
+		"inLanguage": "es-ES",
+		"isPartOf": {
+			"@type": "WebSite",
+			"name": "Acrobata Demente",
+			"url": "https://acrobatademente.com"
+		},
+		"mainEntity": {
+			"@type": "Organization",
+			"name": "Comunidad Acrobata Demente",
+			"description": "Red social y comunidad de acróbatas, atletas y artistas de habla hispana",
+			"url": "https://acrobatademente.com/comunidad",
+			"sameAs": [
+				"https://twitter.com/AcrobataDemente",
+				"https://instagram.com/acrobatademente"
+			],
+			"memberOf": {
+				"@type": "Organization",
+				"name": "Acrobata Demente"
+			},
+			"knowsAbout": [
+				"Acrobacia",
+				"Circo",
+				"Gimnasia",
+				"Artes Marciales",
+				"Parkour",
+				"Danza Aérea"
+			]
+		},
+		"audience": {
+			"@type": "Audience",
+			"audienceType": "Athletes, Artists, Acrobats",
+			"geographicArea": {
+				"@type": "Place",
+				"name": "Worldwide Spanish-speaking community"
+			}
+		},
+		"breadcrumb": {
+			"@type": "BreadcrumbList",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Inicio",
+					"item": "https://acrobatademente.com"
+				},
+				{
+					"@type": "ListItem",
+					"position": 2,
+					"name": "Comunidad",
+					"item": "https://acrobatademente.com/comunidad"
+				}
+			]
+		}
+	}}
+	additionalMeta={[
+		{ name: "theme-color", content: "#0ea5e9" },
+		{ name: "application-name", content: "Acrobata Demente" },
+		{ name: "apple-mobile-web-app-title", content: "Comunidad Acrobática" },
+		{ name: "apple-mobile-web-app-capable", content: "yes" },
+		{ name: "mobile-web-app-capable", content: "yes" },
+		{ name: "format-detection", content: "telephone=no" },
+		{ name: "category", content: "social, community, sports, acrobatics" },
+		{ name: "coverage", content: "Worldwide" },
+		{ name: "target", content: "athletes, artists, acrobats, community" },
+		{ name: "HandheldFriendly", content: "True" },
+		{ name: "MobileOptimized", content: "320" },
+		{ name: "rating", content: "General" },
+		{ name: "distribution", content: "Global" }
+	]}
+>
 	<section class="relative overflow-visible">
 		<HeroSection
 			colorHero="bg-gradient-to-r from-sky-400 to-blue-600"
@@ -14,4 +113,4 @@ import HeroSection from "@components/ui/HeroSection.astro";
 		/>
 	</section>
 	<ComunidadFather />
-</Layout>
+</LayoutSEO>
