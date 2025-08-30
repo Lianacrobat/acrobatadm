@@ -1,6 +1,8 @@
-# 🚀 INSTRUCCIONES RÁPIDAS - SUBIR A LA WEB
+# 🚀 INSTRUCCIONES RÁPIDAS - SETUP INICIAL
 
-## ⚡ Script Automático (RECOMENDADO)
+> **📖 DOCUMENTACIÓN COMPLETA**: Para instrucciones detalladas, configuración avanzada y actualizaciones, consulta **DEPLOY-MASTER.md**
+
+## ⚡ Setup Rápido (RECOMENDADO)
 
 ### Windows PowerShell
 ```bash
@@ -8,7 +10,7 @@
 .\init-github.ps1
 ```
 
-## 📋 Opción 2: Manual
+## 📋 Setup Manual (Alternativo)
 
 ### 1. Crear Repositorio en GitHub
 - Ve a: https://github.com/new
@@ -23,12 +25,12 @@ git init
 git add .
 git commit -m "feat: proyecto completo con mejoras de seguridad"
 git branch -M main
-git remote add origin https://github.com/lianacrobata/AdmApp.git
+git remote add origin https://github.com/Lianacrobat/acrobatadm.git
 git push -u origin main
 ```
 
 ### 3. Configurar GitHub Pages
-1. Ve a tu repositorio: `https://github.com/lianacrobata/AdmApp`
+1. Ve a tu repositorio: `https://github.com/Lianacrobat/acrobatadm`
 2. `Settings` → `Pages`
 3. **Source**: `GitHub Actions`
 
@@ -40,10 +42,9 @@ git push -u origin main
    TELEGRAM_CHAT_ID: [tu_chat_id]
    ```
 
-## 🌐 URL Final
-```
-https://lianacrobata.github.io/AdmApp/
-```
+## 🌐 URLs del Proyecto
+- **GitHub Pages**: `https://lianacrobata.github.io/AdmApp/`
+- **Vercel**: URL asignada automáticamente
 
 ## ⚠️ IMPORTANTE ANTES DEL DESPLIEGUE
 
@@ -99,10 +100,10 @@ Si tienes problemas:
 
 ---
 
-## 🔄 Actualizaciones Futuras
+## 🔄 Actualizaciones y Configuración Avanzada
 
-**Para actualizaciones posteriores del proyecto**, consulta:
-📖 **GUIA-ACTUALIZACIONES.md** - Proceso unificado para GitHub y Vercel
+**Para todo lo relacionado con actualizaciones, configuración de Vercel, solución de problemas y más**, consulta:
+📖 **DEPLOY-MASTER.md** - Guía completa unificada de deploy y actualizaciones
 
 ---
 

@@ -26,7 +26,7 @@ try {
     Write-Host "[5/5] Conectando con GitHub..." -ForegroundColor Yellow
     Write-Host ""
     Write-Host "IMPORTANTE: Asegúrate de haber creado el repositorio en GitHub primero" -ForegroundColor Red
-    Write-Host "URL sugerida: https://github.com/lianacrobata/AdmApp" -ForegroundColor Green
+    Write-Host "URL sugerida: https://github.com/Lianacrobat/acrobatadm" -ForegroundColor Green
     Write-Host ""
     
     $confirm = Read-Host "¿Has creado el repositorio en GitHub? (s/n)"
@@ -43,7 +43,7 @@ try {
         exit 0
     }
     
-    git remote add origin https://github.com/lianacrobata/AdmApp.git
+    git remote add origin https://github.com/Lianacrobat/acrobatadm.git
     if ($LASTEXITCODE -ne 0) { throw "Error conectando con GitHub" }
     
     Write-Host "Subiendo archivos a GitHub..." -ForegroundColor Yellow
@@ -59,7 +59,7 @@ try {
     Write-Host ""
     Write-Host "PRÓXIMOS PASOS:" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "1. Ve a: https://github.com/lianacrobata/AdmApp" -ForegroundColor White
+    Write-Host "1. Ve a: https://github.com/Lianacrobat/acrobatadm" -ForegroundColor White
     Write-Host "2. Configurar GitHub Pages:" -ForegroundColor White
     Write-Host "   - Settings > Pages" -ForegroundColor Gray
     Write-Host "   - Source: GitHub Actions" -ForegroundColor Gray

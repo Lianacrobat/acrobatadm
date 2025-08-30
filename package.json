@@ -11,9 +11,7 @@
     "build:github": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy:vercel": "npm run build && vercel --prod",
-    "deploy:preview": "npm run build && vercel",
-    "deploy:check": "npm run build",
+
     "generate-products": "node scripts/generate-products.js",
     "convert-json": "node scripts/convert-json-to-ts.js",
     "validate-products": "node scripts/validate-products.js",
