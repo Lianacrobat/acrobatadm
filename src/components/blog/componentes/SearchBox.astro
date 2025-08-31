@@ -331,7 +331,7 @@
 
 	// Generar sugerencias basadas en la consulta
 	function generateSuggestions(query: string): void {
-		suggestions = deporteFilter.getSuggestions(query, 8);
+		suggestions = deporteFilter.getSuggestions(query, 8) as string[];
 		
 		if (suggestions.length > 0) {
 			renderSuggestions();

@@ -1,56 +1,63 @@
 ---
 import LayoutSEO from "../layouts/LayoutSEO.astro";
-import FavoritosFather from "../components/tienda/favoritos/FavoritosFather.astro";
+import HeroSection from "../components/ui/HeroSection.astro";
+import FavoritosComponent from "../components/tienda/favoritos/FavoritosComponent.astro";
 
 const seoData = {
 	title: "Mis Favoritos - Lista de Equipos Acrobáticos | Acrobata Demente",
-	description: "Gestiona tu lista de favoritos con los mejores equipos acrobáticos. Guarda trampolines, colchonetas, arneses y más productos para comprar después.",
-	keywords: "favoritos acrobáticos, lista deseos, equipos guardados, trampolines favoritos, colchonetas preferidas, arneses seleccionados, wishlist acrobática, productos guardados",
+	description:
+		"Gestiona tu lista de favoritos con los mejores equipos acrobáticos. Guarda trampolines, colchonetas, arneses y más productos para comprar después.",
+	keywords:
+		"favoritos acrobáticos, lista deseos, equipos guardados, trampolines favoritos, colchonetas preferidas, arneses seleccionados, wishlist acrobática, productos guardados",
 	author: "Acrobata Demente",
 	robots: "noindex, nofollow",
 	canonicalURL: "https://acrobatademente.com/favoritos",
 	openGraph: {
 		title: "Mis Favoritos - Lista de Equipos Acrobáticos",
-		description: "Administra tu lista de equipos acrobáticos favoritos. Guarda y organiza los productos que más te interesan para futuras compras.",
+		description:
+			"Administra tu lista de equipos acrobáticos favoritos. Guarda y organiza los productos que más te interesan para futuras compras.",
 		image: "/assets/cover/favoritos-og.jpg",
 		url: "https://acrobatademente.com/favoritos",
 		type: "website",
 		locale: "es_ES",
-		site_name: "Acrobata Demente"
+		site_name: "Acrobata Demente",
 	},
 	twitterCard: {
 		card: "summary",
 		title: "Mis Favoritos - Lista de Equipos Acrobáticos",
-		description: "Gestiona tu lista de favoritos con equipos acrobáticos profesionales. Organiza tus productos preferidos.",
+		description:
+			"Gestiona tu lista de favoritos con equipos acrobáticos profesionales. Organiza tus productos preferidos.",
 		image: "/assets/cover/favoritos-twitter.jpg",
-		site: "@AcrobataDemente"
+		site: "@AcrobataDemente",
 	},
 	structuredData: {
 		"@context": "https://schema.org",
 		"@type": "WebPage",
 		name: "Lista de Favoritos",
-		description: "Página personal para gestionar lista de equipos acrobáticos favoritos del usuario",
+		description:
+			"Página personal para gestionar lista de equipos acrobáticos favoritos del usuario",
 		url: "https://acrobatademente.com/favoritos",
 		isPartOf: {
 			"@type": "WebSite",
 			name: "Acrobata Demente",
-			url: "https://acrobatademente.com"
+			url: "https://acrobatademente.com",
 		},
 		mainEntity: {
 			"@type": "ItemList",
 			name: "Lista de Favoritos del Usuario",
-			description: "Colección personalizada de equipos acrobáticos seleccionados por el usuario",
+			description:
+				"Colección personalizada de equipos acrobáticos seleccionados por el usuario",
 			numberOfItems: 0,
-			itemListOrder: "https://schema.org/ItemListOrderAscending"
+			itemListOrder: "https://schema.org/ItemListOrderAscending",
 		},
 		potentialAction: {
 			"@type": "ViewAction",
 			target: "https://acrobatademente.com/favoritos",
-			name: "Ver Lista de Favoritos"
+			name: "Ver Lista de Favoritos",
 		},
 		audience: {
 			"@type": "Audience",
-			audienceType: "registered users, athletes, gymnasts"
+			audienceType: "registered users, athletes, gymnasts",
 		},
 		breadcrumb: {
 			"@type": "BreadcrumbList",
@@ -59,22 +66,22 @@ const seoData = {
 					"@type": "ListItem",
 					position: 1,
 					name: "Inicio",
-					item: "https://acrobatademente.com"
+					item: "https://acrobatademente.com",
 				},
 				{
 					"@type": "ListItem",
 					position: 2,
 					name: "Mi Cuenta",
-					item: "https://acrobatademente.com/user"
+					item: "https://acrobatademente.com/user",
 				},
 				{
 					"@type": "ListItem",
 					position: 3,
 					name: "Favoritos",
-					item: "https://acrobatademente.com/favoritos"
-				}
-			]
-		}
+					item: "https://acrobatademente.com/favoritos",
+				},
+			],
+		},
 	},
 	additionalMetaTags: [
 		{ name: "theme-color", content: "#8b5cf6" },
@@ -85,14 +92,20 @@ const seoData = {
 		{ name: "msapplication-TileColor", content: "#8b5cf6" },
 		{ name: "application-name", content: "Acrobata Demente" },
 		{ name: "apple-mobile-web-app-title", content: "Mis Favoritos" },
-		{ name: "msapplication-tooltip", content: "Lista personal de equipos acrobáticos favoritos" },
+		{
+			name: "msapplication-tooltip",
+			content: "Lista personal de equipos acrobáticos favoritos",
+		},
 		{ name: "rating", content: "general" },
 		{ name: "distribution", content: "global" },
 		{ name: "coverage", content: "worldwide" },
 		{ name: "target", content: "all" },
 		{ name: "HandheldFriendly", content: "true" },
 		{ name: "MobileOptimized", content: "320" },
-		{ name: "audience", content: "registered users, athletes, gymnasts, acrobats" },
+		{
+			name: "audience",
+			content: "registered users, athletes, gymnasts, acrobats",
+		},
 		{ name: "category", content: "User Account, Personal Lists, Favorites" },
 		{ name: "coverage", content: "Personal" },
 		{ name: "distribution", content: "private" },
@@ -108,12 +121,18 @@ const seoData = {
 		{ name: "page-type", content: "user-account" },
 		{ name: "content-type", content: "personal-list" },
 		{ name: "user-interaction", content: "required" },
-		{ name: "login-required", content: "optional" }
-	]
+		{ name: "login-required", content: "optional" },
+	],
 };
 ---
 
 <LayoutSEO {...seoData}>
-	<FavoritosFather />
-	<div class="h-10"></div>
-</Layout>
+	<HeroSection
+		colorHero="bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500"
+		heroTitle="Mis Favoritos"
+		heroParagraph="Gestiona tus productos favoritos!"
+		heroImage="catalogo"
+	/>
+
+	<FavoritosComponent />
+</LayoutSEO>

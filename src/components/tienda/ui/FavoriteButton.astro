@@ -37,22 +37,15 @@ const { productId, productName, class: className = "", showText = false } = Astr
 
 <script>
 	import { sendTelegramNotification } from "../../../utils/telegram.js";
+	import { favoritesStorage } from "../../../utils/secureStorage.js";
 
 	// Funciones simples para manejar favoritos
 	const getFavorites = (): string[] => {
-		try {
-			return JSON.parse(localStorage.getItem("favorites") || "[]");
-		} catch {
-			return [];
-		}
+		return favoritesStorage.get();
 	};
 
 	const saveFavorites = (favorites: string[]): void => {
-		try {
-			localStorage.setItem("favorites", JSON.stringify(favorites));
-		} catch (error) {
-			console.error("Error saving favorites:", error);
-		}
+		favoritesStorage.set(favorites);
 	};
 
 	const updateHeartIcon = (icon: SVGElement, isFavorite: boolean): void => {

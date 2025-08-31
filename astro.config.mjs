@@ -10,11 +10,12 @@ export default defineConfig({
   integrations: [],
   
   // Configuración para producción en Vercel
-  output: 'static',
+  output: 'server',
   adapter: vercel({
     webAnalytics: {
       enabled: true
-    }
+    },
+    edgeMiddleware: false
   }),
   
   // Configuración para desarrollo
@@ -26,27 +27,27 @@ export default defineConfig({
     host: true
   },
   
-  // Variables de entorno comentadas para modo estático
-  // env: {
-  //   schema: {
-  //     TELEGRAM_BOT_TOKEN: {
-  //       context: 'server',
-  //       access: 'secret',
-  //       type: 'string'
-  //     },
-  //     TELEGRAM_CHAT_ID: {
-  //       context: 'server', 
-  //       access: 'secret',
-  //       type: 'string'
-  //     },
-  //     NODE_ENV: {
-  //       context: 'server',
-  //       access: 'public',
-  //       type: 'string',
-  //       default: 'development'
-  //     }
-  //   }
-  // },
+  // Variables de entorno para Vercel
+  env: {
+    schema: {
+      TELEGRAM_BOT_TOKEN: {
+        context: 'server',
+        access: 'secret',
+        type: 'string'
+      },
+      TELEGRAM_CHAT_ID: {
+        context: 'server', 
+        access: 'secret',
+        type: 'string'
+      },
+      NODE_ENV: {
+        context: 'server',
+        access: 'public',
+        type: 'string',
+        default: 'development'
+      }
+    }
+  },
 
   vite: {
     plugins: [tailwindcss()],
