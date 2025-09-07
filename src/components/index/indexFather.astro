@@ -1,12 +1,114 @@
 ---
-import IndexHero from "./indexHero.astro";
-import IndexBackground from "./indexBackground.astro";
+// Schema.org structured data para SEO
+const schemaData = {
+	"@context": "https://schema.org",
+	"@type": "Organization",
+	name: "Acrobata Demente",
+	description:
+		"Plataforma profesional de entrenamiento acrobático con recursos para artistas, atletas y acrobatas",
+	url: "https://acrobatademente.com",
+	logo: `${import.meta.env.BASE_URL}icons/sprite.svg#adm`,
+	sameAs: [
+		"https://www.instagram.com/acrobatademente",
+		"https://www.youtube.com/acrobatademente",
+	],
+	offers: {
+		"@type": "Service",
+		name: "Entrenamiento Acrobático Profesional",
+		description:
+			"Recursos, técnicas y equipamiento especializado para acrobacia",
+	},
+};
 ---
 
-<section class="relative min-h-dvh overflow-hidden">
-	<IndexBackground />
+<header
+	class="relative z-50 w-full min-h-screen h-full flex items-center justify-center"
+	role="banner"
+>
 
-	<div class="absolute inset-0 flex items-center justify-center">
-		<IndexHero />
+	<!-- Layout responsivo: columna única en móvil, dos columnas en desktop -->
+	<div class="w-full max-w-7xl mx-auto px-4 py-8 flex flex-col lg:flex-row lg:items-center lg:gap-12">
+		<!-- Columna izquierda: Imagen (en desktop) -->
+		<div class="flex-1 flex justify-center items-stretch mb-8 lg:mb-0">
+			<img
+				src={`${import.meta.env.BASE_URL}public/portada/portada.png`}
+				alt="Logo de Acrobata Demente - Plataforma de entrenamiento acrobático"
+				class="w-full h-full object-cover lg:object-contain"
+				loading="eager"
+				decoding="async"
+			/>
+		</div>
+
+		<!-- Columna derecha: Contenido (en desktop) -->
+		<div class="flex-1 flex flex-col justify-between items-center lg:items-start text-center lg:text-left h-full py-4">
+			<!-- Título optimizado para SEO -->
+			<h1
+				class="font-bold text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight mb-2 max-w-2xl"
+				id="main-title"
+			>
+				ACROBATA DEMENTE
+			</h1>
+			<h2
+				class="font-semibold text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-tight mb-6 max-w-2xl text-[var(--text-color)]"
+			>
+				Entrenamiento Acrobático
+			</h2>
+			
+			<!-- Descripción -->
+			<div class="flex-1 flex flex-col justify-center">
+				<h2
+					class="text-base sm:text-lg lg:text-xl mb-8 max-w-xl text-[var(--text-color)] leading-relaxed"
+					aria-describedby="main-title"
+				>
+					Recursos profesionales para Artistas, Atletas y Acrobatas. Entrenamientos,
+					técnicas y equipamiento especializado.
+				</h2>
+			</div>
+
+			<!-- Botones de navegación -->
+			<nav
+				class="cover-btn-group flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
+				aria-label="Navegación principal del hero"
+				role="navigation"
+			>
+				<a
+					href="/primeros-pasos"
+					class="cover-btn px-8 py-4 bg-gradient-to-r from-sky-400 via-blue-500 to-blue-600 text-white font-semibold rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 hover:from-sky-500 hover:to-blue-700 transition-all duration-300 ease-in-out text-center min-w-[180px]"
+					title="Guía completa para comenzar tu entrenamiento acrobático desde cero"
+					aria-describedby="main-title"
+				>
+					Primeros Pasos
+				</a>
+				<a
+					href="/catalogo"
+					class="cover-btn px-8 py-4 bg-gradient-to-r from-pink-400 via-purple-500 to-purple-600 text-white font-semibold rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 hover:from-pink-500 hover:to-purple-700 transition-all duration-300 ease-in-out text-center min-w-[180px]"
+					title="Explora nuestro catálogo completo de productos y equipamiento acrobático"
+					aria-describedby="main-title"
+				>
+					Catálogo 2025
+				</a>
+			</nav>
+		</div>
 	</div>
-</section>
+</header>
+
+<!-- Schema.org structured data -->
+<script
+	type="application/ld+json"
+	set:html={JSON.stringify(schemaData)}
+/>
+
+<style>
+	@media (min-width: 640px) {
+		.cover-btn-group:has(.cover-btn:hover) .cover-btn:not(:hover) {
+			filter: blur(2px) brightness(0.5) grayscale(1) opacity(0.5);
+		}
+	}
+	.cover-btn {
+		transition:
+			color 0.2s,
+			filter 0.3s,
+			transform 0.3s,
+			box-shadow 0.3s;
+	}
+</style>

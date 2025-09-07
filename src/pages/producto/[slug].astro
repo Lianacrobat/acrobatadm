@@ -21,6 +21,40 @@ if (!product) {
 }
 ---
 
-<Layout title={`${product.name} - Acrobata de Mente`}>
+<Layout 
+	title={`${product.name} - Acrobata de Mente`}
+	description={product.shortDescription}
+	og={{
+		title: product.name,
+		description: product.shortDescription,
+		image: product.images[0] as string,
+		url: Astro.url.href,
+		type: "product",
+		site_name: "Acrobata de Mente"
+	}}
+	twitter={{
+		card: "summary_large_image",
+		title: product.name,
+		description: product.shortDescription,
+		image: product.images[0] as string
+	}}
+	structuredData={{
+		"@context": "https://schema.org",
+		"@type": "Product",
+		"name": product.name,
+		"description": product.shortDescription,
+		"image": product.images[0],
+		"brand": {
+			"@type": "Brand",
+			"name": "Acrobata de Mente"
+		},
+		"category": product.category,
+		"offers": {
+			"@type": "Offer",
+			"availability": "https://schema.org/InStock",
+			"itemCondition": product.condition === "nuevo" ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition"
+		}
+	}}
+>
 	<ProducDetails product={product} />
 </Layout>

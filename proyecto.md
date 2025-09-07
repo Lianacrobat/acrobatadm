@@ -153,7 +153,7 @@ interface Product {
   longDescription: string;
   category: string;
   subcategory: string;
-  status: "stock" | "importacion" | "digital";
+  status: "stock" | "importado" | "digital";
   condition: "nuevo" | "usado";
   calidad: "premium" | "alta" | "media" | "baja" | "estandar" | "promedio";
   tags: string[];
@@ -382,6 +382,27 @@ interface Product {
 ## 🚀---
 
 ## 🔄 Cambios Recientes (Enero 2025)
+
+### Mejoras de Open Graph y Redes Sociales (Enero 2025)
+
+#### Implementación de Metaetiquetas Dinámicas
+- ✅ **Open Graph optimizado:** Metaetiquetas dinámicas en páginas de productos
+- ✅ **Twitter Cards:** Configuración de summary_large_image para mejor presentación
+- ✅ **Datos estructurados:** Schema.org implementado para productos
+- ✅ **SEO mejorado:** Títulos y descripciones específicos por producto
+- ✅ **Imágenes dinámicas:** Primera imagen del producto como imagen principal
+
+#### Funcionalidades de Redes Sociales
+- 🎯 **Cards atractivas:** Enlaces de productos muestran imagen, título y descripción
+- 📱 **Compatibilidad universal:** Facebook, Twitter, LinkedIn, WhatsApp
+- 🏷️ **Branding consistente:** "Acrobata de Mente" en todas las cards
+- ✨ **URL canónicas:** Enlaces optimizados para compartir
+- 🚀 **Datos estructurados:** Información de producto, marca y disponibilidad
+
+#### Archivos Modificados
+- **`src/pages/producto/[slug].astro`:** Implementación completa de Open Graph
+- **Layout.astro:** Ya tenía soporte completo para metaetiquetas
+- **Despliegue:** Actualizado en Vercel con todas las mejoras
 
 ### Refactorización Completa del Componente Variantes Acrobáticas
 

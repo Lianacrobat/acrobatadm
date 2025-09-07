@@ -115,14 +115,14 @@ export function getProductsByCondition(condition: "nuevo" | "usado"): Product[] 
 /**
  * Obtiene productos por autenticidad
  */
-export function getProductsByCalidad(calidad: "premium" | "alta" | "media" | "baja"): Product[] {
+export function getProductsByCalidad(calidad: "premium" | "estandar" | "promedio"): Product[] {
   return products.filter((product) => product.calidad === calidad);
 }
 
 /**
  * Obtiene productos por condición y calidad
  */
-export function getProductsByConditionAndCalidad(condition: "nuevo" | "usado", calidad: "premium" | "alta" | "media" | "baja"): Product[] {
+export function getProductsByConditionAndCalidad(condition: "nuevo" | "usado", calidad: "premium" | "estandar" | "promedio"): Product[] { 
   return products.filter((product) => product.condition === condition && product.calidad === calidad);
 }
 
@@ -144,42 +144,42 @@ export function getUsedPremiumProducts(): Product[] {
  * Obtiene productos nuevos y alta calidad
  */
 export function getNewAltaCalidadProducts(): Product[] {
-  return getProductsByConditionAndCalidad("nuevo", "alta");
+  return getProductsByConditionAndCalidad("nuevo", "premium");   
 }
 
 /**
  * Obtiene productos usados y alta calidad
  */
 export function getUsedAltaCalidadProducts(): Product[] {
-  return getProductsByConditionAndCalidad("usado", "alta");
+  return getProductsByConditionAndCalidad("usado", "premium");
 }
 
 /**
  * Obtiene productos nuevos y media calidad
  */
 export function getNewMediaCalidadProducts(): Product[] {
-  return getProductsByConditionAndCalidad("nuevo", "media");
+  return getProductsByConditionAndCalidad("nuevo", "estandar");
 }
 
 /**
  * Obtiene productos usados y media calidad
  */
 export function getUsedMediaCalidadProducts(): Product[] {
-  return getProductsByConditionAndCalidad("usado", "media");
+  return getProductsByConditionAndCalidad("usado", "estandar");
 }
 
 /**
  * Obtiene productos nuevos y baja calidad
  */
 export function getNewBajaCalidadProducts(): Product[] {
-  return getProductsByConditionAndCalidad("nuevo", "baja");
+  return getProductsByConditionAndCalidad("nuevo", "promedio");
 }
 
 /**
  * Obtiene productos usados y baja calidad
  */
 export function getUsedBajaCalidadProducts(): Product[] {
-  return getProductsByConditionAndCalidad("usado", "baja");
+  return getProductsByConditionAndCalidad("usado", "promedio");
 }
 
 /**
@@ -190,7 +190,7 @@ export function filterProducts(filters: {
   subcategory?: string;
   status?: string;
   condition?: "nuevo" | "usado";
-  calidad?: "premium" | "alta" | "media" | "baja";
+  calidad?: "premium" | "estandar" | "promedio";
   search?: string;
   variant?: string;
 }): Product[] {
@@ -253,9 +253,8 @@ export function getProductStats() {
 
   const statsByCalidad = {
     premium: getProductsByCalidad("premium").length,
-    alta: getProductsByCalidad("alta").length,
-    media: getProductsByCalidad("media").length,
-    baja: getProductsByCalidad("baja").length
+    estandar: getProductsByCalidad("estandar").length,
+    promedio: getProductsByCalidad("promedio").length
   };
 
   return {

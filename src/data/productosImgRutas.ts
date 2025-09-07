@@ -9,6 +9,7 @@ import inicioHero from '@images/cover/catalogo.jpg';
 import catalogoHero from '@images/cover/catalogo.jpg';
 import primerosPasosHero from '../../public/heroBackground/primerosPasos.webp';
 import comunidad from '../../public/heroBackground/comunidad.jpg';
+import Lectura from '../../public/heroBackground/listaLectura.webp';
 
 
 // Imágenes de productos
@@ -52,6 +53,7 @@ export const imgRutas = {
     primerosPasos: primerosPasosHero,
     catalogo: catalogoHero,
     comunidad: comunidad,
+    lectura: Lectura,
   },
 
   // Trampolines

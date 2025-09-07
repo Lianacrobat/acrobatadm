@@ -2,8 +2,8 @@
 import Tooltip from "../ui/Tooltip.astro";
 
 // Tipos optimizados para mejor rendimiento
-type LinkTarget = '_blank' | '_self' | '_parent' | '_top';
-type IconSize = 'sm' | 'md' | 'lg';
+type LinkTarget = "_blank" | "_self" | "_parent" | "_top";
+type IconSize = "sm" | "md" | "lg";
 
 interface Props {
 	href: string;
@@ -16,8 +16,8 @@ interface Props {
 	rel?: string;
 	iconSize?: IconSize;
 	showTooltipOnMobile?: boolean;
-	tooltipPosition?: 'right' | 'left' | 'top' | 'bottom';
-	priority?: 'high' | 'normal' | 'low';
+	tooltipPosition?: "right" | "left" | "top" | "bottom";
+	priority?: "high" | "normal" | "low";
 	disabled?: boolean;
 }
 
@@ -28,52 +28,72 @@ const {
 	isActive = false,
 	activeBgClass = "bg-sky-500",
 	ariaLabel,
-	target = '_self',
+	target = "_self",
 	rel,
-	iconSize = 'md',
+	iconSize = "md",
 	showTooltipOnMobile = true,
-	tooltipPosition = 'right',
-	priority = 'normal',
-	disabled = false
+	tooltipPosition = "right",
+	priority = "normal",
+	disabled = false,
 } = Astro.props;
 
 // Clases de tamaño de iconos optimizadas
 const iconSizeClasses = {
-	sm: 'w-5 h-5',
-	md: 'w-6 h-6',
-	lg: 'w-7 h-7'
+	sm: "w-5 h-5",
+	md: "w-6 h-6",
+	lg: "w-7 h-7",
 };
 
 // Clases CSS optimizadas con mejor rendimiento
 const baseClasses = [
-	"flex", "items-center", "justify-center", "sm:justify-start", 
-	"gap-3", "sm:gap-4", "p-2", "sm:p-2.5", 
-	"transition-all", "duration-200", "ease-out",
-	"rounded-xl", "w-full", "relative", "group",
-	"focus:outline-none", "focus:ring-2", "focus:ring-offset-1", 
-	"focus:ring-transparent", "dark:focus:ring-transparent",
-	"active:scale-[0.98]", "will-change-transform",
+	"flex",
+	"items-center",
+	"justify-center",
+	"sm:justify-start",
+	"gap-3",
+	"sm:gap-4",
+	"p-2",
+	"sm:p-2.5",
+	"transition-all",
+	"duration-200",
+	"ease-out",
+	"rounded-xl",
+	"w-full",
+	"relative",
+	"group",
+	"focus:outline-none",
+	"focus:ring-2",
+	"focus:ring-offset-1",
+	"focus:ring-transparent",
+	"dark:focus:ring-transparent",
+	"active:scale-[0.98]",
+	"will-change-transform",
 	// Mejoras táctiles para móviles
-	"touch-manipulation", "select-none",
+	"touch-manipulation",
+	"select-none",
 	// Estados disabled
-	disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "cursor-pointer"
-].filter(Boolean).join(" ");
+	disabled
+		? "opacity-50 cursor-not-allowed pointer-events-none"
+		: "cursor-pointer",
+]
+	.filter(Boolean)
+	.join(" ");
 
 const activeClasses = `text-white ${activeBgClass} shadow-lg shadow-black/10 dark:shadow-white/10`;
 const inactiveClasses = [
-	"text-[var(--text-color-soft)]", 
-	"hover:text-[var(--text-color)]", 
-	"hover:bg-[var(--cajas)]", 
+	"text-[var(--text-color-soft)]",
+	"hover:text-[var(--text-color)]",
+	"hover:bg-[var(--cajas)]",
 	"hover:shadow-sm",
-	"active:bg-[var(--cajas-hover,var(--cajas))]"
+	"active:bg-[var(--cajas-hover,var(--cajas))]",
 ].join(" ");
 
 const linkClasses = `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
 
 // Generar rel automáticamente para enlaces externos
-const isExternalLink = href.startsWith('http') || href.startsWith('//');
-const linkRel = rel || (isExternalLink ? 'noopener noreferrer' : undefined);
-const linkTarget = target === '_blank' || isExternalLink ? '_blank' : target;
+const isExternalLink = href.startsWith("http") || href.startsWith("//");
+const linkRel = rel || (isExternalLink ? "noopener noreferrer" : undefined);
+const linkTarget = target === "_blank" || isExternalLink ? "_blank" : target;
 
 // ID único para accesibilidad
 const componentId = `iconlabel-${Math.random().toString(36).substr(2, 9)}`;
@@ -82,10 +102,10 @@ const componentId = `iconlabel-${Math.random().toString(36).substr(2, 9)}`;
 <!-- Componente IconLabel optimizado -->
 <a
 	id={componentId}
-	href={disabled ? '#' : href}
+	href={disabled ? "#" : href}
 	class={linkClasses}
 	aria-label={ariaLabel || text}
-	aria-current={isActive ? 'page' : undefined}
+	aria-current={isActive ? "page" : undefined}
 	aria-describedby={showTooltipOnMobile ? `${componentId}-tooltip` : undefined}
 	target={linkTarget}
 	rel={linkRel}
@@ -102,44 +122,69 @@ const componentId = `iconlabel-${Math.random().toString(36).substr(2, 9)}`;
 			aria-labelledby={`${componentId}-icon-title`}
 		>
 			<title id={`${componentId}-icon-title`}>{text} icon</title>
-			<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#${nameIcon}`}></use>
+			<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#${nameIcon}`}
+			></use>
 		</svg>
-		
+
 		<!-- Tooltip solo para móviles -->
-		{showTooltipOnMobile && (
-			<span class="sm:hidden overflow-visible" id={`${componentId}-tooltip`}>
-				<Tooltip
-					text={text}
-					position={tooltipPosition}
-					maxWidth="200px"
-					disabled={disabled}
-				/>
-			</span>
-		)}
+		{
+			showTooltipOnMobile && (
+				<span
+					class="sm:hidden overflow-visible"
+					id={`${componentId}-tooltip`}
+				>
+					<Tooltip
+						text={text}
+						position={tooltipPosition}
+						maxWidth="200px"
+						disabled={disabled}
+					/>
+				</span>
+			)
+		}
 	</div>
-	
+
 	<!-- Texto visible en desktop con mejor tipografía -->
-	<span class="hidden sm:inline text-sm font-medium transition-all duration-200 truncate flex-1">
+	<span
+		class="hidden sm:inline text-sm font-medium transition-all duration-200 truncate flex-1"
+	>
 		{text}
 	</span>
-	
+
 	<!-- Indicadores visuales mejorados -->
 	<div class="hidden sm:flex items-center gap-2 ml-auto">
 		<!-- Indicador de enlace activo -->
-		{isActive && (
-			<div 
-				class="w-2 h-2 bg-current rounded-full opacity-80 animate-pulse" 
-				aria-hidden="true"
-				title="Página actual"
-			></div>
-		)}
-		
+		{
+			isActive && (
+				<div
+					class="w-2 h-2 bg-current rounded-full opacity-80 animate-pulse"
+					aria-hidden="true"
+					title="Página actual"
+				/>
+			)
+		}
+
 		<!-- Indicador de enlace externo -->
-		{isExternalLink && (
-			<svg class="w-3 h-3 opacity-60" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-				<path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-				<path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-			</svg>
-		)}
+		{
+			isExternalLink && (
+				<svg
+					class="w-3 h-3 opacity-60"
+					aria-hidden="true"
+					fill="currentColor"
+					viewBox="0 0 20 20"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z"
+						clip-rule="evenodd"
+					/>
+					<path
+						fill-rule="evenodd"
+						d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			)
+		}
 	</div>
 </a>

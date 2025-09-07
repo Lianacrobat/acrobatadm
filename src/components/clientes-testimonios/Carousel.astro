@@ -141,10 +141,15 @@ const hasTestimonios = Array.isArray(testimonios) && testimonios.length > 0;
 <script>
 	const config = {
 		autoPlay: true,
-		autoPlayInterval: 5500, // más rápido
+		autoPlayInterval: 5500,
 		pauseOnHover: true,
-		swipeThreshold: 50, // más sensible
-		swipeVelocityThreshold: 0.5, // más sensible
+		swipeThreshold: 50,
+		swipeVelocityThreshold: 0.5,
+		// Nuevas configuraciones
+		preloadImages: true,
+		reducedMotion: typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false,
+		infiniteLoop: true,
+		visibilityThreshold: 0.5 // Para Intersection Observer
 	};
 
 	function initCarousel() {
@@ -161,28 +166,50 @@ const hasTestimonios = Array.isArray(testimonios) && testimonios.length > 0;
 			return;
 		}
 
-		let currentIndex = 0;
+		// Estado centralizado del carrusel
+		const carouselState = {
+			currentIndex: 0,
+			isPlaying: false,
+			isTransitioning: false,
+			isVisible: true,
+			touchData: {
+				startX: 0,
+				endX: 0,
+				startTime: 0,
+				isOnLink: false
+			}
+		};
+
 		const total = items.length;
 		let autoPlayTimer: ReturnType<typeof setInterval> | null = null;
-		let isThrottled = false;
-		let touchStartX = 0;
-		let touchEndX = 0;
-		let touchStartTime = 0;
-		let isTouchOnLink = false;
+		let intersectionObserver: IntersectionObserver | null = null;
+		let eventListeners: Array<{ element: Element | Document, event: string, handler: EventListener }> = [];
 
-		// Mejorar: usar requestAnimationFrame para animaciones más suaves
+		// Función para agregar event listeners con cleanup automático
+		function addEventListenerWithCleanup(element: Element | Document, event: string, handler: EventListener, options?: AddEventListenerOptions) {
+			element.addEventListener(event, handler, options);
+			eventListeners.push({ element, event, handler });
+		}
+
+		// Animaciones optimizadas con soporte para reduced motion
 		function showSlide(idx: number, animate = true) {
 			idx = ((idx % total) + total) % total;
-			if (idx === currentIndex) return; // No repintar si ya está en el slide
-			currentIndex = idx;
+			if (idx === carouselState.currentIndex || carouselState.isTransitioning) return;
+			
+			carouselState.isTransitioning = true;
+			carouselState.currentIndex = idx;
+
+			const shouldAnimate = animate && !config.reducedMotion;
 
 			window.requestAnimationFrame(() => {
 				for (let i = 0; i < total; i++) {
 					const el = items[i] as HTMLElement;
 					const isActive = i === idx;
-					el.style.transition = animate
-						? "opacity 0.35s, transform 0.35s"
+					
+					el.style.transition = shouldAnimate
+						? "opacity 0.35s ease-in-out, transform 0.35s ease-in-out"
 						: "none";
+					
 					el.classList.toggle("opacity-100", isActive);
 					el.classList.toggle("scale-100", isActive);
 					el.classList.toggle("pointer-events-auto", isActive);
@@ -192,10 +219,16 @@ const hasTestimonios = Array.isArray(testimonios) && testimonios.length > 0;
 					el.setAttribute("aria-hidden", isActive ? "false" : "true");
 					el.setAttribute("tabindex", isActive ? "0" : "-1");
 				}
+				
 				for (let i = 0; i < dots.length; i++) {
 					dots[i].classList.toggle("dot-active", i === idx);
 					dots[i].classList.toggle("dot-inactive", i !== idx);
 				}
+				
+				// Reset transition flag después de la animación
+				setTimeout(() => {
+					carouselState.isTransitioning = false;
+				}, shouldAnimate ? 350 : 0);
 			});
 		}
 
@@ -211,10 +244,14 @@ const hasTestimonios = Array.isArray(testimonios) && testimonios.length > 0;
 			};
 		}
 
+		// Gestión mejorada del autoplay con estado
 		function startAutoPlay() {
-			if (config.autoPlay && total > 1 && !autoPlayTimer) {
+			if (config.autoPlay && total > 1 && !autoPlayTimer && carouselState.isVisible) {
+				carouselState.isPlaying = true;
 				autoPlayTimer = setInterval(() => {
-					showSlide(currentIndex + 1);
+					if (carouselState.isVisible && !carouselState.isTransitioning) {
+						showSlide(carouselState.currentIndex + 1);
+					}
 				}, config.autoPlayInterval);
 			}
 		}
@@ -223,23 +260,59 @@ const hasTestimonios = Array.isArray(testimonios) && testimonios.length > 0;
 			if (autoPlayTimer) {
 				clearInterval(autoPlayTimer);
 				autoPlayTimer = null;
+				carouselState.isPlaying = false;
 			}
 		}
 
-		const prev = throttle(() => showSlide(currentIndex - 1), 300);
-		const next = throttle(() => showSlide(currentIndex + 1), 300);
+		// Intersection Observer para pausar cuando no es visible
+		function setupIntersectionObserver() {
+			if ('IntersectionObserver' in window) {
+				intersectionObserver = new IntersectionObserver(
+					(entries) => {
+						entries.forEach(entry => {
+							carouselState.isVisible = entry.isIntersecting;
+							if (entry.isIntersecting) {
+								startAutoPlay();
+							} else {
+								stopAutoPlay();
+							}
+						});
+					},
+					{ threshold: config.visibilityThreshold }
+				);
+				if (content) {
+					intersectionObserver.observe(content);
+				}
+			}
+		}
 
-		prevBtn?.addEventListener("click", prev);
-		nextBtn?.addEventListener("click", next);
+		// Función de limpieza para evitar memory leaks
+		function cleanup() {
+			stopAutoPlay();
+			intersectionObserver?.disconnect();
+			
+			// Remover todos los event listeners
+			eventListeners.forEach(({ element, event, handler }) => {
+				element.removeEventListener(event, handler);
+			});
+			eventListeners = [];
+		}
 
-		// Dots
+		const prev = throttle(() => showSlide(carouselState.currentIndex - 1), 300);
+		const next = throttle(() => showSlide(carouselState.currentIndex + 1), 300);
+
+		if (prevBtn) addEventListenerWithCleanup(prevBtn, "click", prev);
+		if (nextBtn) addEventListenerWithCleanup(nextBtn, "click", next);
+
+		// Dots con cleanup automático
 		dots.forEach((dot, i) => {
-			dot.addEventListener("click", (e: Event) => {
+			addEventListenerWithCleanup(dot, "click", (e: Event) => {
 				const target = e.target as HTMLElement;
 				if (target?.closest("a")) return;
 				showSlide(i);
 			});
-			dot.addEventListener("keydown", (e: Event) => {
+			
+			addEventListenerWithCleanup(dot, "keydown", (e: Event) => {
 				const keyboardEvent = e as KeyboardEvent;
 				if (keyboardEvent.key === "Enter" || keyboardEvent.key === " ") {
 					e.preventDefault();
@@ -248,8 +321,8 @@ const hasTestimonios = Array.isArray(testimonios) && testimonios.length > 0;
 			});
 		});
 
-		// Teclado
-		document.addEventListener("keydown", (e: Event) => {
+		// Navegación por teclado con cleanup
+		addEventListenerWithCleanup(document, "keydown", (e: Event) => {
 			const keyboardEvent = e as KeyboardEvent;
 			const target = e.target as HTMLElement;
 			if (
@@ -257,60 +330,68 @@ const hasTestimonios = Array.isArray(testimonios) && testimonios.length > 0;
 				(target.tagName === "INPUT" || target.tagName === "TEXTAREA")
 			)
 				return;
-			if (keyboardEvent.key === "ArrowLeft") prevBtn?.click();
-			if (keyboardEvent.key === "ArrowRight") nextBtn?.click();
+			if (keyboardEvent.key === "ArrowLeft") prev();
+			if (keyboardEvent.key === "ArrowRight") next();
 		});
 
-		// Swipe
+		// Swipe optimizado
 		const swipe = throttle((dir: "left" | "right") => {
 			if (dir === "left") {
-				showSlide(currentIndex + 1);
+				showSlide(carouselState.currentIndex + 1);
 			} else {
-				showSlide(currentIndex - 1);
+				showSlide(carouselState.currentIndex - 1);
 			}
 		}, 300);
 
 		// --- EFECTO DE SWIPE MEJORADO: la tarjeta se mueve en la dirección correcta al arrastrar --- border
 		let lastDiff = 0;
 
-		content.addEventListener(
+		addEventListenerWithCleanup(
+			content,
 			"touchstart",
 			(e: Event) => {
 				const touchEvent = e as TouchEvent;
 				const target = e.target as HTMLElement;
-				isTouchOnLink = !!target?.closest("a");
-				touchStartX = touchEvent.touches[0].clientX;
-				touchStartTime = performance.now();
+				carouselState.touchData.isOnLink = !!target?.closest("a");
+				carouselState.touchData.startX = touchEvent.touches[0].clientX;
+				carouselState.touchData.startTime = performance.now();
 				lastDiff = 0;
 				stopAutoPlay();
-				// No preventDefault para permitir scroll vertical
 			},
 			{ passive: true }
 		);
 
-		content.addEventListener(
+		addEventListenerWithCleanup(
+			content,
 			"touchmove",
 			(e: Event) => {
 				const touchEvent = e as TouchEvent;
-				touchEndX = touchEvent.touches[0].clientX;
-				const diff = touchEndX - touchStartX; // Cambiado el orden para que el signo sea intuitivo
+				carouselState.touchData.endX = touchEvent.touches[0].clientX;
+				const diff = carouselState.touchData.endX - carouselState.touchData.startX;
 				lastDiff = diff;
-				const item = items[currentIndex] as HTMLElement;
-				// Limitar el movimiento a -60px a la izquierda y 60px a la derecha
+				const item = items[carouselState.currentIndex] as HTMLElement;
+				// Limitar el movimiento y aplicar easing
 				const limitedDiff = Math.max(Math.min(diff * 0.4, 60), -60);
-				item.style.transform = `translateX(${limitedDiff}px) scale(1)`;
+				if (!config.reducedMotion) {
+					item.style.transform = `translateX(${limitedDiff}px) scale(1)`;
+				}
 			},
 			{ passive: true }
 		);
 
-		content.addEventListener(
+		addEventListenerWithCleanup(
+			content,
 			"touchend",
 			() => {
 				const diff = lastDiff;
-				const duration = performance.now() - touchStartTime;
+				const duration = performance.now() - carouselState.touchData.startTime;
 				const velocity = Math.abs(diff) / (duration || 1);
-				const item = items[currentIndex] as HTMLElement;
-				item.style.transform = `scale(1)`;
+				const item = items[carouselState.currentIndex] as HTMLElement;
+				
+				// Reset transform
+				if (!config.reducedMotion) {
+					item.style.transform = `scale(1)`;
+				}
 
 				if (
 					Math.abs(diff) > config.swipeThreshold ||
@@ -321,27 +402,50 @@ const hasTestimonios = Array.isArray(testimonios) && testimonios.length > 0;
 					} else if (diff > 0) {
 						swipe("right");
 					}
-				} else if (isTouchOnLink) {
-					isTouchOnLink = false;
+				} else if (carouselState.touchData.isOnLink) {
+					// Reset touch data
+					carouselState.touchData = { startX: 0, endX: 0, startTime: 0, isOnLink: false };
 					return;
 				}
+				
 				startAutoPlay();
-				touchStartX = touchEndX = touchStartTime = 0;
+				// Reset touch data
+				carouselState.touchData = { startX: 0, endX: 0, startTime: 0, isOnLink: false };
 				lastDiff = 0;
-				isTouchOnLink = false;
 			},
 			{ passive: true }
 		);
 		// --- FIN DEL EFECTO DE SWIPE ---
 
+		// Hover events con cleanup
 		if (config.pauseOnHover) {
-			content.addEventListener("mouseenter", stopAutoPlay);
-			content.addEventListener("mouseleave", startAutoPlay);
+			addEventListenerWithCleanup(content, "mouseenter", stopAutoPlay);
+			addEventListenerWithCleanup(content, "mouseleave", startAutoPlay);
 		}
 
-		// Arranque inicial: mostrar el primer slide y autoplay
+		// Preload de imágenes si está habilitado
+		if (config.preloadImages) {
+			items.forEach(item => {
+				const img = item.querySelector('img');
+				if (img && !img.complete) {
+					img.loading = 'eager';
+				}
+			});
+		}
+
+		// Setup y arranque inicial
+		setupIntersectionObserver();
 		showSlide(0, false);
 		startAutoPlay();
+
+		// Cleanup al descargar la página
+		if (typeof window !== 'undefined') {
+			window.addEventListener("beforeunload", cleanup);
+			eventListeners.push({ element: document, event: "beforeunload", handler: cleanup });
+		}
+		
+		// Retornar función de cleanup para uso manual si es necesario
+		return cleanup;
 	}
 
 	if (typeof window !== "undefined") {

@@ -4,112 +4,157 @@ import IndexFather from "../components/index/indexFather.astro";
 
 // SEO optimizado para la página principal
 const seoData = {
-	title: "Acrobata Demente - Equipos Profesionales de Acrobacia y Gimnasia",
-	description: "Descubre la mejor selección de equipos acrobáticos profesionales: trampolines, XPE, spring floors, arneses y más. Calidad premium para atletas, gimnasios y centros deportivos.",
-	keywords: "equipos acrobáticos, trampolines profesionales, XPE, spring floor, arneses deportivos, gimnasia acrobática, equipos deportivos, acrobacia profesional, gimnasio equipamiento",
+	title:
+		"ACROBATA DEMENTE - Equipos Profesionales de Acrobacia | Trampolines y Colchonetas XPE",
+	description:
+		"🏆 Equipos de acrobacia de competición internacional. Trampolines profesionales, colchonetas XPE, spring floors y arneses de alta calidad. Usado por atletas profesionales y gimnasios de élite. ¡Descubre la diferencia de entrenar con equipamiento !",
+	keywords:
+		"acrobacia profesional, trampolines competición, colchonetas XPE, spring floors, arneses acrobacia, equipos gimnasia profesional, material acrobático, gimnasios élite, atletas profesionales, equipamiento deportivo, acrobacia artística, gimnasia rítmica, parkour, freerunning, entrenamiento acrobático",
 	author: "Acrobata Demente - Equipos Deportivos",
 	robots: "index, follow, max-image-preview:large, max-snippet:-1",
 	canonical: "https://admapp.vercel.app/",
 	lang: "es",
-	
+
 	// Open Graph optimizado
 	og: {
-		title: "Acrobata Demente | Equipos Profesionales de Acrobacia",
-		description: "La tienda líder en equipos acrobáticos profesionales. Trampolines, XPE, spring floors y más equipamiento de alta calidad para atletas y gimnasios.",
+		title:
+			"ACROBATA DEMENTE - Equipos Profesionales de Acrobacia | Trampolines y Colchonetas XPE",
+		description:
+			"🏆 Equipos de acrobacia de competición internacional. Trampolines profesionales, colchonetas XPE, spring floors y arneses de alta calidad. Usado por atletas profesionales y gimnasios de élite.",
 		image: "/assets/images/og-home.jpg",
-		url: "https://admapp.vercel.app/",
+		url: "https://acrobatademente.com/",
 		type: "website",
-		site_name: "Acrobata Demente - Equipos Deportivos Profesionales"
+		site_name: "Acrobata Demente",
 	},
-	
+
 	// Twitter Cards optimizado
 	twitter: {
 		card: "summary_large_image",
-		site: "@AcrobataDemente",
-		creator: "@AcrobataDemente",
-		title: "Acrobata Demente - Equipos Acrobáticos Profesionales",
-		description: "Equipos de acrobacia y gimnasia de calidad premium. Trampolines, XPE, spring floors y más para atletas profesionales.",
-		image: "/assets/images/twitter-home.jpg"
+		site: "@acrobatademente",
+		creator: "@acrobatademente",
+		title: "ACROBATA DEMENTE - Equipos Profesionales de Acrobacia",
+		description:
+			"🏆 Equipos de acrobacia de competición internacional. Trampolines profesionales, colchonetas XPE y arneses de alta calidad. Usado por atletas profesionales.",
+		image: "/assets/images/twitter-home.jpg",
 	},
-	
+
 	// Structured Data para la organización
 	structuredData: {
 		"@context": "https://schema.org",
 		"@type": "Organization",
-		"name": "Acrobata Demente",
-		"description": "Tienda especializada en equipos profesionales de acrobacia, gimnasia y deportes acrobáticos",
-		"url": "https://admapp.vercel.app",
-		"logo": {
+		name: "Acrobata Demente",
+		alternateName: "ADM Equipos Acrobáticos",
+		description:
+			"Equipos profesionales de acrobacia de competición internacional. Especialistas en trampolines, colchonetas XPE, spring floors y arneses para atletas profesionales y gimnasios de élite.",
+		url: "https://acrobatademente.com",
+		logo: {
 			"@type": "ImageObject",
-			"url": "https://admapp.vercel.app/assets/images/logo.png",
-			"width": 300,
-			"height": 300
+			url: "https://acrobatademente.com/assets/images/logo.png",
+			width: 300,
+			height: 300,
 		},
-		"contactPoint": {
-			"@type": "ContactPoint",
-			"contactType": "customer service",
-			"availableLanguage": "Spanish"
-		},
-		"sameAs": [
-			"https://twitter.com/AcrobataDemente",
-			"https://instagram.com/acrobatademente"
+		image: "https://acrobatademente.com/assets/images/og-home.jpg",
+		foundingDate: "2020",
+		slogan: "Equipamiento de competición internacional",
+		knowsAbout: [
+			"Acrobacia",
+			"Gimnasia",
+			"Trampolines",
+			"Equipos Deportivos",
+			"XPE",
+			"Spring Floors",
+			"Arneses",
 		],
-		"hasOfferCatalog": {
-			"@type": "OfferCatalog",
-			"name": "Equipos Acrobáticos",
-			"itemListElement": [
-				{
-					"@type": "Offer",
-					"itemOffered": {
-						"@type": "Product",
-						"name": "Trampolines Profesionales",
-						"category": "Equipos de Gimnasia"
-					}
-				},
-				{
-					"@type": "Offer",
-					"itemOffered": {
-						"@type": "Product",
-						"name": "Espuma XPE",
-						"category": "Equipos de Entrenamiento"
-					}
-				},
-				{
-					"@type": "Offer",
-					"itemOffered": {
-						"@type": "Product",
-						"name": "Spring Floor",
-						"category": "Pisos Deportivos"
-					}
-				}
-			]
+		serviceArea: {
+			"@type": "Country",
+			name: "España",
 		},
-		"breadcrumb": {
+		contactPoint: {
+			"@type": "ContactPoint",
+			contactType: "customer service",
+			availableLanguage: ["Spanish", "English"],
+		},
+		sameAs: [
+			"https://www.instagram.com/acrobatademente",
+			"https://www.facebook.com/acrobatademente",
+			"https://www.youtube.com/acrobatademente",
+		],
+		hasOfferCatalog: {
+			"@type": "OfferCatalog",
+			name: "Equipos de Acrobacia Profesional",
+			itemListElement: [
+				{
+					"@type": "Offer",
+					itemOffered: {
+						"@type": "Product",
+						name: "Trampolines Profesionales",
+						description:
+							"Trampolines de competición para atletas profesionales",
+					},
+				},
+				{
+					"@type": "Offer",
+					itemOffered: {
+						"@type": "Product",
+						name: "Colchonetas XPE",
+						description: "Colchonetas de espuma XPE de alta densidad",
+					},
+				},
+				{
+					"@type": "Offer",
+					itemOffered: {
+						"@type": "Product",
+						name: "Spring Floors",
+						description: "Suelos con resortes para gimnasia y acrobacia",
+					},
+				},
+			],
+		},
+		breadcrumb: {
 			"@type": "BreadcrumbList",
-			"itemListElement": [
+			itemListElement: [
 				{
 					"@type": "ListItem",
-					"position": 1,
-					"name": "Inicio",
-					"item": "https://admapp.vercel.app"
-				}
-			]
-		}
+					position: 1,
+					name: "Inicio",
+					item: "https://admapp.vercel.app",
+				},
+			],
+		},
 	},
-	
+
 	// Meta tags adicionales para SEO técnico
 	additionalMeta: [
-		{ name: "theme-color", content: "#0f172a" },
-		{ name: "msapplication-TileColor", content: "#0f172a" },
+		{ name: "viewport", content: "width=device-width, initial-scale=1.0" },
+		{ name: "theme-color", content: "#0ea5e9" },
+		{ name: "msapplication-TileColor", content: "#0ea5e9" },
 		{ name: "apple-mobile-web-app-capable", content: "yes" },
-		{ name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-		{ name: "apple-mobile-web-app-title", content: "Acrobata Demente" },
-		{ property: "og:locale", content: "es_ES" },
+		{ name: "apple-mobile-web-app-status-bar-style", content: "default" },
 		{ name: "format-detection", content: "telephone=no" },
-		{ name: "mobile-web-app-capable", content: "yes" },
+		{ name: "google-site-verification", content: "" },
+		{ name: "msvalidate.01", content: "" },
+		{ name: "yandex-verification", content: "" },
+		{ name: "rating", content: "general" },
+		{ name: "distribution", content: "global" },
+		{ name: "language", content: "es" },
+		{ name: "geo.region", content: "ES" },
+		{ name: "geo.placename", content: "España" },
 		{ name: "application-name", content: "Acrobata Demente" },
-		{ name: "msapplication-tooltip", content: "Equipos Acrobáticos Profesionales" }
-	]
+		{ name: "apple-mobile-web-app-title", content: "Acrobata Demente" },
+		{
+			name: "msapplication-tooltip",
+			content: "Equipos Profesionales de Acrobacia",
+		},
+		{
+			name: "google-site-verification",
+			content: "eiSXOzMX5EnmxU-NsHst7aAsd9o-r2g_5DknU4k1QwY",
+		},
+		{ property: "business:contact_data:street_address", content: "" },
+		{ property: "business:contact_data:locality", content: "España" },
+		{ property: "business:contact_data:country_name", content: "España" },
+		{ property: "og:locale", content: "es_ES" },
+		{ property: "og:locale:alternate", content: "en_US" },
+	],
 };
 ---
 

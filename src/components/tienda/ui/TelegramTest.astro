@@ -28,6 +28,13 @@
 		>
 			❤️ Simular Favorito
 		</button>
+
+		<button
+			id="test-region-stats"
+			class="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+		>
+			🌍 Enviar Estadísticas de Región
+		</button>
 	</div>
 
 	<div
@@ -47,6 +54,7 @@
 		testTelegramConnection,
 		sendTestMessage,
 		sendTelegramNotification,
+		sendRegionStats,
 	} from "../../../utils/telegram.js";
 
 	function showResults(message: string, isError = false) {
@@ -118,13 +126,42 @@
 				);
 
 				if (result.success) {
+					const locationInfo = result.location ? 
+						`\n\n🌍 Región detectada: ${result.location.flag} ${result.location.country}\n🏙️ Ciudad: ${result.location.city}` : '';
 					showResults(
-						"✅ Notificación de favorito enviada exitosamente!\n\nRevisa tu chat de Telegram.",
+						`✅ Notificación de favorito enviada exitosamente!${locationInfo}\n\nRevisa tu chat de Telegram.`,
 						false
 					);
 				} else {
 					showResults(
 						`❌ Error al enviar notificación:\n${result.error}`,
+						true
+					);
+				}
+			} catch (error) {
+				const errorMessage =
+					error instanceof Error ? error.message : "Error desconocido";
+				showResults(`❌ Error inesperado:\n${errorMessage}`, true);
+			}
+		});
+
+	// Test region statistics
+	document
+		.getElementById("test-region-stats")
+		?.addEventListener("click", async () => {
+			try {
+				showResults("🔄 Obteniendo estadísticas de región...", false);
+				const result = await sendRegionStats();
+
+				if (result.success && result.location) {
+					const location = result.location;
+					showResults(
+						`✅ Estadísticas de región enviadas exitosamente!\n\n${location.flag} País: ${location.country}\n🏙️ Ciudad: ${location.city}\n🌎 Región: ${location.region}\n📍 Código: ${location.countryCode}\n🌐 IP: ${location.ip}\n\nRevisa tu chat de Telegram.`,
+						false
+					);
+				} else {
+					showResults(
+						`❌ Error al enviar estadísticas:\n${result.error}`,
 						true
 					);
 				}

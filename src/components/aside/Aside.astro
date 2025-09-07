@@ -26,7 +26,6 @@ interface NavItem {
 	priority?: 'high' | 'normal' | 'low';
 	target?: '_blank' | '_self';
 	ariaLabel?: string;
-	keyboardShortcut?: string;
 	disabled?: boolean;
 }
 
@@ -111,7 +110,7 @@ const navigationSections: NavSection[] = [
 	},
 	{
 		title: "Contenido",
-		gradient: "bg-gradient-to-r from-green-300 via-blue-500 to-purple-600",
+		gradient: "bg-gradient-to-r from-green-300 to-blue-600",
 		priority: "normal",
 		items: [
 			{
@@ -141,7 +140,7 @@ const navigationSections: NavSection[] = [
 <!-- Sidebar de navegación optimizado -->
 <aside 
 	id={asideId}
-	class="flex flex-col h-screen p-2 overflow-visible bg-[var(--bg-secondary,transparent)] backdrop-blur-sm will-change-transform"
+	class="flex flex-col h-screen p-2 overflow-visible bg-[var(--bg-secondary,transparent)] backdrop-blur-sm will-change-transform z-50"
 	role="navigation"
 	aria-label="Navegación principal del sitio"
 	aria-describedby={`${asideId}-description`}
@@ -149,7 +148,7 @@ const navigationSections: NavSection[] = [
 >
 	<!-- Descripción oculta para lectores de pantalla -->
 	<div id={`${asideId}-description`} class="sr-only">
-		Navegación principal con {navigationSections.length} secciones. Use las teclas de flecha para navegar entre elementos.
+		Navegación principal con {navigationSections.length} secciones.
 	</div>
 
 	<!-- Área de navegación principal -->
@@ -201,9 +200,7 @@ const navigationSections: NavSection[] = [
 								ariaLabel={item.ariaLabel || `Ir a ${item.text}`}
 								disabled={item.disabled || false}
 							/>
-							{item.keyboardShortcut && (
-								<span class="sr-only">Atajo de teclado: {item.keyboardShortcut}</span>
-							)}
+
 						</li>
 					))}
 				</ul>
@@ -237,76 +234,24 @@ const navigationSections: NavSection[] = [
 	@import url('/src/styles/accessibility.css');
 </style>
 
-<!-- Script de accesibilidad -->
+<!-- Script básico sin funcionalidades de teclado -->
 <script>
-	// Declaración de tipos para TypeScript
-	declare global {
-		interface Window {
-			accessibilityManagerInitialized?: boolean;
+	// Solo funcionalidad básica para mouse y táctil
+	if (typeof window !== 'undefined') {
+		// Mejorar la experiencia visual en hover para dispositivos con mouse
+		const sidebar = document.querySelector('[data-component="aside-navigation"]');
+		if (sidebar) {
+			const links = sidebar.querySelectorAll('a');
+			links.forEach((link) => {
+				// Añadir efectos visuales suaves para interacciones
+				link.addEventListener('mouseenter', () => {
+					link.style.transform = 'scale(1.02)';
+				});
+				
+				link.addEventListener('mouseleave', () => {
+					link.style.transform = 'scale(1)';
+				});
+			});
 		}
 	}
-
-	// Importar y inicializar el manager de accesibilidad
-	if (typeof window !== 'undefined' && !window.accessibilityManagerInitialized) {
-		try {
-			// Inicializar funcionalidad básica de accesibilidad sin importación externa
-			window.accessibilityManagerInitialized = true;
-			
-			// Configurar navegación por teclado básica
-			document.addEventListener('keydown', (e) => {
-				if (e.key === 'Tab') {
-					// Mejorar visibilidad del focus
-					document.body.classList.add('keyboard-navigation');
-				}
-			});
-			
-			document.addEventListener('mousedown', () => {
-				document.body.classList.remove('keyboard-navigation');
-			});
-		} catch (error) {
-			console.warn('No se pudo inicializar la accesibilidad:', error);
-		}
-	}
-
-	// Atajos de teclado específicos para navegación
-	document.addEventListener('keydown', (e) => {
-		if (e.altKey) {
-			switch (e.key.toLowerCase()) {
-				case 'h':
-					e.preventDefault();
-					window.location.href = '/';
-					break;
-				case 'b':
-					e.preventDefault();
-					window.location.href = '/blog';
-					break;
-				case 'c':
-					e.preventDefault();
-					window.location.href = '/config';
-					break;
-				case 'd':
-					e.preventDefault();
-					window.open('https://docs.example.com', '_blank');
-					break;
-			}
-		}
-	});
-
-	// Mejorar la experiencia de navegación con teclado
-	const sidebar = document.querySelector('[data-component="aside-navigation"]');
-	if (sidebar) {
-		// Añadir indicadores de focus mejorados
-		const links = sidebar.querySelectorAll('a');
-		links.forEach((link, index) => {
-			link.addEventListener('focus', () => {
-				link.setAttribute('data-focus-index', index.toString());
-			});
-			
-			link.addEventListener('blur', () => {
-				link.removeAttribute('data-focus-index');
-			});
-		});
-	}
-
-
 </script>

@@ -34,7 +34,7 @@ export interface Product {
   category: string;
   subcategory: string;
   status: "stock" | "import" | "digital";
-  calidad: "premium" | "alta" | "basica";
+  calidad: "premium" | "estandar" | "promedio";
   condition: "nuevo" | "usado";
   tags: string[];
   images: (ImageMetadata | string)[];

@@ -1,0 +1,74 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#334155;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="600" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="80" cy="80" r="40" fill="#0ea5e9" opacity="0.1"/>
+  <circle cx="1120" cy="520" r="60" fill="#8b5cf6" opacity="0.1"/>
+  <rect x="900" y="40" width="200" height="3" fill="url(#accentGradient)" opacity="0.6"/>
+  
+  <!-- Logo -->
+  <circle cx="120" cy="300" r="50" fill="url(#accentGradient)"/>
+  <text x="120" y="310" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="20" font-weight="bold">ADM</text>
+  
+  <!-- Main content -->
+  <text x="220" y="260" fill="white" font-family="Arial, sans-serif" font-size="42" font-weight="bold">
+    ACROBATA DEMENTE
+  </text>
+  <text x="220" y="305" fill="#94a3b8" font-family="Arial, sans-serif" font-size="28" font-weight="600">
+    Equipos Acrobáticos Profesionales
+  </text>
+  <text x="220" y="345" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="20">
+    Trampolines • XPE • Spring Floors • Arneses
+  </text>
+  <text x="220" y="380" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="18">
+    Calidad premium para atletas y gimnasios
+  </text>
+  
+  <!-- Equipment visualization -->
+  <g transform="translate(750, 180)">
+    <!-- Trampoline -->
+    <rect x="0" y="70" width="100" height="6" rx="3" fill="#0ea5e9" opacity="0.8"/>
+    <rect x="8" y="62" width="84" height="3" rx="1.5" fill="#3b82f6" opacity="0.6"/>
+    <circle cx="15" cy="76" r="2" fill="white"/>
+    <circle cx="85" cy="76" r="2" fill="white"/>
+    
+    <!-- XPE layers -->
+    <rect x="0" y="100" width="100" height="15" rx="7.5" fill="#8b5cf6" opacity="0.8"/>
+    <rect x="0" y="125" width="100" height="15" rx="7.5" fill="#a855f7" opacity="0.6"/>
+    <rect x="0" y="150" width="100" height="15" rx="7.5" fill="#c084fc" opacity="0.4"/>
+    
+    <!-- Spring floor indication -->
+    <rect x="120" y="70" width="80" height="95" rx="5" fill="none" stroke="#0ea5e9" stroke-width="2" opacity="0.6"/>
+    <rect x="125" y="75" width="70" height="85" rx="3" fill="#1e293b" opacity="0.8"/>
+    <line x1="130" y1="85" x2="190" y2="85" stroke="#3b82f6" stroke-width="1" opacity="0.6"/>
+    <line x1="130" y1="95" x2="190" y2="95" stroke="#3b82f6" stroke-width="1" opacity="0.6"/>
+    <line x1="130" y1="105" x2="190" y2="105" stroke="#3b82f6" stroke-width="1" opacity="0.6"/>
+  </g>
+  
+  <!-- Social media optimized text -->
+  <text x="220" y="450" fill="url(#accentGradient)" font-family="Arial, sans-serif" font-size="16" font-weight="600">
+    🏆 Equipamiento de competición internacional
+  </text>
+  <text x="220" y="480" fill="url(#accentGradient)" font-family="Arial, sans-serif" font-size="16" font-weight="600">
+    🎯 Usado por atletas profesionales
+  </text>
+  
+  <!-- Website -->
+  <text x="220" y="550" fill="#64748b" font-family="Arial, sans-serif" font-size="14">
+    acrobatademente.com
+  </text>
+</svg>

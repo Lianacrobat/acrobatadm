@@ -5,62 +5,71 @@ import HeroSection from "../components/ui/HeroSection.astro";
 
 const seoData = {
 	title: "Entrenamiento Deportivo - ADM | Rutinas y Programas de Fitness",
-	description: "Descubre rutinas de entrenamiento profesionales, programas de fitness personalizados y técnicas avanzadas para mejorar tu rendimiento deportivo y condición física.",
-	keywords: "entrenamiento deportivo, rutinas fitness, programas entrenamiento, ejercicios deportivos, acondicionamiento físico, entrenamiento funcional, fitness profesional",
+	description:
+		"Descubre rutinas de entrenamiento profesionales, programas de fitness personalizados y técnicas avanzadas para mejorar tu rendimiento deportivo y condición física.",
+	keywords:
+		"entrenamiento deportivo, rutinas fitness, programas entrenamiento, ejercicios deportivos, acondicionamiento físico, entrenamiento funcional, fitness profesional",
 	author: "ADM - Academia de Movimiento",
 	robots: "index, follow",
-	canonicalURL: Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname,
+	canonicalURL: Astro.site
+		? new URL(Astro.url.pathname, Astro.site).href
+		: Astro.url.pathname,
 	// Open Graph
 	ogTitle: "Entrenamiento Deportivo - ADM | Rutinas y Programas de Fitness",
-	ogDescription: "Descubre rutinas de entrenamiento profesionales, programas de fitness personalizados y técnicas avanzadas para mejorar tu rendimiento deportivo.",
+	ogDescription:
+		"Descubre rutinas de entrenamiento profesionales, programas de fitness personalizados y técnicas avanzadas para mejorar tu rendimiento deportivo.",
 	ogImage: "/assets/images/entrenamiento-og.jpg",
 	ogType: "website",
 	// Twitter Cards
 	twitterCard: "summary_large_image",
-	twitterTitle: "Entrenamiento Deportivo - ADM | Rutinas y Programas de Fitness",
-	twitterDescription: "Descubre rutinas de entrenamiento profesionales, programas de fitness personalizados y técnicas avanzadas.",
+	twitterTitle:
+		"Entrenamiento Deportivo - ADM | Rutinas y Programas de Fitness",
+	twitterDescription:
+		"Descubre rutinas de entrenamiento profesionales, programas de fitness personalizados y técnicas avanzadas.",
 	twitterImage: "/assets/images/entrenamiento-twitter.jpg",
 	// Structured Data
 	structuredData: {
 		"@context": "https://schema.org",
 		"@type": "WebPage",
-		"name": "Entrenamiento Deportivo - ADM",
-		"description": "Descubre rutinas de entrenamiento profesionales, programas de fitness personalizados y técnicas avanzadas para mejorar tu rendimiento deportivo y condición física.",
-		"url": Astro.url.href,
-		"mainEntity": {
+		name: "Entrenamiento Deportivo - ADM",
+		description:
+			"Descubre rutinas de entrenamiento profesionales, programas de fitness personalizados y técnicas avanzadas para mejorar tu rendimiento deportivo y condición física.",
+		url: Astro.url.href,
+		mainEntity: {
 			"@type": "Article",
-			"headline": "Entrenamiento Deportivo y Rutinas de Fitness",
-			"description": "Guía completa de entrenamiento deportivo, rutinas de fitness y programas de acondicionamiento físico para atletas y deportistas.",
-			"author": {
+			headline: "Entrenamiento Deportivo y Rutinas de Fitness",
+			description:
+				"Guía completa de entrenamiento deportivo, rutinas de fitness y programas de acondicionamiento físico para atletas y deportistas.",
+			author: {
 				"@type": "Organization",
-				"name": "ADM - Academia de Movimiento"
+				name: "ADM - Academia de Movimiento",
 			},
-			"publisher": {
+			publisher: {
 				"@type": "Organization",
-				"name": "ADM - Academia de Movimiento"
-			}
+				name: "ADM - Academia de Movimiento",
+			},
 		},
-		"audience": {
+		audience: {
 			"@type": "Audience",
-			"audienceType": "Athletes, Fitness Enthusiasts, Sports Professionals"
+			audienceType: "Athletes, Fitness Enthusiasts, Sports Professionals",
 		},
-		"breadcrumb": {
+		breadcrumb: {
 			"@type": "BreadcrumbList",
-			"itemListElement": [
+			itemListElement: [
 				{
 					"@type": "ListItem",
-					"position": 1,
-					"name": "Inicio",
-					"item": Astro.site
+					position: 1,
+					name: "Inicio",
+					item: Astro.site,
 				},
 				{
 					"@type": "ListItem",
-					"position": 2,
-					"name": "Entrenamiento",
-					"item": Astro.url.href
-				}
-			]
-		}
+					position: 2,
+					name: "Entrenamiento",
+					item: Astro.url.href,
+				},
+			],
+		},
 	},
 	// Additional meta tags
 	additionalMetaTags: [
@@ -76,12 +85,12 @@ const seoData = {
 		{ name: "target", content: "all" },
 		{ name: "HandheldFriendly", content: "True" },
 		{ name: "MobileOptimized", content: "320" },
-		{ name: "apple-mobile-web-app-title", content: "ADM Entrenamiento" }
-	]
+		{ name: "apple-mobile-web-app-title", content: "ADM Entrenamiento" },
+	],
 };
 ---
 
-<LayoutSEO 
+<LayoutSEO
 	title={seoData.title}
 	description={seoData.description}
 	keywords={seoData.keywords}
@@ -92,13 +101,13 @@ const seoData = {
 		title: seoData.ogTitle,
 		description: seoData.ogDescription,
 		image: seoData.ogImage,
-		type: seoData.ogType
+		type: seoData.ogType,
 	}}
 	twitter={{
 		card: seoData.twitterCard,
 		title: seoData.twitterTitle,
 		description: seoData.twitterDescription,
-		image: seoData.twitterImage
+		image: seoData.twitterImage,
 	}}
 	structuredData={seoData.structuredData}
 	additionalMeta={seoData.additionalMetaTags}
@@ -106,7 +115,7 @@ const seoData = {
 	<!-- Hero Section -->
 	<section>
 		<HeroSection
-			colorHero="bg-gradient-to-r from-lime-600 to-green-800"
+			colorHero="bg-gradient-to-r from-lime-600 to-green-600"
 			heroTitle="Entrenamiento"
 			heroParagraph="Entrenamiento, rutinas, y mas!"
 			heroImage="catalogo"

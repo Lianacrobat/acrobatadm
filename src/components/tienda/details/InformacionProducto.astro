@@ -22,7 +22,7 @@ const getStatusLabel = () => {
 	switch (product.status) {
 		case "stock":
 			return "En Stock";
-		case "import":
+		case "importado":
 			return "Por Importar";
 		default:
 			return "Digital";
@@ -33,7 +33,7 @@ const getStatusColor = () => {
 	switch (product.status) {
 		case "stock":
 			return "bg-[var(--cajas)] text-[var(--text-color)] border-[var(--border-color)]";
-		case "import":
+		case "importado":
 			return "bg-[var(--cajas-light)] text-[var(--text-color-soft)] border-[var(--border-color)]";
 		default:
 			return "bg-[var(--cajas-light)] text-[var(--text-color-soft)] border-[var(--border-color-light)]";
@@ -44,7 +44,7 @@ const getStatusDot = () => {
 	switch (product.status) {
 		case "stock":
 			return "bg-[var(--text-color)]";
-		case "import":
+		case "importado":
 			return "bg-[var(--text-color-soft)]";
 		default:
 			return "bg-[var(--text-color-light)]";
@@ -63,6 +63,45 @@ const getConditionDot = () =>
 	product.condition === "nuevo"
 		? "bg-[var(--text-color)]"
 		: "bg-[var(--text-color-soft)]";
+
+const getQualityLabel = () => {
+	switch (product.calidad) {
+		case "premium":
+			return "Premium";
+		case "estandar":
+			return "Estándar";
+		case "promedio":
+			return "Promedio";
+		default:
+			return "Estándar";
+	}
+};
+
+const getQualityColor = () => {
+	switch (product.calidad) {
+		case "premium":
+			return "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white border-yellow-500";
+		case "estandar":
+			return "bg-[var(--cajas)] text-[var(--text-color)] border-[var(--border-color)]";
+		case "promedio":
+			return "bg-[var(--cajas-light)] text-[var(--text-color-soft)] border-[var(--border-color-light)]";
+		default:
+			return "bg-[var(--cajas)] text-[var(--text-color)] border-[var(--border-color)]";
+	}
+};
+
+const getQualityDot = () => {
+	switch (product.calidad) {
+		case "premium":
+			return "bg-yellow-500";
+		case "estandar":
+			return "bg-[var(--text-color)]";
+		case "promedio":
+			return "bg-[var(--text-color-soft)]";
+		default:
+			return "bg-[var(--text-color)]";
+	}
+};
 ---
 
 <div class="bg-[var(--cajas)] p-4 rounded-xl space-y-4">
@@ -123,6 +162,14 @@ const getConditionDot = () =>
 				<div class={`w-1.5 h-1.5 rounded-full mr-1.5 ${getConditionDot()}`}>
 				</div>
 				{getConditionLabel()}
+			</div>
+			<!-- Calidad del producto -->
+			<div
+				class={`inline-flex items-center px-2 py-1 rounded-full text-xs md:text-base font-medium border ${getQualityColor()}`}
+			>
+				<div class={`w-1.5 h-1.5 rounded-full mr-1.5 ${getQualityDot()}`}>
+				</div>
+				{getQualityLabel()}
 			</div>
 		</div>
 	</div>

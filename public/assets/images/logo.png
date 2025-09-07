@@ -1,0 +1,58 @@
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="150" cy="150" r="140" fill="url(#logoGradient)" filter="url(#shadow)"/>
+  
+  <!-- Inner design elements -->
+  <circle cx="150" cy="150" r="120" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
+  <circle cx="150" cy="150" r="100" fill="none" stroke="white" stroke-width="1" opacity="0.2"/>
+  
+  <!-- Acrobatic elements -->
+  <!-- Trampoline representation -->
+  <ellipse cx="150" cy="200" rx="60" ry="8" fill="white" opacity="0.8"/>
+  <ellipse cx="150" cy="195" rx="50" ry="4" fill="#e2e8f0" opacity="0.6"/>
+  
+  <!-- Gymnast figure (abstract) -->
+  <g transform="translate(150, 120)">
+    <!-- Head -->
+    <circle cx="0" cy="-20" r="8" fill="white"/>
+    <!-- Body -->
+    <rect x="-3" y="-12" width="6" height="25" rx="3" fill="white"/>
+    <!-- Arms -->
+    <rect x="-15" y="-8" width="12" height="4" rx="2" fill="white" transform="rotate(-30)"/>
+    <rect x="3" y="-8" width="12" height="4" rx="2" fill="white" transform="rotate(30)"/>
+    <!-- Legs -->
+    <rect x="-6" y="13" width="4" height="15" rx="2" fill="white" transform="rotate(-15)"/>
+    <rect x="2" y="13" width="4" height="15" rx="2" fill="white" transform="rotate(15)"/>
+  </g>
+  
+  <!-- Main text -->
+  <text x="150" y="260" text-anchor="middle" fill="url(#textGradient)" font-family="Arial, sans-serif" font-size="24" font-weight="bold">
+    ACROBATA
+  </text>
+  <text x="150" y="285" text-anchor="middle" fill="url(#textGradient)" font-family="Arial, sans-serif" font-size="24" font-weight="bold">
+    DEMENTE
+  </text>
+  
+  <!-- Decorative stars -->
+  <g fill="white" opacity="0.6">
+    <polygon points="80,80 82,86 88,86 83,90 85,96 80,92 75,96 77,90 72,86 78,86" />
+    <polygon points="220,80 222,86 228,86 223,90 225,96 220,92 215,96 217,90 212,86 218,86" />
+    <polygon points="80,220 82,226 88,226 83,230 85,236 80,232 75,236 77,230 72,226 78,226" />
+    <polygon points="220,220 222,226 228,226 223,230 225,236 220,232 215,236 217,230 212,226 218,226" />
+  </g>
+</svg>

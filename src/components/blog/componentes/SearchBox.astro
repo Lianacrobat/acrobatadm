@@ -4,55 +4,84 @@
 
 <div class="search-container relative mb-6">
 	<div class="relative">
-		<input 
+		<input
 			id="search-input"
-			type="text" 
+			type="text"
 			placeholder="Buscar deportes, actividades o palabras clave..."
 			class="search-input"
 			autocomplete="off"
 			aria-label="Buscar deportes"
 			aria-describedby="search-help"
 		/>
-		
+
 		<!-- Icono de búsqueda -->
 		<div class="search-icon">
-			<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+			<svg
+				class="icon"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+				></path>
 			</svg>
 		</div>
-		
+
 		<!-- Botón de limpiar -->
-		<button 
+		<button
 			id="clear-search"
 			class="clear-button"
 			aria-label="Limpiar búsqueda"
 			type="button"
 		>
-			<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+			<svg
+				class="icon"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M6 18L18 6M6 6l12 12"
+				></path>
 			</svg>
 		</button>
 	</div>
-	
+
 	<!-- Sugerencias de búsqueda -->
-	<div 
+	<div
 		id="search-suggestions"
 		class="suggestions-container hidden"
 		role="listbox"
 		aria-label="Sugerencias de búsqueda"
 	>
-		<div id="suggestions-list" class="suggestions-list">
+		<div
+			id="suggestions-list"
+			class="suggestions-list"
+		>
 			<!-- Las sugerencias se generarán dinámicamente -->
 		</div>
 	</div>
-	
+
 	<!-- Texto de ayuda -->
-	<div id="search-help" class="search-help hidden">
+	<div
+		id="search-help"
+		class="search-help hidden"
+	>
 		Presiona Enter para buscar o selecciona una sugerencia
 	</div>
-	
+
 	<!-- Indicador de resultados -->
-	<div id="search-results-count" class="results-count hidden">
+	<div
+		id="search-results-count"
+		class="results-count hidden"
+	>
 		<span id="results-count">0</span> resultados encontrados
 	</div>
 </div>
@@ -198,7 +227,7 @@
 	}
 
 	.search-loading::after {
-		content: '';
+		content: "";
 		width: 1rem;
 		height: 1rem;
 		border: 2px solid var(--accent-color-soft);
@@ -208,8 +237,12 @@
 	}
 
 	@keyframes spin {
-		from { transform: rotate(0deg); }
-		to { transform: rotate(360deg); }
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	.hidden {
@@ -221,7 +254,7 @@
 		.search-container {
 			margin-bottom: 1rem;
 		}
-		
+
 		.search-input {
 			padding: 0.75rem 2.5rem 0.75rem 3rem;
 			font-size: 0.875rem;
@@ -230,8 +263,8 @@
 </style>
 
 <script>
-	import filterStore from '../../../utils/filterStore.js';
-	import deporteFilter from '../../../utils/deporteFilter.js';
+	import filterStore from "../../../utils/filterStore.js";
+	import deporteFilter from "../../../utils/deporteFilter.js";
 
 	// Variables para el manejo de la búsqueda
 	let searchTimeout: number | undefined;
@@ -250,26 +283,34 @@
 
 	// Función para inicializar la búsqueda
 	function initializeSearch() {
-		searchInput = document.getElementById('search-input') as HTMLInputElement | null;
-		clearButton = document.getElementById('clear-search') as HTMLButtonElement | null;
-		suggestionsContainer = document.getElementById('search-suggestions');
-		suggestionsList = document.getElementById('suggestions-list');
-		searchHelp = document.getElementById('search-help');
-		resultsCount = document.getElementById('search-results-count');
-		resultsCountElement = document.getElementById('results-count');
+		searchInput = document.getElementById(
+			"search-input"
+		) as HTMLInputElement | null;
+		clearButton = document.getElementById(
+			"clear-search"
+		) as HTMLButtonElement | null;
+		suggestionsContainer = document.getElementById("search-suggestions");
+		suggestionsList = document.getElementById("suggestions-list");
+		searchHelp = document.getElementById("search-help");
+		resultsCount = document.getElementById("search-results-count");
+		resultsCountElement = document.getElementById("results-count");
 
 		if (!searchInput) return;
 
 		// Event listeners
-		searchInput.addEventListener('input', handleSearchInput);
-		searchInput.addEventListener('keydown', handleKeyNavigation);
-		searchInput.addEventListener('focus', handleSearchFocus);
-		searchInput.addEventListener('blur', handleSearchBlur);
-		clearButton?.addEventListener('click', clearSearch);
+		searchInput.addEventListener("input", handleSearchInput);
+		searchInput.addEventListener("keydown", handleKeyNavigation);
+		searchInput.addEventListener("focus", handleSearchFocus);
+		searchInput.addEventListener("blur", handleSearchBlur);
+		clearButton?.addEventListener("click", clearSearch);
 
 		// Cerrar sugerencias al hacer clic fuera
-		document.addEventListener('click', (e: Event) => {
-			if (e.target && (e.target as HTMLElement).closest && !(e.target as HTMLElement).closest('.search-container')) {
+		document.addEventListener("click", (e: Event) => {
+			if (
+				e.target &&
+				(e.target as HTMLElement).closest &&
+				!(e.target as HTMLElement).closest(".search-container")
+			) {
 				hideSuggestions();
 			}
 		});
@@ -286,7 +327,7 @@
 	function handleSearchInput(event: Event): void {
 		const target = event.target as HTMLInputElement;
 		const query = target.value.trim();
-		
+
 		// Mostrar/ocultar botón de limpiar
 		if (query.length > 0) {
 			showClearButton();
@@ -312,7 +353,7 @@
 	// Realizar búsqueda
 	function performSearch(query: string): void {
 		if (isSearching) return;
-		
+
 		isSearching = true;
 		showLoadingIndicator();
 
@@ -323,7 +364,7 @@
 		setTimeout(() => {
 			hideLoadingIndicator();
 			isSearching = false;
-			
+
 			// Actualizar contador de resultados
 			updateResultsCount();
 		}, 150);
@@ -332,7 +373,7 @@
 	// Generar sugerencias basadas en la consulta
 	function generateSuggestions(query: string): void {
 		suggestions = deporteFilter.getSuggestions(query, 8) as string[];
-		
+
 		if (suggestions.length > 0) {
 			renderSuggestions();
 			showSuggestions();
@@ -345,7 +386,9 @@
 	function renderSuggestions(): void {
 		if (!suggestionsList) return;
 
-		suggestionsList.innerHTML = suggestions.map((suggestion, index) => `
+		suggestionsList.innerHTML = suggestions
+			.map(
+				(suggestion, index) => `
 			<div 
 				class="suggestion-item" 
 				data-index="${index}"
@@ -353,54 +396,73 @@
 				role="option"
 				aria-selected="false"
 			>
-				<span class="suggestion-text">${highlightMatch(suggestion, searchInput?.value || '')}</span>
+				<span class="suggestion-text">${highlightMatch(suggestion, searchInput?.value || "")}</span>
 			</div>
-		`).join('');
+		`
+			)
+			.join("");
 
 		// Agregar event listeners a las sugerencias
-		suggestionsList.querySelectorAll('.suggestion-item').forEach(item => {
+		suggestionsList.querySelectorAll(".suggestion-item").forEach((item) => {
 			const htmlItem = item as HTMLElement;
-			htmlItem.addEventListener('click', () => selectSuggestion(htmlItem.dataset.value || ''));
-			htmlItem.addEventListener('mouseenter', () => highlightSuggestion(parseInt(htmlItem.dataset.index || '0')));
+			htmlItem.addEventListener("click", () =>
+				selectSuggestion(htmlItem.dataset.value || "")
+			);
+			htmlItem.addEventListener("mouseenter", () =>
+				highlightSuggestion(parseInt(htmlItem.dataset.index || "0"))
+			);
 		});
 	}
 
 	// Resaltar coincidencias en las sugerencias
 	function highlightMatch(text: string, query: string): string {
 		if (!query) return text;
-		
-		const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-		return text.replace(regex, '<strong>$1</strong>');
+
+		const regex = new RegExp(
+			`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+			"gi"
+		);
+		return text.replace(regex, "<strong>$1</strong>");
 	}
 
 	// Manejar navegación por teclado
 	function handleKeyNavigation(event: KeyboardEvent): void {
-		if (!suggestionsContainer || !suggestionsContainer.classList.contains('show')) return;
+		if (
+			!suggestionsContainer ||
+			!suggestionsContainer.classList.contains("show")
+		)
+			return;
 
 		switch (event.key) {
-			case 'ArrowDown':
+			case "ArrowDown":
 				event.preventDefault();
-				currentSuggestionIndex = Math.min(currentSuggestionIndex + 1, suggestions.length - 1);
+				currentSuggestionIndex = Math.min(
+					currentSuggestionIndex + 1,
+					suggestions.length - 1
+				);
 				highlightSuggestion(currentSuggestionIndex);
 				break;
-				
-			case 'ArrowUp':
+
+			case "ArrowUp":
 				event.preventDefault();
 				currentSuggestionIndex = Math.max(currentSuggestionIndex - 1, -1);
 				highlightSuggestion(currentSuggestionIndex);
 				break;
-				
-			case 'Enter':
+
+			case "Enter":
 				event.preventDefault();
-				if (currentSuggestionIndex >= 0 && suggestions[currentSuggestionIndex]) {
+				if (
+					currentSuggestionIndex >= 0 &&
+					suggestions[currentSuggestionIndex]
+				) {
 					selectSuggestion(suggestions[currentSuggestionIndex]);
 				} else if (searchInput) {
 					performSearch(searchInput.value.trim());
 					hideSuggestions();
 				}
 				break;
-				
-			case 'Escape':
+
+			case "Escape":
 				hideSuggestions();
 				if (searchInput) searchInput.blur();
 				break;
@@ -410,15 +472,15 @@
 	// Resaltar sugerencia específica
 	function highlightSuggestion(index: number): void {
 		if (!suggestionsList) return;
-		const items = suggestionsList.querySelectorAll('.suggestion-item');
-		
+		const items = suggestionsList.querySelectorAll(".suggestion-item");
+
 		items.forEach((item, i) => {
 			if (i === index) {
-				item.classList.add('highlighted');
-				item.setAttribute('aria-selected', 'true');
+				item.classList.add("highlighted");
+				item.setAttribute("aria-selected", "true");
 			} else {
-				item.classList.remove('highlighted');
-				item.setAttribute('aria-selected', 'false');
+				item.classList.remove("highlighted");
+				item.setAttribute("aria-selected", "false");
 			}
 		});
 	}
@@ -436,9 +498,9 @@
 	// Mostrar/ocultar elementos de la UI
 	function showSuggestions(): void {
 		if (suggestionsContainer) {
-			suggestionsContainer.classList.remove('hidden');
+			suggestionsContainer.classList.remove("hidden");
 			setTimeout(() => {
-				if (suggestionsContainer) suggestionsContainer.classList.add('show');
+				if (suggestionsContainer) suggestionsContainer.classList.add("show");
 			}, 10);
 		}
 		currentSuggestionIndex = -1;
@@ -446,9 +508,9 @@
 
 	function hideSuggestions(): void {
 		if (suggestionsContainer) {
-			suggestionsContainer.classList.remove('show');
+			suggestionsContainer.classList.remove("show");
 			setTimeout(() => {
-				if (suggestionsContainer) suggestionsContainer.classList.add('hidden');
+				if (suggestionsContainer) suggestionsContainer.classList.add("hidden");
 			}, 200);
 		}
 		currentSuggestionIndex = -1;
@@ -456,26 +518,26 @@
 
 	function showClearButton(): void {
 		if (clearButton) {
-			clearButton.classList.add('show');
+			clearButton.classList.add("show");
 		}
 	}
 
 	function hideClearButton(): void {
 		if (clearButton) {
-			clearButton.classList.remove('show');
+			clearButton.classList.remove("show");
 		}
 	}
 
 	function showLoadingIndicator(): void {
 		if (!searchInput || !searchInput.parentNode) return;
-		const loadingDiv = document.createElement('div');
-		loadingDiv.className = 'search-loading';
-		loadingDiv.id = 'search-loading';
+		const loadingDiv = document.createElement("div");
+		loadingDiv.className = "search-loading";
+		loadingDiv.id = "search-loading";
 		searchInput.parentNode.appendChild(loadingDiv);
 	}
 
 	function hideLoadingIndicator(): void {
-		const loading = document.getElementById('search-loading');
+		const loading = document.getElementById("search-loading");
 		if (loading) {
 			loading.remove();
 		}
@@ -484,8 +546,8 @@
 	// Limpiar búsqueda
 	function clearSearch(): void {
 		if (searchInput) {
-			searchInput.value = '';
-			filterStore.setSearchQuery('');
+			searchInput.value = "";
+			filterStore.setSearchQuery("");
 			hideClearButton();
 			hideSuggestions();
 			hideResultsCount();
@@ -496,9 +558,9 @@
 	// Manejar eventos de foco
 	function handleSearchFocus() {
 		if (searchHelp) {
-			searchHelp.classList.remove('hidden');
+			searchHelp.classList.remove("hidden");
 		}
-		
+
 		if (searchInput && searchInput.value.length >= 2) {
 			generateSuggestions(searchInput.value);
 		}
@@ -508,7 +570,7 @@
 		// Delay para permitir clics en sugerencias
 		setTimeout(() => {
 			if (searchHelp) {
-				searchHelp.classList.add('hidden');
+				searchHelp.classList.add("hidden");
 			}
 		}, 150);
 	}
@@ -519,33 +581,40 @@
 		const results = deporteFilter.filterDeportes({
 			activeCategories: state.activeCategories,
 			searchQuery: state.searchQuery,
-			sortBy: state.sortBy
+			sortBy: state.sortBy,
 		});
 
 		if (resultsCountElement && resultsCount) {
 			resultsCountElement.textContent = results.length;
-			
+
 			if (state.searchQuery || state.activeCategories.length > 0) {
-				resultsCount.classList.remove('hidden');
+				resultsCount.classList.remove("hidden");
 			} else {
-				resultsCount.classList.add('hidden');
+				resultsCount.classList.add("hidden");
 			}
 		}
 	}
 
 	function hideResultsCount(): void {
 		if (resultsCount) {
-			resultsCount.classList.add('hidden');
+			resultsCount.classList.add("hidden");
 		}
 	}
 
 	// Inicializar cuando el DOM esté listo
-	document.addEventListener('DOMContentLoaded', () => {
+	document.addEventListener("DOMContentLoaded", () => {
 		initializeSearch();
-		
+
 		// Suscribirse a cambios del store para actualizar contador
 		filterStore.subscribe((change: any) => {
-			if (['CATEGORY_CHANGED', 'SEARCH_CHANGED', 'SORT_CHANGED', 'FILTERS_CLEARED'].includes(change.type)) {
+			if (
+				[
+					"CATEGORY_CHANGED",
+					"SEARCH_CHANGED",
+					"SORT_CHANGED",
+					"FILTERS_CLEARED",
+				].includes(change.type)
+			) {
 				updateResultsCount();
 			}
 		});

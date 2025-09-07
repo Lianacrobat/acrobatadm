@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://acrobatademente.com/sitemap.xml
+
+# Disallow API routes
+Disallow: /api/
+
+# Allow important pages
+Allow: /catalogo
+Allow: /tienda
+Allow: /producto/
+Allow: /blog
+Allow: /comunidad
+Allow: /entrenamiento
+Allow: /nutricion
+Allow: /primeros-pasos
+Allow: /Variantes/
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1

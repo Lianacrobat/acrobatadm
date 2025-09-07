@@ -2,12 +2,11 @@
 import { defineConfig } from 'astro/config';
 import { resolve } from 'path';
 import vercel from '@astrojs/vercel';
-
-import tailwindcss from '@tailwindcss/vite';
+import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [],
+  integrations: [tailwind()],
   
   // Configuración para producción en Vercel
   output: 'server',
@@ -50,7 +49,6 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()],
     resolve: {
       alias: {
         '@images': resolve('./src/assets/images'),
@@ -62,37 +60,10 @@ export default defineConfig({
         '@middleware': resolve('./src/middleware')
       },
     },
-    css: {
-      // Generar CSS independiente
-      extract: true,
-    },
-    build: {
-      // Optimizaciones para el build
-      cssCodeSplit: true,
-      rollupOptions: {
-        output: {
-          // Generar archivos CSS separados
-          assetFileNames: (assetInfo) => {
-            if (assetInfo.name?.endsWith('.css')) {
-              return 'assets/css/[name]-[hash][extname]';
-            }
-            return 'assets/[name]-[hash][extname]';
-          },
-          // Separar chunks para mejor seguridad y caching
-          manualChunks: {
-            'vendor': ['astro']
-          }
-        },
-      },
-      // Minificar para ofuscar código en producción
-      minify: true // Usar minificación básica de Vite
-    },
-    // Configuración de desarrollo removida (movida al nivel raíz)
   },
 
   // Configuración de build
   build: {
-    // Generar CSS independiente
-    inlineStylesheets: 'never',
+    inlineStylesheets: 'auto',
   },
 });
