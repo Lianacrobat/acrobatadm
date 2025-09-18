@@ -14,79 +14,83 @@ import HeroSection from "@components/ui/HeroSection.astro";
 	lang="es"
 	og={{
 		title: "Comunidad Acrobática - Conecta con Atletas y Artistas del Mundo",
-		description: "La red social más grande de acróbatas en español. Comparte experiencias, conecta con profesionales y crece en tu disciplina acrobática.",
+		description:
+			"La red social más grande de acróbatas en español. Comparte experiencias, conecta con profesionales y crece en tu disciplina acrobática.",
 		image: "https://acrobatademente.com/heroBackground/comunidad.jpg",
 		url: "https://acrobatademente.com/comunidad",
 		type: "website",
-		site_name: "Acrobata Demente"
+		site_name: "Acrobata Demente",
 	}}
 	twitter={{
 		card: "summary_large_image",
 		site: "@AcrobataDemente",
 		creator: "@AcrobataDemente",
 		title: "Comunidad Acrobática - Conecta con Atletas y Artistas",
-		description: "Únete a la red de acróbatas más grande en español. Conecta, aprende y crece con profesionales del mundo acrobático.",
-		image: "https://acrobatademente.com/heroBackground/comunidad.jpg"
+		description:
+			"Únete a la red de acróbatas más grande en español. Conecta, aprende y crece con profesionales del mundo acrobático.",
+		image: "https://acrobatademente.com/heroBackground/comunidad.jpg",
 	}}
 	structuredData={{
 		"@context": "https://schema.org",
 		"@type": "WebPage",
-		"name": "Comunidad Acrobática",
-		"description": "Plataforma de conexión para atletas, artistas y acróbatas profesionales y aficionados.",
-		"url": "https://acrobatademente.com/comunidad",
-		"inLanguage": "es-ES",
-		"isPartOf": {
+		name: "Comunidad Acrobática",
+		description:
+			"Plataforma de conexión para atletas, artistas y acróbatas profesionales y aficionados.",
+		url: "https://acrobatademente.com/comunidad",
+		inLanguage: "es-ES",
+		isPartOf: {
 			"@type": "WebSite",
-			"name": "Acrobata Demente",
-			"url": "https://acrobatademente.com"
+			name: "Acrobata Demente",
+			url: "https://acrobatademente.com",
 		},
-		"mainEntity": {
+		mainEntity: {
 			"@type": "Organization",
-			"name": "Comunidad Acrobata Demente",
-			"description": "Red social y comunidad de acróbatas, atletas y artistas de habla hispana",
-			"url": "https://acrobatademente.com/comunidad",
-			"sameAs": [
+			name: "Comunidad Acrobata Demente",
+			description:
+				"Red social y comunidad de acróbatas, atletas y artistas de habla hispana",
+			url: "https://acrobatademente.com/comunidad",
+			sameAs: [
 				"https://twitter.com/AcrobataDemente",
-				"https://instagram.com/acrobatademente"
+				"https://instagram.com/acrobatademente",
 			],
-			"memberOf": {
+			memberOf: {
 				"@type": "Organization",
-				"name": "Acrobata Demente"
+				name: "Acrobata Demente",
 			},
-			"knowsAbout": [
+			knowsAbout: [
 				"Acrobacia",
 				"Circo",
 				"Gimnasia",
 				"Artes Marciales",
 				"Parkour",
-				"Danza Aérea"
-			]
+				"Danza Aérea",
+			],
 		},
-		"audience": {
+		audience: {
 			"@type": "Audience",
-			"audienceType": "Athletes, Artists, Acrobats",
-			"geographicArea": {
+			audienceType: "Athletes, Artists, Acrobats",
+			geographicArea: {
 				"@type": "Place",
-				"name": "Worldwide Spanish-speaking community"
-			}
+				name: "Worldwide Spanish-speaking community",
+			},
 		},
-		"breadcrumb": {
+		breadcrumb: {
 			"@type": "BreadcrumbList",
-			"itemListElement": [
+			itemListElement: [
 				{
 					"@type": "ListItem",
-					"position": 1,
-					"name": "Inicio",
-					"item": "https://acrobatademente.com"
+					position: 1,
+					name: "Inicio",
+					item: "https://acrobatademente.com",
 				},
 				{
 					"@type": "ListItem",
-					"position": 2,
-					"name": "Comunidad",
-					"item": "https://acrobatademente.com/comunidad"
-				}
-			]
-		}
+					position: 2,
+					name: "Comunidad",
+					item: "https://acrobatademente.com/comunidad",
+				},
+			],
+		},
 	}}
 	additionalMeta={[
 		{ name: "theme-color", content: "#0ea5e9" },
@@ -101,7 +105,7 @@ import HeroSection from "@components/ui/HeroSection.astro";
 		{ name: "HandheldFriendly", content: "True" },
 		{ name: "MobileOptimized", content: "320" },
 		{ name: "rating", content: "General" },
-		{ name: "distribution", content: "Global" }
+		{ name: "distribution", content: "Global" },
 	]}
 >
 	<section class="relative overflow-visible">
@@ -112,5 +116,7 @@ import HeroSection from "@components/ui/HeroSection.astro";
 			heroImage="comunidad"
 		/>
 	</section>
-	<ComunidadFather />
+	<section class="container mx-auto pt-4">
+		<ComunidadFather />
+	</section>
 </LayoutSEO>

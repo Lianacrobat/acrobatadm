@@ -13,80 +13,84 @@ import HeroSection from "../components/ui/HeroSection.astro";
 	lang="es"
 	og={{
 		title: "Primeros Pasos - Tu Guía Completa en el Mundo de la Acrobacia",
-		description: "Explora el catálogo 2025, únete a la comunidad, descubre consejos de nutrición y variantes acrobáticas. Todo lo que necesitas para comenzar tu journey acrobático.",
+		description:
+			"Explora el catálogo 2025, únete a la comunidad, descubre consejos de nutrición y variantes acrobáticas. Todo lo que necesitas para comenzar tu journey acrobático.",
 		image: "https://acrobatademente.com/heroBackground/primerosPasos.webp",
 		url: "https://acrobatademente.com/primeros-pasos",
 		type: "website",
-		site_name: "Acrobata Demente"
+		site_name: "Acrobata Demente",
 	}}
 	twitter={{
 		card: "summary_large_image",
 		site: "@AcrobataDemente",
 		creator: "@AcrobataDemente",
 		title: "Primeros Pasos - Guía Completa para Acróbatas",
-		description: "Descubre recursos esenciales: catálogo 2025, comunidad, nutrición y variantes acrobáticas para artistas y atletas.",
-		image: "https://acrobatademente.com/heroBackground/primerosPasos.webp"
+		description:
+			"Descubre recursos esenciales: catálogo 2025, comunidad, nutrición y variantes acrobáticas para artistas y atletas.",
+		image: "https://acrobatademente.com/heroBackground/primerosPasos.webp",
 	}}
 	structuredData={{
 		"@context": "https://schema.org",
 		"@type": "WebPage",
-		"name": "Primeros Pasos - Guía para Acróbatas",
-		"description": "Página de recursos esenciales para artistas, atletas y acróbatas que comienzan su journey en el mundo acrobático.",
-		"url": "https://acrobatademente.com/primeros-pasos",
-		"inLanguage": "es-ES",
-		"isPartOf": {
+		name: "Primeros Pasos - Guía para Acróbatas",
+		description:
+			"Página de recursos esenciales para artistas, atletas y acróbatas que comienzan su journey en el mundo acrobático.",
+		url: "https://acrobatademente.com/primeros-pasos",
+		inLanguage: "es-ES",
+		isPartOf: {
 			"@type": "WebSite",
-			"name": "Acrobata Demente",
-			"url": "https://acrobatademente.com"
+			name: "Acrobata Demente",
+			url: "https://acrobatademente.com",
 		},
-		"mainEntity": {
+		mainEntity: {
 			"@type": "ItemList",
-			"name": "Recursos para Acróbatas",
-			"description": "Lista completa de recursos disponibles para artistas y atletas acrobáticos",
-			"itemListElement": [
+			name: "Recursos para Acróbatas",
+			description:
+				"Lista completa de recursos disponibles para artistas y atletas acrobáticos",
+			itemListElement: [
 				{
 					"@type": "ListItem",
-					"position": 1,
-					"name": "Catálogo 2025",
-					"description": "Productos, servicios y herramientas acrobáticas"
+					position: 1,
+					name: "Catálogo 2025",
+					description: "Productos, servicios y herramientas acrobáticas",
 				},
 				{
 					"@type": "ListItem",
-					"position": 2,
-					"name": "Comunidad",
-					"description": "Red de artistas y atletas acrobáticos"
+					position: 2,
+					name: "Comunidad",
+					description: "Red de artistas y atletas acrobáticos",
 				},
 				{
 					"@type": "ListItem",
-					"position": 3,
-					"name": "Nutrición Deportiva",
-					"description": "Consejos nutricionales para acróbatas"
+					position: 3,
+					name: "Nutrición Deportiva",
+					description: "Consejos nutricionales para acróbatas",
 				},
 				{
 					"@type": "ListItem",
-					"position": 4,
-					"name": "Variantes Acrobáticas",
-					"description": "Diferentes disciplinas y estilos acrobáticos"
-				}
-			]
+					position: 4,
+					name: "Variantes Acrobáticas",
+					description: "Diferentes disciplinas y estilos acrobáticos",
+				},
+			],
 		},
-		"breadcrumb": {
+		breadcrumb: {
 			"@type": "BreadcrumbList",
-			"itemListElement": [
+			itemListElement: [
 				{
 					"@type": "ListItem",
-					"position": 1,
-					"name": "Inicio",
-					"item": "https://acrobatademente.com"
+					position: 1,
+					name: "Inicio",
+					item: "https://acrobatademente.com",
 				},
 				{
 					"@type": "ListItem",
-					"position": 2,
-					"name": "Primeros Pasos",
-					"item": "https://acrobatademente.com/primeros-pasos"
-				}
-			]
-		}
+					position: 2,
+					name: "Primeros Pasos",
+					item: "https://acrobatademente.com/primeros-pasos",
+				},
+			],
+		},
 	}}
 	additionalMeta={[
 		{ name: "theme-color", content: "#0ea5e9" },
@@ -99,7 +103,7 @@ import HeroSection from "../components/ui/HeroSection.astro";
 		{ name: "coverage", content: "Worldwide" },
 		{ name: "target", content: "athletes, artists, acrobats" },
 		{ name: "HandheldFriendly", content: "True" },
-		{ name: "MobileOptimized", content: "320" }
+		{ name: "MobileOptimized", content: "320" },
 	]}
 >
 	<!-- Hero Section -->
@@ -115,7 +119,7 @@ import HeroSection from "../components/ui/HeroSection.astro";
 	<section class="max-w-6xl mx-auto py-8">
 		<!-- Mensaje de bienvenida - ancho completo -->
 		<div class="w-full mb-8">
-			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 md:p-8 space-y-4">
+			<div class="md:p-8 space-y-4">
 				<h1 class="text-3xl md:text-4xl font-bold">Hola! 👋</h1>
 				<p>
 					¡Bienvenido/a a Acrobata Demente! El primer sitio en español con
@@ -124,164 +128,276 @@ import HeroSection from "../components/ui/HeroSection.astro";
 			</div>
 		</div>
 
-		<!-- Grid de recursos - cuadrícula perfecta -->
-		<div
-			class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr"
-		>
-			<!-- Catálogo -->
-			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full">
-				<div class="flex items-center gap-3 mb-4">
-					<svg
-						class="w-6 h-6 flex-shrink-0"
-						aria-hidden="true"
-					>
-						<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#tienda`}
-						></use>
-					</svg>
-					<h2 class="text-xl font-bold text-[var(--accent-color)]">Catálogo</h2>
-				</div>
-				<p class="text-sm flex-1">
-					Explora el <a
-						href="/catalogo"
-						class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
-						>Catálogo 2025</a
-					> con productos, servicios, herramientas y más. Filtra por categorías y
-					subcategorías, y descubre todo lo que tenemos para ti.
+		<!-- Secciones organizadas por categorías del aside -->
+
+		<!-- SECCIÓN PRINCIPAL -->
+		<div class="mb-12">
+			<div class="mb-6">
+				<h2
+					class="text-2xl font-bold text-[var(--accent-color)] mb-2 flex items-center gap-2"
+				>
+					🏠 Principal
+				</h2>
+				<p class="text-[var(--text-color-soft)] text-sm">
+					Páginas principales y comunidad
 				</p>
 			</div>
-			<!-- Destacados -->
-			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full">
-				<div class="flex items-center gap-3 mb-4">
-					<svg
-						class="w-6 h-6 flex-shrink-0"
-						aria-hidden="true"
-					>
-						<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#productos`}
-						></use>
-					</svg>
-					<h2 class="text-xl font-bold text-[var(--accent-color)]">
-						Destacados
-					</h2>
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+				<!-- Comunidad -->
+				<div
+					class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full"
+				>
+					<div class="flex items-center gap-3 mb-4">
+						<svg
+							class="w-6 h-6 flex-shrink-0"
+							aria-hidden="true"
+						>
+							<use
+								href={`${import.meta.env.BASE_URL}icons/sprite.svg#comunidad`}
+							></use>
+						</svg>
+						<h3 class="text-xl font-bold text-[var(--accent-color)]">
+							Comunidad
+						</h3>
+					</div>
+					<p class="text-sm flex-1">
+						Únete a nuestra <a
+							href="/comunidad"
+							class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
+							>comunidad</a
+						> de artistas y atletas. Comparte experiencias, conecta con otros profesionales
+						y mantente actualizado con las últimas tendencias.
+					</p>
 				</div>
-				<p class="text-sm flex-1">
-					Encuentra una selección de <span class="font-semibold"
-						>productos recomendados</span
-					> y populares para descubrir lo mejor de la tienda rápidamente.
+			</div>
+		</div>
+
+		<!-- SECCIÓN CATÁLOGO -->
+		<div class="mb-12">
+			<div class="mb-6">
+				<h2
+					class="text-2xl font-bold text-[var(--accent-color)] mb-2 flex items-center gap-2"
+				>
+					🛒 Catálogo
+				</h2>
+				<p class="text-[var(--text-color-soft)] text-sm">
+					Productos, servicios y herramientas acrobáticas
 				</p>
 			</div>
-			<!-- Testimonios -->
-			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full">
-				<div class="flex items-center gap-3 mb-4">
-					<svg
-						class="w-6 h-6 flex-shrink-0"
-						aria-hidden="true"
-					>
-						<use
-							href={`${import.meta.env.BASE_URL}icons/sprite.svg#testimonios`}
-						></use>
-					</svg>
-					<h2 class="text-xl font-bold text-[var(--accent-color)]">
-						Testimonios
-					</h2>
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+				<!-- Catálogo -->
+				<div
+					class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full"
+				>
+					<div class="flex items-center gap-3 mb-4">
+						<svg
+							class="w-6 h-6 flex-shrink-0"
+							aria-hidden="true"
+						>
+							<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#tienda`}
+							></use>
+						</svg>
+						<h3 class="text-xl font-bold text-[var(--accent-color)]">
+							Catálogo
+						</h3>
+					</div>
+					<p class="text-sm flex-1">
+						Explora el <a
+							href="/catalogo"
+							class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
+							>Catálogo 2025</a
+						> completo con productos, servicios y herramientas. Filtra por categorías,
+						subcategorías y encuentra exactamente lo que necesitas.
+					</p>
 				</div>
-				<p class="text-sm flex-1">
-					Lee las experiencias de otros artistas y atletas que han usado
-					nuestros productos y servicios. Descubre cómo han mejorado su
-					rendimiento.
+				<!-- Productos -->
+				<div
+					class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full"
+				>
+					<div class="flex items-center gap-3 mb-4">
+						<svg
+							class="w-6 h-6 flex-shrink-0"
+							aria-hidden="true"
+						>
+							<use
+								href={`${import.meta.env.BASE_URL}icons/sprite.svg#productos`}
+							></use>
+						</svg>
+						<h3 class="text-xl font-bold text-[var(--accent-color)]">
+							Productos
+						</h3>
+					</div>
+					<p class="text-sm flex-1">
+						Descubre nuestra <a
+							href="/tienda"
+							class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
+							>tienda</a
+						> con productos destacados y recomendados. Encuentra equipamiento, accesorios
+						y herramientas para mejorar tu práctica acrobática.
+					</p>
+				</div>
+				<!-- Favoritos -->
+				<div
+					class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full"
+				>
+					<div class="flex items-center gap-3 mb-4">
+						<svg
+							class="w-6 h-6 flex-shrink-0"
+							aria-hidden="true"
+						>
+							<use
+								href={`${import.meta.env.BASE_URL}icons/sprite.svg#favoritos`}
+							></use>
+						</svg>
+						<h3 class="text-xl font-bold text-[var(--accent-color)]">
+							Mis Favoritos
+						</h3>
+					</div>
+					<p class="text-sm flex-1">
+						Guarda tus <a
+							href="/favoritos"
+							class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
+							>productos favoritos</a
+						> para acceder rápidamente a ellos. Organiza tu lista de deseos personal
+						y no pierdas de vista lo que más te interesa.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- SECCIÓN BIENESTAR -->
+		<div class="mb-12">
+			<div class="mb-6">
+				<h2
+					class="text-2xl font-bold text-[var(--accent-color)] mb-2 flex items-center gap-2"
+				>
+					💪 Bienestar
+				</h2>
+				<p class="text-[var(--text-color-soft)] text-sm">
+					Nutrición y entrenamiento para optimizar tu rendimiento
 				</p>
 			</div>
-			<!-- Comunidad -->
-			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full">
-				<div class="flex items-center gap-3 mb-4">
-					<svg
-						class="w-6 h-6 flex-shrink-0"
-						aria-hidden="true"
-					>
-						<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#comunidad`}
-						></use>
-					</svg>
-					<h2 class="text-xl font-bold text-[var(--accent-color)]">
-						Comunidad
-					</h2>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+				<!-- Nutrición -->
+				<div
+					class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full"
+				>
+					<div class="flex items-center gap-3 mb-4">
+						<svg
+							class="w-6 h-6 flex-shrink-0"
+							aria-hidden="true"
+						>
+							<use
+								href={`${import.meta.env.BASE_URL}icons/sprite.svg#nutricion`}
+							></use>
+						</svg>
+						<h3 class="text-xl font-bold text-[var(--accent-color)]">
+							Nutrición
+						</h3>
+					</div>
+					<p class="text-sm flex-1">
+						Descubre <a
+							href="/nutricion"
+							class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
+							>consejos de nutrición</a
+						> específicos para artistas y atletas. Optimiza tu rendimiento con una
+						alimentación adecuada y planes nutricionales personalizados.
+					</p>
 				</div>
-				<p class="text-sm flex-1">
-					Únete a nuestra comunidad de artistas y atletas. Comparte
-					experiencias, conecta con otros profesionales y mantente actualizado.
+				<!-- Entrenamiento -->
+				<div
+					class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full"
+				>
+					<div class="flex items-center gap-3 mb-4">
+						<svg
+							class="w-6 h-6 flex-shrink-0"
+							aria-hidden="true"
+						>
+							<use
+								href={`${import.meta.env.BASE_URL}icons/sprite.svg#entrenamiento`}
+							></use>
+						</svg>
+						<h3 class="text-xl font-bold text-[var(--accent-color)]">
+							Entrenamiento
+						</h3>
+					</div>
+					<p class="text-sm flex-1">
+						Accede a <a
+							href="/entrenamiento"
+							class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
+							>rutinas de entrenamiento</a
+						> especializadas para acróbatas. Mejora tu técnica, fuerza y flexibilidad
+						con programas diseñados por profesionales.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- SECCIÓN CONTENIDO -->
+		<div class="mb-12">
+			<div class="mb-6">
+				<h2
+					class="text-2xl font-bold text-[var(--accent-color)] mb-2 flex items-center gap-2"
+				>
+					📚 Contenido
+				</h2>
+				<p class="text-[var(--text-color-soft)] text-sm">
+					Blog y biblioteca personal de artículos acrobáticos
 				</p>
 			</div>
-			<!-- Nutrición -->
-			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full">
-				<div class="flex items-center gap-3 mb-4">
-					<svg
-						class="w-6 h-6 flex-shrink-0"
-						aria-hidden="true"
-					>
-						<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#nutricion`}
-						></use>
-					</svg>
-					<h2 class="text-xl font-bold text-[var(--accent-color)]">
-						Nutrición
-					</h2>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+				<!-- Variantes Acrobáticas -->
+				<div
+					class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full"
+				>
+					<div class="flex items-center gap-3 mb-4">
+						<svg
+							class="w-6 h-6 flex-shrink-0"
+							aria-hidden="true"
+						>
+							<use
+								href={`${import.meta.env.BASE_URL}icons/sprite.svg#variantes`}
+							></use>
+						</svg>
+						<h3 class="text-xl font-bold text-[var(--accent-color)]">
+							Variantes Acro
+						</h3>
+					</div>
+					<p class="text-sm flex-1">
+						Explora nuestro <a
+							href="/blog"
+							class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
+							>blog de variantes acrobáticas</a
+						>. Descubre diferentes disciplinas, técnicas y estilos desde circo
+						hasta deportes urbanos, con artículos detallados y consejos
+						profesionales.
+					</p>
 				</div>
-				<p class="text-sm flex-1">
-					Descubre consejos de nutrición específicos para artistas y atletas.
-					Optimiza tu rendimiento con una alimentación adecuada.
-				</p>
-			</div>
-			<!-- Variantes Acrobáticas -->
-			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full">
-				<div class="flex items-center gap-3 mb-4">
-					<svg
-						class="w-6 h-6 flex-shrink-0"
-						aria-hidden="true"
-					>
-						<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#variantes`}
-						></use>
-					</svg>
-					<h2 class="text-xl font-bold text-[var(--accent-color)]">
-						Variantes
-					</h2>
+				<!-- Lista de Lectura -->
+				<div
+					class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full"
+				>
+					<div class="flex items-center gap-3 mb-4">
+						<svg
+							class="w-6 h-6 flex-shrink-0"
+							aria-hidden="true"
+						>
+							<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#feedback`}
+							></use>
+						</svg>
+						<h3 class="text-xl font-bold text-[var(--accent-color)]">
+							Lista de Lectura
+						</h3>
+					</div>
+					<p class="text-sm flex-1">
+						Crea tu <a
+							href="/Variantes/lista-lectura"
+							class="text-[var(--accent-color)] underline hover:text-[var(--vinculo)] font-semibold"
+							>biblioteca personal</a
+						> guardando tus artículos favoritos. Organiza y accede fácilmente a todo
+						el contenido que más te interesa sobre acrobacias y técnicas.
+					</p>
 				</div>
-				<p class="text-sm flex-1">
-					Explora diferentes disciplinas acrobáticas y descubre nuevas formas de
-					expresar tu arte. Desde circo hasta deportes urbanos.
-				</p>
-			</div>
-			<!-- Favoritos -->
-			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full">
-				<div class="flex items-center gap-3 mb-4">
-					<svg
-						class="w-6 h-6 flex-shrink-0"
-						aria-hidden="true"
-					>
-						<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#favoritos`}
-						></use>
-					</svg>
-					<h2 class="text-xl font-bold text-[var(--accent-color)]">
-						Favoritos
-					</h2>
-				</div>
-				<p class="text-sm flex-1">
-					Guarda tus productos favoritos para acceder rápidamente a ellos más
-					tarde. Organiza tu lista de deseos personal.
-				</p>
-			</div>
-			<!-- Feedback -->
-			<div class="bg-[var(--cajas)] rounded-xl shadow p-6 flex flex-col h-full">
-				<div class="flex items-center gap-3 mb-4">
-					<svg
-						class="w-6 h-6 flex-shrink-0"
-						aria-hidden="true"
-					>
-						<use href={`${import.meta.env.BASE_URL}icons/sprite.svg#feedback`}
-						></use>
-					</svg>
-					<h2 class="text-xl font-bold text-[var(--accent-color)]">Feedback</h2>
-				</div>
-				<p class="text-sm flex-1">
-					Comparte tu opinión sobre nuestros productos y servicios. Tu feedback
-					nos ayuda a mejorar y servirte mejor.
-				</p>
 			</div>
 		</div>
 	</section>

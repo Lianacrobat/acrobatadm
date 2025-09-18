@@ -1,0 +1,381 @@
+---
+import LayoutSeo from "../../layouts/LayoutSEO.astro";
+import supabaseServer from "../../supabase/serverClient";
+
+// Intentar múltiples consultas para diagnosticar el problema
+let productos = [];
+let error = null;
+let diagnostico = [];
+
+// Consulta 1: Seleccionar todo con service_role
+const { data: data1, error: error1 } = await supabaseServer.from("productos").select("*");
+diagnostico.push({ consulta: "select * (service_role)", data: data1, error: error1 });
+
+// Consulta 2: Contar registros con service_role
+const { count, error: error2 } = await supabaseServer.from("productos").select("*", { count: 'exact', head: true });
+diagnostico.push({ consulta: "count (service_role)", count, error: error2 });
+
+// Consulta 3: Seleccionar solo ID con service_role
+const { data: data3, error: error3 } = await supabaseServer.from("productos").select("id");
+diagnostico.push({ consulta: "select id (service_role)", data: data3, error: error3 });
+
+productos = data1 || [];
+error = error1;
+
+console.log("=== DIAGNÓSTICO COMPLETO ===");
+console.log("Productos desde servidor:", productos);
+console.log("Número de productos:", productos?.length || 0);
+console.log("Diagnóstico completo:", diagnostico);
+console.log("URL de Supabase:", import.meta.env.PUBLIC_SUPABASE_URL);
+console.log("================================");
+---
+
+<LayoutSeo
+	title="Login - AdmApp"
+	description="Página de inicio de sesión para el panel de administración de AdmApp"
+	keywords="login, iniciar sesión, administración, backend"
+	author="AdmApp"
+	canonical="https://adm-app.vercel.app/backend/login"
+	og={{
+		title: "Login - AdmApp",
+		description: "Página de inicio de sesión para el panel de administración",
+		type: "website",
+		site_name: "AdmApp",
+	}}
+	twitter={{
+		card: "summary",
+		title: "Login - AdmApp",
+		description: "Página de inicio de sesión para el panel de administración",
+	}}
+>
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+	<div class="p-6 max-w-6xl mx-auto">
+		<h1 class="text-3xl font-bold mb-6 text-center">Diagnóstico de Conexión Supabase</h1>
+		
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+			<!-- Diagnóstico del Servidor -->
+			<div class="bg-gray-50 p-6 rounded-lg">
+				<h2 class="text-xl font-bold mb-4 text-gray-800">📊 Diagnóstico del Servidor</h2>
+				<div class="space-y-4">
+					<div class="bg-white p-3 rounded border">
+						<h3 class="font-semibold text-sm text-gray-600">Productos encontrados:</h3>
+						<p class="text-lg font-bold {productos?.length > 0 ? 'text-green-600' : 'text-red-600'}">
+							{productos?.length || 0} productos
+						</p>
+					</div>
+					
+					{error && (
+						<div class="bg-red-50 border border-red-200 p-3 rounded">
+							<h3 class="font-semibold text-red-800">❌ Error:</h3>
+							<p class="text-red-700 text-sm">{error.message}</p>
+							{error.code && <p class="text-red-600 text-xs">Código: {error.code}</p>}
+						</div>
+					)}
+					
+					<div class="bg-white p-3 rounded border">
+						<h3 class="font-semibold text-sm text-gray-600">Diagnóstico completo:</h3>
+						<pre class="text-xs bg-gray-100 p-2 rounded mt-2 overflow-auto max-h-40">{JSON.stringify(diagnostico, null, 2)}</pre>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Formulario para Agregar Productos -->
+			<div class="bg-green-50 p-6 rounded-lg">
+				<h2 class="text-xl font-bold mb-4 text-green-800">➕ Agregar Nuevo Producto</h2>
+				<form id="producto-form" class="space-y-4">
+					<div>
+						<label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Producto</label>
+						<input 
+							type="text" 
+							id="nombre" 
+							name="nombre" 
+							required 
+							class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+							placeholder="Ej: Producto04"
+						/>
+					</div>
+					<div>
+						<label class="flex items-center">
+							<input type="checkbox" id="done" name="done" class="mr-2 rounded">
+							<span class="text-sm text-gray-700">Producto completado</span>
+						</label>
+					</div>
+					<button 
+						type="submit" 
+						class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+					>
+						🚀 Agregar Producto
+					</button>
+				</form>
+				<div id="form-message" class="mt-4 hidden"></div>
+			</div>
+			
+			<!-- Datos del Cliente -->
+			<div id="productos-cliente" class="bg-blue-50 p-6 rounded-lg">
+				<h2 class="text-xl font-bold mb-4 text-blue-800">🔄 Carga desde Cliente</h2>
+				<p class="text-blue-600">Cargando productos desde el cliente...</p>
+			</div>
+		</div>
+		
+		<!-- Datos en bruto -->
+		<div class="mt-6 bg-white p-4 rounded-lg border">
+			<h2 class="text-lg font-semibold mb-3">📋 Datos en bruto (Servidor)</h2>
+			<pre class="text-xs bg-gray-100 p-3 rounded overflow-auto max-h-60">{JSON.stringify(productos, null, 2)}</pre>
+		</div>
+	</div>
+	
+	<script is:inline>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Esperar a que se cargue Supabase y crear cliente
+			let supabase;
+			if (typeof window !== 'undefined' && window.supabase) {
+				supabase = window.supabase.createClient(
+					'https://owjnbcbjycicferrmeav.supabase.co',
+					'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93am5iY2JqeWNpY2ZlcnJtZWF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNDIwNTYsImV4cCI6MjA3MjYxODA1Nn0.udsjkzNrKCv6qlSPb7Mty2Wa2iH8PdE1C7WBDDbhHvU'
+				);
+			} else {
+				console.error('Supabase no está disponible');
+				return;
+			}
+
+		// Función para agregar producto
+		async function agregarProducto(nombre, done = false) {
+			try {
+				const { data, error } = await supabase
+					.from('productos')
+					.insert([{ Nombre: nombre, done: done }])
+					.select();
+
+				if (error) {
+					throw error;
+				}
+
+				return { success: true, data };
+			} catch (error) {
+				console.error('Error al agregar producto:', error);
+				return { success: false, error: error.message };
+			}
+		}
+
+		// Función para cargar productos desde el cliente
+		async function cargarProductosCliente() {
+			try {
+				const { data, error } = await supabase
+					.from('productos')
+					.select('*')
+					.order('created_at', { ascending: false });
+
+				if (error) {
+					throw error;
+				}
+
+				return data;
+			} catch (error) {
+				console.error('Error al cargar productos:', error);
+				return [];
+			}
+		}
+
+		// Función para mostrar mensaje
+		function mostrarMensaje(mensaje, tipo = 'success') {
+			const messageDiv = document.getElementById('form-message');
+			messageDiv.className = `mt-4 p-3 rounded-md ${
+				tipo === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'
+			}`;
+			messageDiv.textContent = mensaje;
+			messageDiv.classList.remove('hidden');
+			
+			// Ocultar mensaje después de 5 segundos
+			setTimeout(() => {
+				messageDiv.classList.add('hidden');
+			}, 5000);
+		}
+
+		// Función para eliminar producto
+		async function eliminarProducto(id) {
+			try {
+				const { error } = await supabase
+					.from('productos')
+					.delete()
+					.eq('id', id);
+
+				if (error) {
+					throw error;
+				}
+
+				return { success: true };
+			} catch (error) {
+				console.error('Error al eliminar producto:', error);
+				return { success: false, error: error.message };
+			}
+		}
+
+		// Función para actualizar estado de producto
+		async function toggleProducto(id, currentDone) {
+			try {
+				const { error } = await supabase
+					.from('productos')
+					.update({ done: !currentDone })
+					.eq('id', id);
+
+				if (error) {
+					throw error;
+				}
+
+				return { success: true };
+			} catch (error) {
+				console.error('Error al actualizar producto:', error);
+				return { success: false, error: error.message };
+			}
+		}
+
+		// Función para actualizar la lista de productos del cliente
+		async function actualizarListaCliente() {
+			const productos = await cargarProductosCliente();
+			const clienteDiv = document.getElementById('productos-cliente');
+			
+			if (productos.length > 0) {
+				clienteDiv.innerHTML = `
+					<h2 class="text-xl font-bold mb-4 text-blue-800">📋 Lista de Productos (${productos.length})</h2>
+					<div class="overflow-x-auto">
+						<table class="w-full bg-white rounded-lg shadow">
+							<thead class="bg-gray-50">
+								<tr>
+									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+									<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-gray-200">
+								${productos.map(producto => `
+									<tr class="hover:bg-gray-50">
+										<td class="px-4 py-3 text-sm text-gray-900">${producto.id}</td>
+										<td class="px-4 py-3 text-sm">
+											<span class="${producto.done ? 'line-through text-gray-500' : 'text-gray-900 font-medium'}">
+												${producto.Nombre}
+											</span>
+										</td>
+										<td class="px-4 py-3 text-sm">
+											<span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+												producto.done ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+											}">
+												${producto.done ? '✅ Completado' : '⏳ Pendiente'}
+											</span>
+										</td>
+										<td class="px-4 py-3 text-sm text-gray-500">
+											${new Date(producto.created_at).toLocaleDateString('es-ES')}
+										</td>
+										<td class="px-4 py-3 text-sm">
+											<div class="flex space-x-2">
+												<button 
+													onclick="toggleProductoHandler(${producto.id}, ${producto.done})" 
+													class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors"
+													title="${producto.done ? 'Marcar como pendiente' : 'Marcar como completado'}"
+												>
+													${producto.done ? '↩️' : '✅'}
+												</button>
+												<button 
+													onclick="eliminarProductoHandler(${producto.id}, '${producto.Nombre}')" 
+													class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200 transition-colors"
+													title="Eliminar producto"
+												>
+													🗑️
+												</button>
+											</div>
+										</td>
+									</tr>
+								`).join('')}
+							</tbody>
+						</table>
+					</div>
+				`;
+			} else {
+				clienteDiv.innerHTML = `
+					<h2 class="text-xl font-bold mb-4 text-blue-800">📋 Lista de Productos</h2>
+					<div class="text-center py-8 bg-white rounded-lg">
+						<p class="text-gray-500 mb-2">📦 No hay productos disponibles</p>
+						<p class="text-sm text-gray-400">Agrega tu primer producto usando el formulario de arriba</p>
+					</div>
+				`;
+			}
+		}
+
+		// Manejar envío del formulario
+			const form = document.getElementById('producto-form');
+			
+			form.addEventListener('submit', async function(e) {
+				e.preventDefault();
+				
+				const formData = new FormData(form);
+				const nombre = formData.get('nombre').trim();
+				const done = formData.get('done') === 'on';
+				
+				if (!nombre) {
+					mostrarMensaje('Por favor ingresa un nombre para el producto.', 'error');
+					return;
+				}
+				
+				// Deshabilitar botón mientras se procesa
+				const submitBtn = form.querySelector('button[type="submit"]');
+				const originalText = submitBtn.textContent;
+				submitBtn.disabled = true;
+				submitBtn.textContent = '⏳ Agregando...';
+				
+				try {
+					const resultado = await agregarProducto(nombre, done);
+					
+					if (resultado.success) {
+						mostrarMensaje(`✅ Producto "${nombre}" agregado exitosamente!`, 'success');
+						form.reset();
+						// Actualizar la lista de productos
+						await actualizarListaCliente();
+					} else {
+						mostrarMensaje(`❌ Error: ${resultado.error}`, 'error');
+					}
+				} catch (error) {
+					mostrarMensaje(`❌ Error inesperado: ${error.message}`, 'error');
+				} finally {
+					// Rehabilitar botón
+					submitBtn.disabled = false;
+					submitBtn.textContent = originalText;
+				}
+			});
+			
+			// Cargar productos inicialmente
+			actualizarListaCliente();
+
+		// Funciones globales para los botones
+		window.toggleProductoHandler = async function(id, currentDone) {
+			try {
+				const resultado = await toggleProducto(id, currentDone);
+				if (resultado.success) {
+					mostrarMensaje(`✅ Estado del producto actualizado`, 'success');
+					await actualizarListaCliente();
+				} else {
+					mostrarMensaje(`❌ Error: ${resultado.error}`, 'error');
+				}
+			} catch (error) {
+				mostrarMensaje(`❌ Error inesperado: ${error.message}`, 'error');
+			}
+		};
+
+		window.eliminarProductoHandler = async function(id, nombre) {
+			if (confirm(`¿Estás seguro de que quieres eliminar el producto "${nombre}"?`)) {
+				try {
+					const resultado = await eliminarProducto(id);
+					if (resultado.success) {
+						mostrarMensaje(`✅ Producto "${nombre}" eliminado exitosamente`, 'success');
+						await actualizarListaCliente();
+					} else {
+						mostrarMensaje(`❌ Error: ${resultado.error}`, 'error');
+					}
+				} catch (error) {
+					mostrarMensaje(`❌ Error inesperado: ${error.message}`, 'error');
+				}
+			}
+		};
+		});
+	</script>
+</LayoutSeo>
