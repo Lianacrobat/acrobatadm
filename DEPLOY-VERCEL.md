@@ -23,6 +23,9 @@
 ```
 TELEGRAM_BOT_TOKEN=tu_token_real_aqui
 TELEGRAM_CHAT_ID=tu_chat_id_real_aqui
+PUBLIC_SUPABASE_URL=tu_supabase_url
+PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=tu_supabase_service_role_key
 NODE_ENV=production
 ```
 
@@ -35,6 +38,9 @@ NODE_ENV=production
 ```
 TELEGRAM_BOT_TOKEN=tu_token_real_aqui
 TELEGRAM_CHAT_ID=tu_chat_id_real_aqui
+PUBLIC_SUPABASE_URL=tu_supabase_url
+PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=tu_supabase_service_role_key
 VERCEL_TOKEN=tu_vercel_token
 VERCEL_ORG_ID=tu_organization_id
 VERCEL_PROJECT_ID=tu_project_id
@@ -101,8 +107,11 @@ git push origin main
 ### Características Habilitadas:
 
 - ✅ **Server-Side Rendering (SSR)** - Para formularios dinámicos
+- ✅ **Aplicación CRUD completa** - Con Supabase para gestión de datos
+- ✅ **Base de datos en tiempo real** - Supabase PostgreSQL
+- ✅ **Autenticación y seguridad** - RLS y service role configurados
 - ✅ **Web Analytics** - Métricas integradas de Vercel
-- ✅ **Variables de entorno seguras** - Para tokens de Telegram
+- ✅ **Variables de entorno seguras** - Para tokens de Telegram y Supabase
 - ✅ **Build optimizado** - Minificación y compresión
 - ✅ **CI/CD automático** - Despliegue en cada push
 
@@ -134,7 +143,11 @@ Si tienes problemas:
 Tu aplicación **Acrobata Demente** está ahora desplegada en Vercel con:
 - ✅ Formularios funcionales
 - ✅ Sistema de favoritos
+- ✅ **Aplicación CRUD completa con Supabase**
+- ✅ **Gestión de productos en tiempo real**
+- ✅ **Panel de administración (/backend/login)**
 - ✅ Notificaciones de Telegram
+- ✅ Página de testimonios con EmailJS
 - ✅ Rendimiento optimizado
 - ✅ Despliegue automático
 
